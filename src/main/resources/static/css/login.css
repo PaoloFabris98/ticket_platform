@@ -1,0 +1,26 @@
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.bg-image {
+  background-image:url('/imgs/sfondo/background.jpg');
+  background-size: cover;
+  background-position: center;
+  flex: 1;
+}
+.card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+footer {
+  margin-top: auto;
+}
+.card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}

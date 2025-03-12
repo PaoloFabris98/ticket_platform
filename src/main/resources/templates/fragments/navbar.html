@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+</head>
+
+<body>
+    <th:block th:fragment="navBar">
+        <div class="navbar text-white m-1 p-2 rounded">
+            <div class="row align-items-center w-100">
+                <div class="col-md-8 d-flex align-items-center">
+                    <h4 class="m-0 me-3">
+                        <a th:href="@{'/'}" class="text-white">La Mia Pizzeria</a>
+                    </h4>
+                </div>
+                
+                <div class="col-md-4 d-flex align-items-center justify-content-end gap-3">
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="btn btn-danger">Logout</button>
+                    </form>
+                    <form class="d-flex" th:action="@{/searchPizza}" method="GET">
+                        <div class="input-group">
+                            <input type="text" name="pizzas" id="pizzas" class="form-control" placeholder="Che pizza vuoi cercare?" aria-label="Cerca pizza">
+                            <button type="submit" class="btn btn-primary">Cerca</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</body>
+
+</html>

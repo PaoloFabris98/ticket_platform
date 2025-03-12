@@ -1,0 +1,23 @@
+.navbar {
+    background-color: #343a40;
+}
+
+.navbar a {
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    color: #ffc107;
+}
+
+.input-group {
+    border-radius: 30px;
+}
+
+.btn-primary {
+    border-radius: 30px;
+}
+
+.contact-info {
+    font-size: 0.9rem;
+}

@@ -1,0 +1,22 @@
+.card-body {
+  padding: 1.5rem;
+}
+
+.card-text {
+  margin-bottom: 1rem;
+}
+
+h5 {
+  color: #f8b400;
+}
+.card {
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#card .card:hover {
+  background-color: yellow;
+}
+.table-responsive {
+  width: 100%;
+}

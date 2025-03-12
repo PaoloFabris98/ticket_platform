@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/stile.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/login.css}" />
+</head>
+
+<body class="bg-dark">
+    <div class="bg-image">
+        <div class="container card-container mt-5"> 
+            <div class="card p-4 shadow-lg mx-auto" style="max-width: 400px; background-color: rgba(255, 255, 255, 0.9); border-radius: 15px;">
+                <h2 class="text-center mb-4 text-danger">Login</h2>
+                <form th:action="@{/login}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Username:</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password:</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-warning">Accedi</button>
+                    </div>
+                </form>
+                <div th:if="${param.error}" class="alert alert-danger mt-3 text-center">
+                    Username o password errati.
+                </div>
+                <div th:if="${param.logout}" class="alert alert-success mt-3 text-center">
+                    Logout effettuato con successo.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script th:src="@{/js/app.js}"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</body>
+
+</html>
