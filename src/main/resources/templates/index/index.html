@@ -11,9 +11,38 @@
 </head>
 
 <body class="bg-dark">
+    <div class="class container">
 
-    <div th:insert="~{fragments/navbar :: navBar}"></div>
-    <div th:insert="~{fragments/footer :: footer}"></div>
+
+
+        <div th:insert="~{fragments/navbar :: navBar}"></div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="width: 10%;">Ticket Id</th>
+                        <th style="width: 30%;">Descrizione</th>
+                        <th style="width: 25%;">Operatore</th>
+                        <th style="width: 15%;">Stato</th>
+                        <th style="width: 20%;">Note</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="pizza : ${pizzas}">
+                        <td style="width: 10%;"></td>
+                        <td style="width: 30%;"></td>
+                        <td style="width: 25%;"></td>
+                        <td style="width: 15%;"></td>
+                        <td style="width: 20%;"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div th:insert="~{fragments/footer :: footer}"></div>
+
+
+
+    </div>
 
 
 

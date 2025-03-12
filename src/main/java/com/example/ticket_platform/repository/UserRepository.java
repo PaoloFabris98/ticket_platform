@@ -10,4 +10,5 @@ import com.example.ticket_platform.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByUsername(String username);
+
 }
