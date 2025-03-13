@@ -20,12 +20,9 @@
                 <thead class="table-dark">
                     <tr>
                         <th style="width: 5%;">Ticket Id</th>
-                        <th style="width: 30%;">Descrizione</th>
-                        <th style="width: 10%;">Operatore</th>
-                        <th style="width: 10%;">Stato</th>
-                        <th style="width: 10%;">Note</th>
-                        <th style="width: 10%;">DataCreazione</th>
-                        <th style="width: 10%;" th:text="test"></th>
+                        <th style="width: 30%;">Username</th>
+                        <th style="width: 10%;">Email</th>
+                        <th style="width: 10%;">Tickets Id</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,7 +37,7 @@
                         </td>
                         <td style="width: 10%;" th:text="${ticket.getNote()}"></td>
                         <td style="width: 10%;" th:text="${ticket.getDataCreazione()}"></td>
-                        <td style="width: 10%;" th:text="test"></td>
+                        <td style="width: 10%;"></td>
                     </tr>
                 </tbody>
             </table>

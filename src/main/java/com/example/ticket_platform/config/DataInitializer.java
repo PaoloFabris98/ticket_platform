@@ -32,16 +32,29 @@ public class DataInitializer {
 
             Status statusAperto = statusRepository.findByStatus(StatusType.APERTO);
 
-            User testOperatore = userRepository.findByUsername("test")
+            User testOperatore = userRepository.findByUsername("User")
                     .orElseGet(() -> {
                         User user = new User();
-                        user.setUsername("test");
+                        user.setUsername("User");
                         user.setPassword("123");
                         user.setEmail("test@example.com");
                         user.setEnable(true);
                         Authorities authorities = new Authorities();
                         authorities.setUsername(user.getUsername());
                         authorities.setAuthority("USER");
+                        authoritiesRepository.save(authorities);
+                        return userRepository.save(user);
+                    });
+            User testAdmin = userRepository.findByUsername("Admin")
+                    .orElseGet(() -> {
+                        User user = new User();
+                        user.setUsername("Admin");
+                        user.setPassword("123");
+                        user.setEmail("test@example.com");
+                        user.setEnable(true);
+                        Authorities authorities = new Authorities();
+                        authorities.setUsername(user.getUsername());
+                        authorities.setAuthority("ADMIN");
                         authoritiesRepository.save(authorities);
                         return userRepository.save(user);
                     });
@@ -56,6 +69,17 @@ public class DataInitializer {
                     ticketRepository.save(ticket);
                 }
             }
+            if (ticketRepository.countByOperatore(testAdmin) < 5) {
+                for (int i = 1; i <= 5; i++) {
+                    Ticket ticket = new Ticket();
+                    ticket.setOperatore(testAdmin);
+                    ticket.setDataCreazione(LocalDate.now());
+                    ticket.setDescrizione("Ticket di test numero " + i);
+                    ticket.setStatus(statusAperto);
+                    ticketRepository.save(ticket);
+                }
+            }
+
         };
     }
 }

@@ -1,6 +1,7 @@
 package com.example.ticket_platform.model;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -33,7 +34,7 @@ public class User implements Serializable {
 
     @Column(name = "tickets")
     @OneToMany(mappedBy = "operatore")
-    private Set<Ticket> tickets;
+    private List<Ticket> tickets;
 
     // @NotBlank(message = "Lo status non può essere vuoto")
     // private String status;
@@ -70,11 +71,11 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public Set<Ticket> getTickets() {
+    public List<Ticket> getTickets() {
         return this.tickets;
     }
 
-    public void setTickets(Set<Ticket> tickets) {
+    public void setTickets(List<Ticket> tickets) {
         this.tickets = tickets;
     }
 

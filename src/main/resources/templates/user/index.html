@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/stile.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/card.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/navbar.css}" />
+</head>
+
+<body class="bg-dark d-flex justify-content-center">
+
+    <div class="w-100 mx-4 m-3"> 
+
+        <div th:insert="~{fragments/navbar :: navBar}"></div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="width: 5%;" >Operatore Id</th>
+                        <th style="width: 30%;">Descrizione</th>
+                        <th style="width: 10%;">Operatore</th>
+                        <th style="width: 10%;">Tickets ID</th>
+                        <th style="width: 10%;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="user : ${users}">
+                        <td style="width: 5%;" th:text="${user.getId()}"></td>
+                        <td style="width: 30%;" th:text="${user.getUsername()}"></td>
+                        <td class="fs-6" style="width: 10%;" th:text="${user.getEmail()}"></td>
+                        <td class="fs-6" style="width: 10%;">
+                            <span th:each="ticket, iterStat : ${user.tickets}">
+                                <span th:text="${ticket.id}"></span>
+                                <span th:if="${iterStat.index != user.tickets.size() - 1}">, </span>
+                            </span>
+                        </td>
+                        <td></td>
+                        <td style="width: 10%;"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div th:insert="~{fragments/footer :: footer}"></div>
+
+ 

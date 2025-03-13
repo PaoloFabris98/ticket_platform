@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Ticket {
@@ -19,6 +20,7 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @NotNull
     private User operatore;
 
     private LocalDate dataCreazione;

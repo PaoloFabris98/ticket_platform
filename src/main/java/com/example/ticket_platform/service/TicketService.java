@@ -17,4 +17,8 @@ public class TicketService {
     public List<Ticket> findAll() {
         return ticketRepository.findAll();
     }
+
+    public List<Ticket> getTicketsByUserId(Integer userId) {
+        return ticketRepository.findByOperatoreId(userId);
+    }
 }

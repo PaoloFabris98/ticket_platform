@@ -20,4 +20,8 @@ public class UserService {
     public void addUser(User user) {
         userRepository.save(user);
     }
+
+    public User findByUsernameUser(String name) {
+        return userRepository.findByUsername(name).get();
+    }
 }
