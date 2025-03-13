@@ -32,11 +32,11 @@ public class User implements Serializable {
     private Boolean enable = true;
 
     @Column(name = "tickets")
-    @OneToMany(mappedBy = "autore")
+    @OneToMany(mappedBy = "operatore")
     private Set<Ticket> tickets;
 
-    @NotBlank
-    private String status;
+    // @NotBlank(message = "Lo status non può essere vuoto")
+    // private String status;
 
     public Integer getId() {
         return this.id;
@@ -70,13 +70,23 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public String getStatus() {
-        return this.status;
+    public Set<Ticket> getTickets() {
+        return this.tickets;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setTickets(Set<Ticket> tickets) {
+        this.tickets = tickets;
     }
+
+    /*
+     * public String getStatus() {
+     * return this.status;
+     * }
+     * 
+     * public void setStatus(String status) {
+     * this.status = status;
+     * }
+     */
 
     public Boolean isEnable() {
         return this.enable;

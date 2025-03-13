@@ -1,10 +1,11 @@
 package com.example.ticket_platform.model;
 
+import java.io.Serializable;
+
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 
 @Entity
-public class Status {
+public class Status implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -13,7 +14,6 @@ public class Status {
     @Column(unique = true, nullable = false)
     private StatusType status;
 
-    // Getters e Setters
     public Integer getId() {
         return id;
     }

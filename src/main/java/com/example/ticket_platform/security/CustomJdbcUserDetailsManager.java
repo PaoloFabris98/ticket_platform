@@ -1,6 +1,7 @@
 package com.example.ticket_platform.security;
 
 import javax.sql.DataSource;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -34,5 +35,6 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
             throw new IllegalArgumentException("L'utente esiste già!");
         }
         super.createUser(user);
+
     }
 }

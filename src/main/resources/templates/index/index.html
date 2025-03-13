@@ -10,10 +10,9 @@
     <link th:rel="stylesheet" th:href="@{/css/navbar.css}" />
 </head>
 
-<body class="bg-dark">
-    <div class="class container">
+<body class="bg-dark d-flex justify-content-center">
 
-
+    <div class="w-100 mx-4 m-3"> 
 
         <div th:insert="~{fragments/navbar :: navBar}"></div>
         <div class="table-responsive">
@@ -22,34 +21,30 @@
                     <tr>
                         <th style="width: 10%;">Ticket Id</th>
                         <th style="width: 30%;">Descrizione</th>
-                        <th style="width: 25%;">Operatore</th>
-                        <th style="width: 15%;">Stato</th>
-                        <th style="width: 20%;">Note</th>
+                        <th style="width: 10%;">Operatore</th>
+                        <th style="width: 10%;">Stato</th>
+                        <th style="width: 10%;">Note</th>
+                        <th style="width: 10%;">DataCreazione</th>
+                        <th style="width: 210%;" th:text="test"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="pizza : ${pizzas}">
-                        <td style="width: 10%;"></td>
-                        <td style="width: 30%;"></td>
-                        <td style="width: 25%;"></td>
-                        <td style="width: 15%;"></td>
-                        <td style="width: 20%;"></td>
+                    <tr th:each="ticket : ${tickets}">
+                        <td style="width: 10%;" th:text="${ticket.getId()}"></td>
+                        <td style="width: 30%;" th:text="${ticket.getDescrizione()}"></td>
+                        <td class="fs-6" style="width: 10%;" th:text="${ticket.getOperatoreUsername()}"></td>
+                        <td class="fs-6" style="width: 10%;" th:text="${ticket.getStatusName()}"
+                            th:classappend="${ticket.getStatusName() == 'APERTO' ? 'bg-success' : 
+                            (ticket.getStatusName() == 'CHIUSO' ? 'bg-danger' : 
+                            (ticket.getStatusName() == 'IN_CORSO' ? 'bg-warning' : ''))}">
+                        </td>
+                        <td style="width: 10%;" th:text="${ticket.getNote()}"></td>
+                        <td style="width: 10%;" th:text="${ticket.getDataCreazione()}"></td>
+                        <td style="width: 10%;" th:text="test"></td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div th:insert="~{fragments/footer :: footer}"></div>
 
-
-
-    </div>
-
-
-
-
-    <!--JS-->
-    <script th:src="@{/js/app.js}"></script>
-    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
-</body>
-
-</html>
+ 

@@ -17,17 +17,18 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "L'autore non può essere vuoto.")
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User autore;
+    private User operatore;
 
-    @NotBlank(message = "La data di creazione non può essere vuota.")
     private LocalDate dataCreazione;
 
     @Lob
     @NotBlank(message = "La descrizione non può essere vuota.")
     private String descrizione;
+
+    @Lob
+    private String note;
 
     @ManyToOne
     @JoinColumn(name = "status_id", nullable = false)
@@ -41,12 +42,20 @@ public class Ticket {
         this.id = id;
     }
 
-    public User getUser() {
-        return this.autore;
+    public User getOperatore() {
+        return this.operatore;
     }
 
-    public void setUser(User user) {
-        this.autore = user;
+    public void setOperatore(User operatore) {
+        this.operatore = operatore;
+    }
+
+    public Status getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public LocalDate getDataCreazione() {
@@ -63,6 +72,22 @@ public class Ticket {
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
+    }
+
+    public String getNote() {
+        return this.note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getOperatoreUsername() {
+        return this.operatore.getUsername();
+    }
+
+    public String getStatusName() {
+        return this.status.getStatus().toString();
     }
 
 }

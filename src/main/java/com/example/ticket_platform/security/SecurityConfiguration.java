@@ -22,7 +22,7 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/webjars/**", "/css/**", "/js/**", "/imgs/**").permitAll()
-                        .requestMatchers("/login", "/error").permitAll()
+                        .requestMatchers("/login", "/error", "/logout").permitAll()
                         .requestMatchers(HttpMethod.POST)
                         .hasAuthority("ADMIN")
                         .requestMatchers("/")
