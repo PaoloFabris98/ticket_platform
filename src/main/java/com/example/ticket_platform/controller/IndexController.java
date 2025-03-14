@@ -8,13 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.ticket_platform.model.Authorities;
+import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.Ticket;
-import com.example.ticket_platform.model.User;
-import com.example.ticket_platform.repository.TicketRepository;
-import com.example.ticket_platform.service.AuthoritiesService;
 import com.example.ticket_platform.service.TicketService;
-import com.example.ticket_platform.service.UserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -26,34 +22,29 @@ public class IndexController {
     private TicketService ticketService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private AuthoritiesService authoritiesService;
+    private UtilityFunctions utilityFunctions;
 
     @GetMapping("/")
     public String index(Model model, Principal principal) {
 
-        User currentUser = userService.findByUsernameUser(principal.getName());
-        Authorities authorities = authoritiesService.findByUsername(currentUser);
-
-        if (authorities.getAuthority().equals("ADMIN")) {
+        if (utilityFunctions.isAdmin(utilityFunctions.currentUser(principal))) {
             List<Ticket> allTickets = ticketService.findAll();
             model.addAttribute("tickets", allTickets);
         } else {
-            List<Ticket> userTickets = ticketService.getTicketsByUserId(currentUser.getId());
+            List<Ticket> userTickets = ticketService
+                    .getTicketsByUserId(utilityFunctions.currentUser(principal).getId());
             model.addAttribute("tickets", userTickets);
         }
 
         return "index/index";
     }
 
-    @GetMapping("/access_denied_not_autenticated")
+    @GetMapping("/not_autenticated")
     public String accessDeniedNotAutenticated() {
         return "index/accessDeniedNotAutenticated";
     }
 
-    @GetMapping("/access_denied_autenticated")
+    @GetMapping("/permissions_missing")
     public String accessDeniedAutenticated() {
         return "index/accessDeniedAutenticated";
     }

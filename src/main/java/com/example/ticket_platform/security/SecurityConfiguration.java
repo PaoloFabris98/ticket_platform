@@ -32,9 +32,10 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/webjars/**", "/css/**", "/js/**", "/imgs/**").permitAll()
-                        .requestMatchers("/login", "/access_denied_not_autenticated", "/logout").permitAll()
+                        .requestMatchers("/login", "/not_autenticated", "/logout").permitAll()
                         .requestMatchers("/").hasAnyAuthority("ADMIN", "USER")
                         .requestMatchers("/operatori").hasAuthority("ADMIN")
+                        .requestMatchers("/permissions_missing").hasAuthority("USER")
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")

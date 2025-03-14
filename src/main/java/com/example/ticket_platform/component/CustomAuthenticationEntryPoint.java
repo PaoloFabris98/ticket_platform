@@ -14,6 +14,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException authException) throws IOException {
-        response.sendRedirect("/access_denied_not_autenticated");
+        response.sendRedirect("/not_autenticated");
     }
 }
