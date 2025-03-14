@@ -1,0 +1,6 @@
+<a th:fragment="buttonEdit(link)" th:href="@{${link}}" class="btn btn-success w-100 d-flex justify-content-center">
+    Edit
+</a>
+
+<div th:insert="~{fragments/fragments :: buttonEdit('/edit/' + ${pizza.getId()})}">
+</div>

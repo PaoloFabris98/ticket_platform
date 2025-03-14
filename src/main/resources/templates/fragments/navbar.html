@@ -13,7 +13,7 @@
             <div class="row align-items-center w-100">
                 <div class="col-md-8 d-flex align-items-center">
                     <h4 class="m-0 me-3">
-                        <a th:href="@{'/'}" class="text-white">Tickets</a>
+                        <a th:href="@{'/index'}" class="text-white">Tickets</a>
                     </h4>
                     <h6 class="m-0 me-3" sec:authorize="hasAuthority('ADMIN')">
                         <a th:href="@{'/operatori'}" class="text-white">Operatori</a>

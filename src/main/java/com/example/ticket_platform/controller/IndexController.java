@@ -25,8 +25,12 @@ public class IndexController {
     private UtilityFunctions utilityFunctions;
 
     @GetMapping("/")
-    public String index(Model model, Principal principal) {
+    public String index() {
+        return "redirect:/login";
+    }
 
+    @GetMapping("/index")
+    public String index(Model model, Principal principal) {
         if (utilityFunctions.isAdmin(utilityFunctions.currentUser(principal))) {
             List<Ticket> allTickets = ticketService.findAll();
             model.addAttribute("tickets", allTickets);

@@ -1,6 +1,7 @@
 package com.example.ticket_platform.model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -86,6 +87,11 @@ public class Ticket {
 
     public String getOperatoreUsername() {
         return this.operatore.getUsername();
+    }
+
+    public String getFormattedDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return this.dataCreazione.format(formatter);
     }
 
     public String getStatusName() {

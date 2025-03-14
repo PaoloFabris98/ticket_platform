@@ -15,14 +15,22 @@
     <div class="w-100 mx-4 m-3"> 
 
         <div th:insert="~{fragments/navbar :: navBar}"></div>
+        <div th:if="${message != null && messageClass != null}">
+            <div class="alert text-center" th:classappend="${messageClass}">
+                <p th:text="${message}"></p>
+            </div>
+        </div>
         <div class="table-responsive">
             <table class="table table-bordered table-striped text-center">
                 <thead class="table-dark">
                     <tr>
                         <th style="width: 5%;">Ticket Id</th>
-                        <th style="width: 30%;">Username</th>
-                        <th style="width: 10%;">Email</th>
-                        <th style="width: 10%;">Tickets Id</th>
+                        <th style="width: 30%;">Descrizione</th>
+                        <th style="width: 10%;">Operatore</th>
+                        <th style="width: 10%;">Status</th>
+                        <th style="width: 10%;">Note</th>
+                        <th style="width: 10%;">Data Apertura</th>
+                        <th style="width: 10%;"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,15 +41,25 @@
                         <td class="fs-6" style="width: 10%;" th:text="${ticket.getStatusName()}"
                             th:classappend="${ticket.getStatusName() == 'APERTO' ? 'bg-success' : 
                             (ticket.getStatusName() == 'CHIUSO' ? 'bg-danger' : 
-                            (ticket.getStatusName() == 'IN_CORSO' ? 'bg-warning' : ''))}">
-                        </td>
+                            (ticket.getStatusName() == 'IN_CORSO' ? 'bg-warning' : ''))}"></td>
                         <td style="width: 10%;" th:text="${ticket.getNote()}"></td>
                         <td style="width: 10%;" th:text="${ticket.getDataCreazione()}"></td>
-                        <td style="width: 10%;"></td>
+                        <td class="d-flex justify-content-start">
+                            <div class="me-2">
+                                <div th:insert="~{fragments/buttons :: seeTicket('/ticket/' + ${ticket.getId()})}"></div>
+                            </div>
+                            <div>
+                                <div th:insert="~{fragments/buttons :: editTicket('/editTicket/' + ${ticket.getId()})}"></div>
+                            </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div th:insert="~{fragments/footer :: footer}"></div>
 
- 
+    </div>
+
+</body>
+
+</html>
