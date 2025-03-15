@@ -1,5 +1,7 @@
 package com.example.ticket_platform.controller;
 
+import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.Status;
 import com.example.ticket_platform.model.StatusType;
 import com.example.ticket_platform.model.Ticket;
@@ -24,7 +27,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class TicketController {
@@ -39,16 +41,25 @@ public class TicketController {
     StatusRepository statusRepository;
     @Autowired
     StatusService statusService;
-
-    TicketController(TicketRepository ticketRepository) {
-        this.ticketRepository = ticketRepository;
-    }
+    @Autowired
+    UtilityFunctions utilityFunctions;
 
     @GetMapping("/ticket/{id}")
-    public String getMethodName(@PathVariable Integer id, Model model) {
+    public String getMethodName(@PathVariable Integer id, Model model, Principal principal,
+            RedirectAttributes redirectAttributes) {
         Ticket ticket = ticketService.getTicketById(id);
-        model.addAttribute("ticket", ticket);
-        return "ticket/ticket";
+        if (utilityFunctions.isAdmin(utilityFunctions.currentUser(principal))) {
+            model.addAttribute("ticket", ticket);
+            return "ticket/ticket";
+        } else {
+            if (ticket.getOperatore().getUsername().equals(utilityFunctions.currentUser(principal).getUsername())) {
+                model.addAttribute(ticket);
+                return "ticket/ticket";
+            } else {
+                return "redirect:/permissions_missing";
+            }
+        }
+
     }
 
     @GetMapping("/editTicket/{id}")
@@ -90,30 +101,6 @@ public class TicketController {
         return "ticket/add";
     }
 
-    @PostMapping("/setStatusIn_corso/{id}")
-    public String setStatusIn_corso(@PathVariable Integer id) {
-        Ticket ticket = ticketService.getTicketById(id);
-        ticket.setStatus(statusRepository.findByStatus(StatusType.IN_CORSO));
-        ticketService.updateTicket(ticket);
-        return "redirect:/index";
-    }
-
-    @PostMapping("/setStatusChiuso/{id}")
-    public String setStatusChiuso(@PathVariable Integer id) {
-        Ticket ticket = ticketService.getTicketById(id);
-        ticket.setStatus(statusRepository.findByStatus(StatusType.CHIUSO));
-        ticketService.updateTicket(ticket);
-        return "redirect:/index";
-    }
-
-    @PostMapping("/setStatusAperto/{id}")
-    public String setStatusAperto(@PathVariable Integer id) {
-        Ticket ticket = ticketService.getTicketById(id);
-        ticket.setStatus(statusRepository.findByStatus(StatusType.APERTO));
-        ticketService.updateTicket(ticket);
-        return "redirect:/index";
-    }
-
     @PostMapping("/addTicket")
     public String addTicket(@Valid @ModelAttribute("ticket") Ticket formTicket,
             BindingResult bindingResult,
@@ -128,6 +115,39 @@ public class TicketController {
         redirectAttributes.addFlashAttribute("message", "Il ticket è stato creato con successo");
         redirectAttributes.addFlashAttribute("messageClass", "alert-success");
 
+        return "redirect:/index";
+    }
+
+    @PostMapping("/setStatusIn_corso/{id}")
+    public String setStatusIn_corso(@PathVariable Integer id) {
+        Ticket ticket = ticketService.getTicketById(id);
+        ticket.setStatus(statusRepository.findByStatus(StatusType.IN_CORSO));
+        ticketService.updateTicket(ticket);
+        return "redirect:/index";
+    }
+
+    @PostMapping("/setStatusChiuso/{id}")
+    public String setStatusChiuso(@PathVariable Integer id) {
+        Ticket ticket = ticketService.getTicketById(id);
+        ticket.setStatus(statusRepository.findByStatus(StatusType.CHIUSO));
+        ticket.setDataChiusura(LocalDate.now());
+        ticketService.updateTicket(ticket);
+        return "redirect:/index";
+    }
+
+    @PostMapping("/setStatusAperto/{id}")
+    public String setStatusAperto(@PathVariable Integer id) {
+        Ticket ticket = ticketService.getTicketById(id);
+        ticket.setStatus(statusRepository.findByStatus(StatusType.APERTO));
+        ticketService.updateTicket(ticket);
+        return "redirect:/index";
+    }
+
+    @PostMapping("/deleteTicket/{id}")
+    public String deleteTicket(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        ticketRepository.delete(ticketService.getTicketById(id));
+        redirectAttributes.addFlashAttribute("message", "Il ticket è stato cancellato con successo");
+        redirectAttributes.addFlashAttribute("messageClass", "alert-danger");
         return "redirect:/index";
     }
 

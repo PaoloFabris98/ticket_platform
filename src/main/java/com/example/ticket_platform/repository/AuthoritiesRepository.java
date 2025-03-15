@@ -10,4 +10,6 @@ import com.example.ticket_platform.model.Authorities;
 @Repository
 public interface AuthoritiesRepository extends JpaRepository<Authorities, Integer> {
     List<Authorities> findByUsername(String username);
+
+    void deleteByUsername(String username);
 }

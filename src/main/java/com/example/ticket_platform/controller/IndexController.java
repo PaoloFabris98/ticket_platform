@@ -43,16 +43,6 @@ public class IndexController {
         return "index/index";
     }
 
-    @GetMapping("/not_autenticated")
-    public String accessDeniedNotAutenticated() {
-        return "index/accessDeniedNotAutenticated";
-    }
-
-    @GetMapping("/permissions_missing")
-    public String accessDeniedAutenticated() {
-        return "index/accessDeniedAutenticated";
-    }
-
     @GetMapping("/login")
     public String login() {
         return "login/login";

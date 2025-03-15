@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -53,7 +52,8 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(DataSource dataSource, UserRepository userRepository,
+    public CustomJdbcUserDetailsManager customJdbcUserDetailsManager(DataSource dataSource,
+            UserRepository userRepository,
             AuthoritiesRepository authoritiesRepository) {
         return new CustomJdbcUserDetailsManager(dataSource, userRepository, authoritiesRepository);
     }

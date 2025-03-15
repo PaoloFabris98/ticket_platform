@@ -12,18 +12,20 @@
 
 <body class="bg-dark d-flex justify-content-center">
 
-    <div class="w-100 mx-4 m-3"> 
+    <div class="w-100 mx-4 m-3">
 
         <div th:insert="~{fragments/navbar :: navBar}"></div>
         <div class="table-responsive">
             <table class="table table-bordered table-striped text-center">
                 <thead class="table-dark">
                     <tr>
-                        <th style="width: 5%;" >Operatore Id</th>
-                        <th style="width: 30%;">Descrizione</th>
+                        <th style="width: 5%;">Operatore Id</th>
+                        <th style="width: 30%;">Username</th>
                         <th style="width: 10%;">Operatore</th>
                         <th style="width: 10%;">Tickets ID</th>
                         <th style="width: 10%;">Status</th>
+                        <th style="width: 10%;">Abilitato</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,16 +35,26 @@
                         <td class="fs-6" style="width: 10%;" th:text="${user.getEmail()}"></td>
                         <td class="fs-6" style="width: 10%;">
                             <span th:each="ticket, iterStat : ${user.tickets}">
-                                <span th:text="${ticket.id}"></span>
+                                <a th:href="@{'/ticket/' + ${ticket.getId()}}"><span th:text="${ticket.id}"></span></a>
                                 <span th:if="${iterStat.index != user.tickets.size() - 1}">, </span>
                             </span>
                         </td>
-                        <td></td>
-                        <td style="width: 10%;"></td>
+                        <td style="width: 10%;">
+                            <span th:classappend="${user.getUserStatus().getUserStatusType().name() == 'ATTIVO' ? 'bg-success text-white' : 'bg-danger text-white'}" class="badge rounded-pill">
+                                <span th:text="${user.getUserStatus().getUserStatusType().name() == 'ATTIVO' ? 'Attivo' : 'Non Attivo'}"></span>
+                            </span>
+                        </td>
+                        <td style="width: 10%;">
+                            <span th:classappend="${user.isEnable() ? 'bg-success text-white' : 'bg-danger text-white'}" class="badge rounded-pill">
+                                <span th:text="${user.isEnable() ? 'Abilitato' : 'Disabilitato'}"></span>
+                            </span>
+                        </td>
+                        <td style="width: 10%;">
+                            <div class="me-2"
+                                th:insert="~{fragments/buttons :: editUser('/editUser/' + ${user.getId()})}"></div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div th:insert="~{fragments/footer :: footer}"></div>
-
- 

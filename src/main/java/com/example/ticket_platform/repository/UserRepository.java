@@ -11,4 +11,8 @@ import com.example.ticket_platform.model.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByUsername(String username);
 
+    Optional<User> findById(Integer id);
+
+    void deleteByUsername(String username);
+
 }

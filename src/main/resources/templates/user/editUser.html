@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/stile.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/card.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/navbar.css}" />
+</head>
+
+<body class="bg-dark text-white mx-4 m-3">
+
+    <div th:insert="~{fragments/navbar :: navBar}"></div>
+
+
+    <div th:if="${message != null && messageClass != null}">
+        <div class="alert text-center" th:classappend="${messageClass}">
+            <p th:text="${message}"></p>
+        </div>
+    </div>
+
+    <div class="m-3 p-2">
+        <h5>Modifica Operatore: <span th:text="${user.username}"></span></h5>
+    </div>
+
+    <div>
+        <form th:action="@{|/editUser/${id}|}" method="post" id="editUser-form" th:object="${user}"
+            class="bg-dark text-white">
+            <input type="hidden" th:field="*{id}" />
+            <div class="m-3 p-2">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" th:field="*{username}" th:errorClass="is-invalid">
+                <div th:if="${#fields.hasErrors('username')}" class="invalid-feedback">
+                    <ul>
+                        <li th:each="error: ${#fields.errors('username')}" th:text="${error}"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="m-3 p-2">
+                <label for="password" class="form-label">Password</label>
+                <input type="text" class="form-control" id="password" th:field="*{password}" th:errorClass="is-invalid">
+                <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback">
+                    <ul>
+                        <li th:each="error: ${#fields.errors('password')}" th:text="${error}"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="m-3 p-2">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" class="form-control" id="email" th:field="*{email}" th:errorClass="is-invalid">
+                <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback">
+                    <ul>
+                        <li th:each="error: ${#fields.errors('email')}" th:text="${error}"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="m-3 p-2 d-flex align-items-center">
+                <label for="enable" class="form-label me-2">Abilitato</label>
+                <input class="form-check-input mt-0" type="checkbox" id="enable" th:field="*{enable}">
+                <div th:if="${#fields.hasErrors('enable')}" class="invalid-feedback">
+                    <ul>
+                        <li th:each="error: ${#fields.errors('enable')}" th:text="${error}"></li>
+                    </ul>
+                </div>
+            </div>
+            <input type="submit" value="Modifica Operatore" class="btn btn-primary m-3 p-2">
+            <input type="reset" value="Reset" class="btn btn-warning m-3 p-2">
+        </form>
+    </div>
+
+    <div th:insert="~{fragments/footer :: footer}"></div>
+    <!--JS-->
+    <script th:src="@{/js/app.js}"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</body>
+
+</html>

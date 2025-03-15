@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.ticket_platform.model.Authorities;
 import com.example.ticket_platform.model.User;
+import com.example.ticket_platform.model.UserStatus;
 import com.example.ticket_platform.repository.AuthoritiesRepository;
 
 public class DatabaseUserDetails implements UserDetails {
@@ -20,7 +21,7 @@ public class DatabaseUserDetails implements UserDetails {
     private final String password;
     private final String email;
     private final Boolean enable;
-    // private final String status;
+    private final UserStatus status;
     private final Set<GrantedAuthority> authorities;
 
     public DatabaseUserDetails(User user, AuthoritiesRepository authoritiesRepository) {
@@ -29,7 +30,7 @@ public class DatabaseUserDetails implements UserDetails {
         this.password = user.getPassword();
         this.email = user.getEmail();
         this.enable = user.getEnable();
-        // this.status = user.getStatus();
+        this.status = user.getUserStatus();
         this.authorities = new HashSet<>();
 
         List<Authorities> userAuthorities = authoritiesRepository.findByUsername(username);
@@ -69,11 +70,9 @@ public class DatabaseUserDetails implements UserDetails {
         return this.enable;
     }
 
-    /*
-     * public String getStatus() {
-     * return this.status;
-     * }
-     */
+    public UserStatus getStatus() {
+        return this.status;
+    }
 
     @Override
     public String toString() {

@@ -20,6 +20,14 @@ public class Authorities {
     @NotBlank(message = "Il nome del ruolo non può essere vuoto")
     private String authority;
 
+    public Authorities() {
+    }
+
+    public Authorities(String username, String authority) {
+        this.setUsername(username);
+        this.setAuthority(authority);
+    }
+
     public Integer getId() {
         return this.id;
     }

@@ -14,7 +14,8 @@ public class DataInitializer {
 
     @Bean
     public CommandLineRunner initData(UserRepository userRepository, TicketRepository ticketRepository,
-            StatusRepository statusRepository, AuthoritiesRepository authoritiesRepository) {
+            StatusRepository statusRepository, AuthoritiesRepository authoritiesRepository,
+            UserStatusRepository userStatusRepository) {
         return args -> {
 
             if (statusRepository.count() == 0) {
@@ -32,6 +33,19 @@ public class DataInitializer {
 
             Status statusAperto = statusRepository.findByStatus(StatusType.APERTO);
 
+            if (userStatusRepository.count() == 0) {
+                UserStatus attivo = new UserStatus();
+                attivo.setUserStatusType(UserStatusType.ATTIVO);
+
+                UserStatus nonAttivo = new UserStatus();
+                nonAttivo.setUserStatusType(UserStatusType.NON_ATTIVO);
+
+                userStatusRepository.saveAll(Arrays.asList(attivo, nonAttivo));
+            }
+
+            UserStatus statusAttivo = userStatusRepository.findByUserStatusType(UserStatusType.ATTIVO);
+            UserStatus statusNonAttivo = userStatusRepository.findByUserStatusType(UserStatusType.NON_ATTIVO);
+
             User testOperatore = userRepository.findByUsername("User")
                     .orElseGet(() -> {
                         User user = new User();
@@ -39,6 +53,8 @@ public class DataInitializer {
                         user.setPassword("123");
                         user.setEmail("test@example.com");
                         user.setEnable(true);
+                        user.setUserStatus(statusAttivo);
+
                         Authorities authorities = new Authorities();
                         authorities.setUsername(user.getUsername());
                         authorities.setAuthority("USER");
@@ -50,11 +66,29 @@ public class DataInitializer {
                         User user = new User();
                         user.setUsername("Admin");
                         user.setPassword("123");
-                        user.setEmail("test@example.com");
+                        user.setEmail("admin@example.com");
                         user.setEnable(true);
+                        user.setUserStatus(statusAttivo);
+
                         Authorities authorities = new Authorities();
                         authorities.setUsername(user.getUsername());
                         authorities.setAuthority("ADMIN");
+                        authoritiesRepository.save(authorities);
+                        return userRepository.save(user);
+                    });
+
+            User testGuest = userRepository.findByUsername("Guest")
+                    .orElseGet(() -> {
+                        User user = new User();
+                        user.setUsername("Guest");
+                        user.setPassword("guest123");
+                        user.setEmail("guest@example.com");
+                        user.setEnable(false);
+                        user.setUserStatus(statusNonAttivo);
+
+                        Authorities authorities = new Authorities();
+                        authorities.setUsername(user.getUsername());
+                        authorities.setAuthority("USER");
                         authoritiesRepository.save(authorities);
                         return userRepository.save(user);
                     });

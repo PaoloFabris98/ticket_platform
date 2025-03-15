@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -36,8 +38,9 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "operatore")
     private List<Ticket> tickets;
 
-    // @NotBlank(message = "Lo status non può essere vuoto")
-    // private String status;
+    @ManyToOne
+    @JoinColumn(name = "user_status_id", nullable = false)
+    private UserStatus userStatus;
 
     public Integer getId() {
         return this.id;
@@ -79,15 +82,13 @@ public class User implements Serializable {
         this.tickets = tickets;
     }
 
-    /*
-     * public String getStatus() {
-     * return this.status;
-     * }
-     * 
-     * public void setStatus(String status) {
-     * this.status = status;
-     * }
-     */
+    public UserStatus getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
+    }
 
     public Boolean isEnable() {
         return this.enable;

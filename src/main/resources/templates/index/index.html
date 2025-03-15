@@ -29,7 +29,8 @@
                         <th style="width: 10%;">Operatore</th>
                         <th style="width: 10%;">Status</th>
                         <th style="width: 10%;">Note</th>
-                        <th style="width: 10%;">Data Apertura</th>
+                        <th style="width: 5%;">Data Apertura</th>
+                        <th style="width: 5%;">Data Chiusura</th>
                         <th style="width: 20%;"></th>
                     </tr>
                 </thead>
@@ -43,7 +44,8 @@
                             (ticket.getStatusName() == 'CHIUSO' ? 'bg-danger' : 
                             (ticket.getStatusName() == 'IN_CORSO' ? 'bg-warning' : ''))}"></td>
                         <td style="width: 10%;" th:text="${ticket.getNote()}"></td>
-                        <td style="width: 10%;" th:text="${ticket.getDataCreazione()}"></td>
+                        <td style="width: 5%;" th:text="${ticket.getDataCreazione()}"></td>
+                        <td style="width: 5%;" th:text="${ticket.getDataChiusura()}"></td>
                         <td class="d-flex justify-content-start">
 
                             <div class="me-2" th:insert="~{fragments/buttons :: seeTicket('/ticket/' + ${ticket.getId()})}"></div>
@@ -69,6 +71,12 @@
                             <div th:if="${ticket.getStatusName() == 'CHIUSO'}" class="me-2">
                                 <form th:action="@{/setStatusAperto/{id}(id=${ticket.getId()})}" method="post">
                                     <button type="submit" class="btn btn-danger">Apri</button>
+                                </form>
+                                <!--<p> Ticket Chiuso</p>-->
+                            </div>
+                            <div class="me-2" sec:authorize="hasAuthority('ADMIN')">
+                                <form th:action="@{/deleteTicket/{id}(id=${ticket.getId()})}" method="post" >
+                                    <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
                             </div>
                         </td>
