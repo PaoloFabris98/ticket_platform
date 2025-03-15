@@ -3,7 +3,7 @@ package com.example.ticket_platform.repository;
 import com.example.ticket_platform.model.Status;
 import com.example.ticket_platform.model.StatusType;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

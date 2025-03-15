@@ -10,7 +10,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.ticket_platform.model.Authorities;
-import com.example.ticket_platform.model.Status;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.repository.AuthoritiesRepository;
 

@@ -9,14 +9,15 @@
 
 <body>
     <a th:fragment="seeTicket(link)" th:href="@{${link}}" class="btn btn-primary">
-        See
+        Visualizza
     </a>
-    <a th:fragment="editTicket(link)" th:href="@{${link}}" class="btn btn-warning">
+    <a th:fragment="editTicket(link)" th:href="@{${link}}" class="btn btn-info">
         Edit
     </a>
     <a th:fragment="goToHome" th:href="@{/index}" class="btn btn-primary">
         Home
     </a>
+
 </body>
 
 </html>

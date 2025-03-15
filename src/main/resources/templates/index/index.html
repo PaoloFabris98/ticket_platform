@@ -25,18 +25,18 @@
                 <thead class="table-dark">
                     <tr>
                         <th style="width: 5%;">Ticket Id</th>
-                        <th style="width: 30%;">Descrizione</th>
+                        <th style="width: 20%;">Descrizione</th>
                         <th style="width: 10%;">Operatore</th>
                         <th style="width: 10%;">Status</th>
                         <th style="width: 10%;">Note</th>
                         <th style="width: 10%;">Data Apertura</th>
-                        <th style="width: 10%;"></th>
+                        <th style="width: 20%;"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="ticket : ${tickets}">
                         <td style="width: 5%;" th:text="${ticket.getId()}"></td>
-                        <td style="width: 30%;" th:text="${ticket.getDescrizione()}"></td>
+                        <td style="width: 20%;" th:text="${ticket.getDescrizione()}"></td>
                         <td class="fs-6" style="width: 10%;" th:text="${ticket.getOperatoreUsername()}"></td>
                         <td class="fs-6" style="width: 10%;" th:text="${ticket.getStatusName()}"
                             th:classappend="${ticket.getStatusName() == 'APERTO' ? 'bg-success' : 
@@ -45,11 +45,31 @@
                         <td style="width: 10%;" th:text="${ticket.getNote()}"></td>
                         <td style="width: 10%;" th:text="${ticket.getDataCreazione()}"></td>
                         <td class="d-flex justify-content-start">
-                            <div class="me-2">
-                                <div th:insert="~{fragments/buttons :: seeTicket('/ticket/' + ${ticket.getId()})}"></div>
+
+                            <div class="me-2" th:insert="~{fragments/buttons :: seeTicket('/ticket/' + ${ticket.getId()})}"></div>
+                            
+
+                            <div class="me-2" th:insert="~{fragments/buttons :: editTicket('/editTicket/' + ${ticket.getId()})}"></div>
+
+
+                            <div th:if="${ticket.getStatusName() == 'APERTO'}" class="me-2">
+                                <form th:action="@{/setStatusIn_corso/{id}(id=${ticket.getId()})}" method="post">
+                                    <button type="submit" class="btn btn-warning">Inizia</button>
+                                </form>
                             </div>
-                            <div>
-                                <div th:insert="~{fragments/buttons :: editTicket('/editTicket/' + ${ticket.getId()})}"></div>
+
+
+                            <div th:if="${ticket.getStatusName() == 'IN_CORSO'}" class="me-2">
+                                <form th:action="@{/setStatusChiuso/{id}(id=${ticket.getId()})}" method="post">
+                                    <button type="submit" class="btn btn-danger">Chiudi</button>
+                                </form>
+                            </div>
+
+
+                            <div th:if="${ticket.getStatusName() == 'CHIUSO'}" class="me-2">
+                                <form th:action="@{/setStatusAperto/{id}(id=${ticket.getId()})}" method="post">
+                                    <button type="submit" class="btn btn-danger">Apri</button>
+                                </form>
                             </div>
                         </td>
                     </tr>

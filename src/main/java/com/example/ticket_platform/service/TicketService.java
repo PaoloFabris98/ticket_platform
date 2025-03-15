@@ -29,6 +29,11 @@ public class TicketService {
         return ticketRepository.findById(id).get();
     }
 
+    public void updateTicket(Ticket ticket) {
+        statusRepository.save(ticket.getStatus());
+        ticketRepository.save(ticket);
+    }
+
     public void saveTicket(Ticket ticket) {
         statusRepository.save(ticket.getStatus());
         ticketRepository.save(ticket);

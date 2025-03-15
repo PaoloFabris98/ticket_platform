@@ -34,10 +34,12 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/webjars/**", "/css/**", "/js/**", "/imgs/**").permitAll()
                         .requestMatchers("/login", "/not_autenticated", "/logout", "/").permitAll()
-                        .requestMatchers("/operatori", "/editTicket/**").hasAuthority("ADMIN")
+                        .requestMatchers("/operatori").hasAuthority("ADMIN")
                         .requestMatchers("/permissions_missing").hasAuthority("USER")
+                        .requestMatchers("/index", "/editTicket/**")
+                        .hasAnyAuthority("ADMIN", "USER")
                         .requestMatchers(HttpMethod.POST, "/editTicket/**")
-                        .hasAuthority("ADMIN")
+                        .hasAnyAuthority("ADMIN", "USER")
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")

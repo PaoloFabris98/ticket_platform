@@ -24,7 +24,10 @@ public class Ticket {
     @NotNull
     private User operatore;
 
+    @NotNull(message = "La data non può essere vuota")
     private LocalDate dataCreazione;
+
+    private LocalDate dataChiusura;
 
     @Lob
     @NotBlank(message = "La descrizione non può essere vuota.")
@@ -83,6 +86,14 @@ public class Ticket {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public LocalDate getDataChiusura() {
+        return this.dataChiusura;
+    }
+
+    public void setDataChiusura(LocalDate dataChiusura) {
+        this.dataChiusura = dataChiusura;
     }
 
     public String getOperatoreUsername() {

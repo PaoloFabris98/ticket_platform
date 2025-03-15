@@ -18,17 +18,6 @@ public class Status implements Serializable {
     @OneToMany(mappedBy = "status")
     private List<Ticket> tickets;
 
-    public Status() {
-    }
-
-    public Status(String status) {
-        try {
-            this.status = StatusType.valueOf(status);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid status value: " + status);
-        }
-    }
-
     public Integer getId() {
         return id;
     }
@@ -51,5 +40,9 @@ public class Status implements Serializable {
 
     public void setTickets(List<Ticket> tickets) {
         this.tickets = tickets;
+    }
+
+    public void defaultStatusType() {
+        this.status = StatusType.APERTO;
     }
 }
