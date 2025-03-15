@@ -15,6 +15,11 @@
     <div class="w-100 mx-4 m-3">
 
         <div th:insert="~{fragments/navbar :: navBar}"></div>
+        <div th:if="${message != null && messageClass != null}">
+            <div class="alert text-center" th:classappend="${messageClass}">
+                <p th:text="${message}"></p>
+            </div>
+        </div>
         <div class="table-responsive">
             <table class="table table-bordered table-striped text-center">
                 <thead class="table-dark">
@@ -40,19 +45,29 @@
                             </span>
                         </td>
                         <td style="width: 10%;">
-                            <span th:classappend="${user.getUserStatus().getUserStatusType().name() == 'ATTIVO' ? 'bg-success text-white' : 'bg-danger text-white'}" class="badge rounded-pill">
-                                <span th:text="${user.getUserStatus().getUserStatusType().name() == 'ATTIVO' ? 'Attivo' : 'Non Attivo'}"></span>
+                            <span
+                                th:classappend="${user.getUserStatus().getUserStatusType().name() == 'ATTIVO' ? 'bg-success text-white' : 'bg-danger text-white'}"
+                                class="badge rounded-pill">
+                                <span
+                                    th:text="${user.getUserStatus().getUserStatusType().name() == 'ATTIVO' ? 'Attivo' : 'Non Attivo'}"></span>
                             </span>
                         </td>
                         <td style="width: 10%;">
-                            <span th:classappend="${user.isEnable() ? 'bg-success text-white' : 'bg-danger text-white'}" class="badge rounded-pill">
+                            <span th:classappend="${user.isEnable() ? 'bg-success text-white' : 'bg-danger text-white'}"
+                                class="badge rounded-pill">
                                 <span th:text="${user.isEnable() ? 'Abilitato' : 'Disabilitato'}"></span>
                             </span>
                         </td>
-                        <td style="width: 10%;">
+                        <td class="d-flex justify-content-start">
                             <div class="me-2"
                                 th:insert="~{fragments/buttons :: editUser('/editUser/' + ${user.getId()})}"></div>
+                            <div class="me-2" sec:authorize="hasAuthority('ADMIN')">
+                                <form th:action="@{/deleteUser/{id}(id=${user.getId()})}" method="post">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
                         </td>
+
                     </tr>
                 </tbody>
             </table>

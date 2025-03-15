@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserStatusRepository extends JpaRepository<UserStatus, Integer> {
     UserStatus findByUserStatusType(UserStatusType userStatusType);
+
 }

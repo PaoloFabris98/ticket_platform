@@ -2,7 +2,6 @@ package com.example.ticket_platform.model;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,7 +38,7 @@ public class User implements Serializable {
     private List<Ticket> tickets;
 
     @ManyToOne
-    @JoinColumn(name = "user_status_id", nullable = false)
+    @JoinColumn(name = "user_status_id")
     private UserStatus userStatus;
 
     public Integer getId() {

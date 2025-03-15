@@ -21,6 +21,9 @@
                     <h6 class="m-0 me-3" sec:authorize="hasAuthority('ADMIN')">
                         <a th:href="@{'/addTicket'}" class="text-white">Aggiungi Ticket</a>
                     </h6>
+                    <h6 class="m-0 me-3" sec:authorize="hasAuthority('ADMIN')">
+                        <a th:href="@{'/createUser'}" class="text-white">Aggiungi Operatore</a>
+                    </h6>
                 </div>
                 
                 <div class="col-md-4 d-flex align-items-center justify-content-end gap-3">

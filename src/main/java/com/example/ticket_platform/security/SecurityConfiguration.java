@@ -33,12 +33,15 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/webjars/**", "/css/**", "/js/**", "/imgs/**").permitAll()
                         .requestMatchers("/login", "/not_autenticated", "/logout", "/").permitAll()
-                        .requestMatchers("/operatori").hasAuthority("ADMIN")
+                        .requestMatchers("/operatori", "/addTicket", "/editTicket/**", "/deleteTicket/**",
+                                "/editUser/**", "/createUser")
+                        .hasAuthority("ADMIN")
                         .requestMatchers("/permissions_missing").hasAuthority("USER")
-                        .requestMatchers("/index", "/editTicket/**")
+                        .requestMatchers("/index")
                         .hasAnyAuthority("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.POST, "/editTicket/**")
-                        .hasAnyAuthority("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST, "/editTicket/**", "/addTicket", "/deleteTicket/**",
+                                "/editUser/**", "/createUser")
+                        .hasAnyAuthority("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")

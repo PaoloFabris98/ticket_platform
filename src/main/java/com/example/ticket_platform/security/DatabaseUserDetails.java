@@ -21,7 +21,7 @@ public class DatabaseUserDetails implements UserDetails {
     private final String password;
     private final String email;
     private final Boolean enable;
-    private final UserStatus status;
+    private UserStatus status;
     private final Set<GrantedAuthority> authorities;
 
     public DatabaseUserDetails(User user, AuthoritiesRepository authoritiesRepository) {
@@ -62,16 +62,20 @@ public class DatabaseUserDetails implements UserDetails {
         return this.email;
     }
 
-    public Boolean getEnable() {
+    public Boolean isEnable() {
         return this.enable;
     }
 
-    public Boolean isEnable() {
+    public Boolean getEnable() {
         return this.enable;
     }
 
     public UserStatus getStatus() {
         return this.status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
     }
 
     @Override

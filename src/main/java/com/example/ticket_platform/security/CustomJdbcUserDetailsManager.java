@@ -9,9 +9,10 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.ticket_platform.model.Authorities;
-
+import com.example.ticket_platform.model.Status;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.UserStatus;
+import com.example.ticket_platform.model.UserStatusType;
 import com.example.ticket_platform.repository.UserRepository;
 import com.example.ticket_platform.repository.UserStatusRepository;
 
@@ -41,12 +42,15 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
         return new DatabaseUserDetails(user, authoritiesRepository);
     }
 
-    @Override
-    public void createUser(UserDetails user) {
+    @Transactional
+    public void create(User user) {
         if (userExists(user.getUsername())) {
             throw new IllegalArgumentException("L'utente esiste già!");
         }
-        super.createUser(user);
+        createUserAuthoriti(user);
+        userRepository.save(user);
+        DatabaseUserDetails databaseUserDetails = new DatabaseUserDetails(user, authoritiesRepository);
+        updateAuthorities(databaseUserDetails);
 
     }
 
@@ -77,5 +81,13 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
         userDetails.getAuthorities().forEach(authority -> {
             authoritiesRepository.save(new Authorities(userDetails.getUsername(), authority.getAuthority()));
         });
+    }
+
+    @Transactional
+    private void createUserAuthoriti(User user) {
+        Authorities authorities = new Authorities();
+        authorities.setUsername(user.getUsername());
+        authorities.setAuthority("USER");
+        authoritiesRepository.save(authorities);
     }
 }

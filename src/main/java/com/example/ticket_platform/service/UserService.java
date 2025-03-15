@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.repository.UserRepository;
 
@@ -29,6 +31,7 @@ public class UserService {
         return userRepository.findById(Id).get();
     }
 
+    @Transactional
     public void deleteUser(String username) {
         userRepository.deleteByUsername(username);
     }

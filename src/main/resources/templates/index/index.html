@@ -51,7 +51,7 @@
                             <div class="me-2" th:insert="~{fragments/buttons :: seeTicket('/ticket/' + ${ticket.getId()})}"></div>
                             
 
-                            <div class="me-2" th:insert="~{fragments/buttons :: editTicket('/editTicket/' + ${ticket.getId()})}"></div>
+                            <div class="me-2" th:insert="~{fragments/buttons :: editTicket('/editTicket/' + ${ticket.getId()})}" sec:authorize="hasAuthority('ADMIN')"></div>
 
 
                             <div th:if="${ticket.getStatusName() == 'APERTO'}" class="me-2">
