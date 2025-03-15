@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/stile.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/card.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/navbar.css}" />
+</head>
+
+<body class="bg-dark text-white mx-4 m-3">
+
+    <div th:insert="~{fragments/navbar :: navBar}"></div>
+    <div th:if="${message != null && messageClass != null}">
+        <div class="alert text-center" th:classappend="${messageClass}">
+            <p th:text="${message}"></p>
+        </div>
+    </div>
+
+    <div class="m-3 p-2">
+        <h5>Modifica Nota Ticket:</h5>
+    </div>
+
+    <form th:action="@{|/addNote/${id}|}" method="post" id="addNote-form" class="bg-dark text-white container">
+        
+        <div class="m-3 p-2">
+            <label for="note" class="form-label">Contenuto</label>
+            <textarea class="form-control" id="note" name="note" rows="3" placeholder="Aggiungi eventuali informazioni..."></textarea>
+        </div>
+    
+        <input type="submit" value="Salva Modifiche" class="btn btn-success m-3 p-2">
+        <input type="reset" value="Reset" class="btn btn-warning m-3 p-2">
+    </form>
+
+    <div th:insert="~{fragments/footer :: footer}"></div>
+    
+    <!-- JS -->
+    <script th:src="@{/js/app.js}"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+</body>
+
+</html>

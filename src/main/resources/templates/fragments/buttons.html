@@ -11,9 +11,15 @@
     <a th:fragment="seeTicket(link)" th:href="@{${link}}" class="btn btn-primary">
         Visualizza
     </a>
-    <a th:fragment="editTicket(link)" th:href="@{${link}}" class="btn btn-info">
+    <a th:fragment="addNote(link)" th:href="@{${link}}" class="btn btn-primary">
+        Aggiungi Note
+    </a>
+
+    <a th:fragment="editTicket(link)" th:href="@{${link}}"
+        class="btn btn-info">
         Edit
     </a>
+
     <a th:fragment="editUser(link)" th:href="@{${link}}" class="btn btn-info">
         Edit
     </a>

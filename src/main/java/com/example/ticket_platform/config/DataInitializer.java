@@ -46,10 +46,10 @@ public class DataInitializer {
             UserStatus statusAttivo = userStatusRepository.findByUserStatusType(UserStatusType.ATTIVO);
             UserStatus statusNonAttivo = userStatusRepository.findByUserStatusType(UserStatusType.NON_ATTIVO);
 
-            User testOperatore = userRepository.findByUsername("User")
+            User testOperatore = userRepository.findByUsername("Operatore")
                     .orElseGet(() -> {
                         User user = new User();
-                        user.setUsername("User");
+                        user.setUsername("Operatore");
                         user.setPassword("123");
                         user.setEmail("test@example.com");
                         user.setEnable(true);

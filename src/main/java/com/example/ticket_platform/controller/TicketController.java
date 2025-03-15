@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -113,6 +114,29 @@ public class TicketController {
         ticketService.saveTicket(formTicket);
 
         redirectAttributes.addFlashAttribute("message", "Il ticket è stato creato con successo");
+        redirectAttributes.addFlashAttribute("messageClass", "alert-success");
+
+        return "redirect:/index";
+    }
+
+    @GetMapping("/addNote/{id}")
+    public String addNote(@PathVariable Integer id, Model model) {
+        model.addAttribute("id", id);
+        return "ticket/addNote";
+    }
+
+    @PostMapping("/addNote/{id}")
+    public String addNote(@PathVariable("id") Integer id, @Valid @ModelAttribute("note") String formNote,
+            BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            return "ticket/addNote";
+        }
+
+        Ticket ticket = ticketRepository.findById(id).get();
+        ticket.setNote(formNote);
+        ticketService.updateTicket(ticket);
+
+        redirectAttributes.addFlashAttribute("message", "Note aggiunte con successo");
         redirectAttributes.addFlashAttribute("messageClass", "alert-success");
 
         return "redirect:/index";

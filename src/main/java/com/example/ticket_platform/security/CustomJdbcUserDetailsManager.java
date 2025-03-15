@@ -9,10 +9,8 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.ticket_platform.model.Authorities;
-import com.example.ticket_platform.model.Status;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.UserStatus;
-import com.example.ticket_platform.model.UserStatusType;
 import com.example.ticket_platform.repository.UserRepository;
 import com.example.ticket_platform.repository.UserStatusRepository;
 

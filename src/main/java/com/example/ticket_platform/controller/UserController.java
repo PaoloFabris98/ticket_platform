@@ -23,12 +23,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class UserController {
-
-    private final UserRepository userRepository;
 
     @Autowired
     private UserService userService;
@@ -38,10 +35,6 @@ public class UserController {
     AuthoritiesRepository authoritiesRepository;
     @Autowired
     UserStatusRepository userStatusRepository;
-
-    UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @GetMapping("/operatori")
     public String seeOperators(Model model) {
@@ -107,7 +100,7 @@ public class UserController {
         redirectAttributes.addFlashAttribute("message", "L'operatore " + temp + " è stato eliminato correttamente!");
         redirectAttributes.addFlashAttribute("messageClass", "alert-success");
 
-        return "redirect:/index";
+        return "redirect:/operatori";
     }
 
 }

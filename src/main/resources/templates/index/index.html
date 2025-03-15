@@ -44,14 +44,15 @@
                             (ticket.getStatusName() == 'CHIUSO' ? 'bg-danger' : 
                             (ticket.getStatusName() == 'IN_CORSO' ? 'bg-warning' : ''))}"></td>
                         <td style="width: 10%;" th:text="${ticket.getNote()}"></td>
-                        <td style="width: 5%;" th:text="${ticket.getDataCreazione()}"></td>
-                        <td style="width: 5%;" th:text="${ticket.getDataChiusura()}"></td>
+                        <td style="width: 5%;" th:text="${ticket.getFormattedDate()}"></td>
+                        <td style="width: 5%;" th:text="${ticket.getFormattedClosedDate()}"></td>
                         <td class="d-flex justify-content-start">
 
                             <div class="me-2" th:insert="~{fragments/buttons :: seeTicket('/ticket/' + ${ticket.getId()})}"></div>
-                            
 
-                            <div class="me-2" th:insert="~{fragments/buttons :: editTicket('/editTicket/' + ${ticket.getId()})}" sec:authorize="hasAuthority('ADMIN')"></div>
+                            <div class="me-2" th:insert="~{fragments/buttons :: editTicket('/editTicket/' + ${ticket.getId()})}" sec:authorize="hasAuthority('ADMIN')" ></div>
+                            <div class="me-2" th:insert="~{fragments/buttons :: addNote('/addNote/' + ${ticket.getId()})}" sec:authorize="hasAuthority('USER')" ></div>
+                            
 
 
                             <div th:if="${ticket.getStatusName() == 'APERTO'}" class="me-2">
@@ -59,7 +60,6 @@
                                     <button type="submit" class="btn btn-warning">Inizia</button>
                                 </form>
                             </div>
-
 
                             <div th:if="${ticket.getStatusName() == 'IN_CORSO'}" class="me-2">
                                 <form th:action="@{/setStatusChiuso/{id}(id=${ticket.getId()})}" method="post">

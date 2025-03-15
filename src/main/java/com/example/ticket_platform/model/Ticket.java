@@ -105,6 +105,14 @@ public class Ticket {
         return this.dataCreazione.format(formatter);
     }
 
+    public String getFormattedClosedDate() {
+        if (this.dataChiusura == null) {
+            return "";
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return this.dataChiusura.format(formatter);
+    }
+
     public String getStatusName() {
         return this.status.getStatus().toString();
     }
