@@ -28,6 +28,7 @@
                         <th style="width: 20%;">Descrizione</th>
                         <th style="width: 10%;">Operatore</th>
                         <th style="width: 10%;">Status</th>
+                        <th style="width: 10%;">Categoria</th>
                         <th style="width: 10%;">Note</th>
                         <th style="width: 5%;">Data Apertura</th>
                         <th style="width: 5%;">Data Chiusura</th>
@@ -43,6 +44,11 @@
                             th:classappend="${ticket.getStatusName() == 'APERTO' ? 'bg-success' : 
                             (ticket.getStatusName() == 'CHIUSO' ? 'bg-danger' : 
                             (ticket.getStatusName() == 'IN_CORSO' ? 'bg-warning' : ''))}"></td>
+                            <td style="width: 10%;" th:text="${ticket.getCategoria().getCategoriaName()}"
+                            th:classappend="${ticket.getCategoria().getCategoriaName() == 'ASSISTENZA' ? 'bg-primary text-white' : 
+                                             (ticket.getCategoria().getCategoriaName() == 'MANUTENZIONE' ? 'bg-success text-white' : 
+                                             (ticket.getCategoria().getCategoriaName() == 'AMMINISTRAZIONE' ? 'bg-info text-white' : 
+                                             (ticket.getCategoria().getCategoriaName() == 'TECNICA' ? 'bg-warning text-dark' : '')))}"></td>
                         <td style="width: 10%;" th:text="${ticket.getNote()}"></td>
                         <td style="width: 5%;" th:text="${ticket.getFormattedDate()}"></td>
                         <td style="width: 5%;" th:text="${ticket.getFormattedClosedDate()}"></td>

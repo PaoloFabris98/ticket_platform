@@ -11,8 +11,6 @@ import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.UserStatus;
 import com.example.ticket_platform.model.UserStatusType;
-import com.example.ticket_platform.repository.AuthoritiesRepository;
-import com.example.ticket_platform.repository.UserRepository;
 import com.example.ticket_platform.repository.UserStatusRepository;
 import com.example.ticket_platform.security.CustomJdbcUserDetailsManager;
 import com.example.ticket_platform.service.UserService;
@@ -85,7 +83,7 @@ public class UserController {
     @GetMapping("/createUser")
     public String addUser(Model model) {
         User user = new User();
-        UserStatus userStatus = userStatusRepository.findByUserStatusType(UserStatusType.ATTIVO);
+        UserStatus userStatus = userStatusRepository.findByUserStatusType(UserStatusType.DISPONIBILE);
         user.setUserStatus(userStatus);
         model.addAttribute("user", user);
         return "user/create";
@@ -99,7 +97,7 @@ public class UserController {
             return "user/create";
         }
 
-        UserStatus userStatus = userStatusRepository.findByUserStatusType(UserStatusType.ATTIVO);
+        UserStatus userStatus = userStatusRepository.findByUserStatusType(UserStatusType.DISPONIBILE);
         formUser.setUserStatus(userStatus);
         customJdbcUserDetailsManager.create(formUser);
 

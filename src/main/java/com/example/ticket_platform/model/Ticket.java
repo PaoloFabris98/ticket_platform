@@ -40,6 +40,10 @@ public class Ticket {
     @JoinColumn(name = "status_id", nullable = false)
     private Status status;
 
+    @ManyToOne
+    @JoinColumn(name = "categoria_id", nullable = false)
+    private Categoria categoria;
+
     public Integer getId() {
         return this.id;
     }
@@ -94,6 +98,14 @@ public class Ticket {
 
     public void setDataChiusura(LocalDate dataChiusura) {
         this.dataChiusura = dataChiusura;
+    }
+
+    public Categoria getCategoria() {
+        return this.categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 
     public String getOperatoreUsername() {

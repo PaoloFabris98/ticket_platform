@@ -10,13 +10,16 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
 import com.example.ticket_platform.component.UtilityFunctions;
+import com.example.ticket_platform.model.Categoria;
 import com.example.ticket_platform.model.Note;
 import com.example.ticket_platform.model.Status;
 import com.example.ticket_platform.model.StatusType;
 import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.model.User;
+import com.example.ticket_platform.repository.CategoriaRepository;
 import com.example.ticket_platform.repository.StatusRepository;
 import com.example.ticket_platform.repository.TicketRepository;
+import com.example.ticket_platform.service.CategoriaService;
 import com.example.ticket_platform.service.StatusService;
 import com.example.ticket_platform.service.TicketService;
 import com.example.ticket_platform.service.UserService;
@@ -44,6 +47,10 @@ public class TicketController {
     private StatusService statusService;
     @Autowired
     private UtilityFunctions utilityFunctions;
+    @Autowired
+    private CategoriaService categoriaService;
+    @Autowired
+    private CategoriaRepository categoriaRepository;
 
     @GetMapping("/ticket/{id}")
     public String getMethodName(@PathVariable Integer id, Model model, Principal principal,
@@ -71,6 +78,7 @@ public class TicketController {
         model.addAttribute("ticket", ticket);
         model.addAttribute("users", users);
         model.addAttribute("statusType", statusTypes);
+        model.addAttribute("categorie", categoriaService.getAllCategoriaStatusTypes());
         return "ticket/edit";
     }
 
@@ -82,7 +90,9 @@ public class TicketController {
             return "ticket/edit";
         }
         Status status = statusRepository.findByStatus(formTicket.getStatus().getStatus());
+        Categoria categoria = categoriaRepository.findByNome(formTicket.getCategoria().getNome());
         formTicket.setStatus(status);
+        formTicket.setCategoria(categoria);
         ticketService.updateTicket(formTicket);
 
         redirectAttributes.addFlashAttribute("message", "Il ticket è stato modificato con successo");
@@ -95,10 +105,11 @@ public class TicketController {
         Ticket ticket = new Ticket();
         List<User> users = userService.getAll();
         ticket.setStatus(statusRepository.findByStatus(StatusType.APERTO));
+        ticket.setDataCreazione(LocalDate.now());
         model.addAttribute("statusList", statusService.getAllStatusTypes());
+        model.addAttribute("categorie", categoriaService.getAllCategoriaStatusTypes());
         model.addAttribute("users", users);
         model.addAttribute("ticket", ticket);
-
         return "ticket/add";
     }
 
@@ -110,7 +121,9 @@ public class TicketController {
             return "ticket/add";
         }
         Status status = statusRepository.findByStatus(formTicket.getStatus().getStatus());
+        Categoria categoria = categoriaRepository.findByNome(formTicket.getCategoria().getNome());
         formTicket.setStatus(status);
+        formTicket.setCategoria(categoria);
         ticketService.saveTicket(formTicket);
 
         redirectAttributes.addFlashAttribute("message", "Il ticket è stato creato con successo");

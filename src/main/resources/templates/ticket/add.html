@@ -18,18 +18,16 @@
             <p th:text="${message}"></p>
         </div>
     </div>
-    </div>
-    <form th:action="@{/addTicket}" method="post" id="addTicket-form" th:object="${ticket}"
-        class="bg-dark text-white container">
+
+    <form th:action="@{/addTicket}" method="post" id="addTicket-form" th:object="${ticket}" class="bg-dark text-white container">
         <input type="hidden" th:field="*{status.status}" />
+
         <div class="m-3 p-2">
             <label for="Operatore" class="form-label">Operatore</label>
             <select class="form-control" id="Operatore" th:field="*{operatore.id}" th:errorClass="is-invalid">
                 <option value="" disabled selected>Seleziona un operatore</option>
                 <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.username}"
-                    th:selected="${ticket.operatore != null && ticket.operatore.id == user.id}"
-                    th:errorClass="is-invalid">
-                </option>
+                        th:selected="${ticket.operatore != null && ticket.operatore.id == user.id}"></option>
             </select>
             <div th:if="${#fields.hasErrors('operatore')}" class="invalid-feedback">
                 <ul>
@@ -37,34 +35,46 @@
                 </ul>
             </div>
         </div>
+
         <div class="m-3 p-2">
             <label for="dataCreazione" class="form-label">Data di Apertura</label>
-            <input type="date" class="form-control" id="dataCreazione" th:field="*{dataCreazione}"
-                th:errorClass="is-invalid">
+            <input type="date" class="form-control" id="dataCreazione" th:field="*{dataCreazione}" th:errorClass="is-invalid">
             <div th:if="${#fields.hasErrors('dataCreazione')}" class="invalid-feedback">
                 <ul>
                     <li th:each="error: ${#fields.errors('dataCreazione')}" th:text="${error}"></li>
                 </ul>
             </div>
         </div>
+
         <div class="m-3 p-2">
             <label for="Descrizione" class="form-label">Descrizione</label>
             <textarea class="form-control" id="Descrizione" th:field="*{descrizione}" rows="5"
-                placeholder="Inserisci la descrizione del ticket" th:errorClass="is-invalid"></textarea>
+                      placeholder="Inserisci la descrizione del ticket" th:errorClass="is-invalid"></textarea>
             <div th:if="${#fields.hasErrors('descrizione')}" class="invalid-feedback">
                 <ul>
                     <li th:each="error: ${#fields.errors('descrizione')}" th:text="${error}"></li>
                 </ul>
             </div>
         </div>
-
+        <div class="m-3 p-2">
+            <label for="Categoria" class="form-label">Categoria</label>
+            <select class="form-control" id="Categoria" th:field="*{categoria.nome}" th:errorClass="is-invalid">
+                <option value="" disabled selected>Seleziona una categoria</option>
+                <option th:each="categoria : ${categorie}" th:value="${categoria}" th:text="${categoria}"></option>
+            </select>
+            <div th:if="${#fields.hasErrors('categoria')}" class="invalid-feedback">
+                <ul>
+                    <li th:each="error: ${#fields.errors('categoria')}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
 
         <input type="submit" value="Aggiungi Ticket" class="btn btn-primary m-3 p-2">
         <input type="reset" value="Reset" class="btn btn-warning m-3 p-2">
     </form>
 
-
     <div th:insert="~{fragments/footer :: footer}"></div>
+
     <!--JS-->
     <script th:src="@{/js/app.js}"></script>
     <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>

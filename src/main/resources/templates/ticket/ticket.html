@@ -7,7 +7,6 @@
     <title>Dettagli Ticket</title>
 
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
-
     <link th:rel="stylesheet" th:href="@{/css/stile.css}" />
     <link th:rel="stylesheet" th:href="@{/css/card.css}" />
     <link th:rel="stylesheet" th:href="@{/css/navbar.css}" />
@@ -33,6 +32,10 @@
                             <p th:text="${ticket.getDescrizione()}" class="text-light"></p>
                         </div>
                         <div class="mb-3">
+                            <strong>Categoria:</strong>
+                            <span th:text="${ticket.getCategoria().getCategoriaName()}" class="text-light"></span>
+                        </div>
+                        <div class="mb-3">
                             <strong>Data Apertura:</strong>
                             <span th:text="${ticket.getFormattedDate()}" class="text-light"></span>
                         </div>
@@ -40,8 +43,7 @@
                             <strong>Status:</strong>
                             <span th:text="${ticket.getStatusName()}" class="text-light"></span>
                         </div>
-                        <div th:insert="~{fragments/buttons :: goToHome}">
-                        </div>
+                        <div th:insert="~{fragments/buttons :: goToHome}"></div>
                     </div>
                 </div>
             </div>

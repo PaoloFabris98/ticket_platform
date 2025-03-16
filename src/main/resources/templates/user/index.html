@@ -46,10 +46,10 @@
                         </td>
                         <td style="width: 10%;">
                             <span
-                                th:classappend="${user.getUserStatus().getUserStatusType().name() == 'ATTIVO' ? 'bg-success text-white' : 'bg-danger text-white'}"
+                                th:classappend="${user.getUserStatus().getUserStatusType().name() == 'DISPONIBILE' ? 'bg-success text-white' : 'bg-danger text-white'}"
                                 class="badge rounded-pill">
                                 <span
-                                    th:text="${user.getUserStatus().getUserStatusType().name() == 'ATTIVO' ? 'Attivo' : 'Non Attivo'}"></span>
+                                    th:text="${user.getUserStatus().getUserStatusType().name() == 'DISPONIBILE' ? 'Disponibile' : 'Non Disponibile'}"></span>
                             </span>
                         </td>
                         <td style="width: 10%;">

@@ -1,8 +1,8 @@
 package com.example.ticket_platform.model;
 
 public enum UserStatusType {
-    ATTIVO,
-    NON_ATTIVO;
+    DISPONIBILE,
+    NON_DISPONIBILE;
 
     public String getName() {
         return this.name();

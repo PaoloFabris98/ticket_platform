@@ -15,7 +15,7 @@ public class DataInitializer {
     @Bean
     public CommandLineRunner initData(UserRepository userRepository, TicketRepository ticketRepository,
             StatusRepository statusRepository, AuthoritiesRepository authoritiesRepository,
-            UserStatusRepository userStatusRepository) {
+            UserStatusRepository userStatusRepository, CategoriaRepository categoriaRepository) {
         return args -> {
 
             if (statusRepository.count() == 0) {
@@ -35,16 +35,16 @@ public class DataInitializer {
 
             if (userStatusRepository.count() == 0) {
                 UserStatus attivo = new UserStatus();
-                attivo.setUserStatusType(UserStatusType.ATTIVO);
+                attivo.setUserStatusType(UserStatusType.DISPONIBILE);
 
                 UserStatus nonAttivo = new UserStatus();
-                nonAttivo.setUserStatusType(UserStatusType.NON_ATTIVO);
+                nonAttivo.setUserStatusType(UserStatusType.NON_DISPONIBILE);
 
                 userStatusRepository.saveAll(Arrays.asList(attivo, nonAttivo));
             }
 
-            UserStatus statusAttivo = userStatusRepository.findByUserStatusType(UserStatusType.ATTIVO);
-            UserStatus statusNonAttivo = userStatusRepository.findByUserStatusType(UserStatusType.NON_ATTIVO);
+            UserStatus statusAttivo = userStatusRepository.findByUserStatusType(UserStatusType.DISPONIBILE);
+            UserStatus statusNonAttivo = userStatusRepository.findByUserStatusType(UserStatusType.NON_DISPONIBILE);
 
             User testOperatore = userRepository.findByUsername("Operatore")
                     .orElseGet(() -> {
@@ -93,6 +93,18 @@ public class DataInitializer {
                         return userRepository.save(user);
                     });
 
+            if (categoriaRepository.count() == 0) {
+                Categoria assistenza = new Categoria(CategoriaTicketType.ASSISTENZA);
+                Categoria manutenzione = new Categoria(CategoriaTicketType.MANUTENZIONE);
+                Categoria amministrazione = new Categoria(CategoriaTicketType.AMMINISTRAZIONE);
+                Categoria tecnica = new Categoria(CategoriaTicketType.TECNICA);
+
+                categoriaRepository.saveAll(Arrays.asList(assistenza, manutenzione, amministrazione, tecnica));
+            }
+
+            Categoria categoriaAssistenza = categoriaRepository.findByNome(CategoriaTicketType.ASSISTENZA);
+            Categoria categoriaManutenzione = categoriaRepository.findByNome(CategoriaTicketType.MANUTENZIONE);
+
             if (ticketRepository.countByOperatore(testOperatore) < 5) {
                 for (int i = 1; i <= 5; i++) {
                     Ticket ticket = new Ticket();
@@ -100,9 +112,11 @@ public class DataInitializer {
                     ticket.setDataCreazione(LocalDate.now());
                     ticket.setDescrizione("Ticket di test numero " + i);
                     ticket.setStatus(statusAperto);
+                    ticket.setCategoria(i % 2 == 0 ? categoriaManutenzione : categoriaAssistenza);
                     ticketRepository.save(ticket);
                 }
             }
+
             if (ticketRepository.countByOperatore(testAdmin) < 5) {
                 for (int i = 1; i <= 5; i++) {
                     Ticket ticket = new Ticket();
@@ -110,6 +124,7 @@ public class DataInitializer {
                     ticket.setDataCreazione(LocalDate.now());
                     ticket.setDescrizione("Ticket di test numero " + i);
                     ticket.setStatus(statusAperto);
+                    ticket.setCategoria(i % 2 == 0 ? categoriaManutenzione : categoriaAssistenza);
                     ticketRepository.save(ticket);
                 }
             }
