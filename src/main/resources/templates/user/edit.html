@@ -31,9 +31,7 @@
             <input type="hidden" th:field="*{id}" />
             <div class="m-3 p-2">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" th:field="*{username}" 
-       th:errorClass="is-invalid" 
-       th:readonly="${!#authorization.expression('hasRole(''ADMIN'')')}">
+                <input type="text" class="form-control" id="username" th:field="*{username}" th:errorClass="is-invalid">
                 <div th:if="${#fields.hasErrors('username')}" class="invalid-feedback">
                     <ul>
                         <li th:each="error: ${#fields.errors('username')}" th:text="${error}"></li>

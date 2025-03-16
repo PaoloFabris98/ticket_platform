@@ -3,6 +3,7 @@ package com.example.ticket_platform.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,11 +25,13 @@ public class UserService {
     }
 
     public User findByUsernameUser(String name) {
-        return userRepository.findByUsername(name).get();
+        return userRepository.findByUsername(name)
+                .orElseThrow(() -> new UsernameNotFoundException("Utente non trovato: " + name));
     }
 
     public User findUserById(Integer Id) {
-        return userRepository.findById(Id).get();
+        return userRepository.findById(Id)
+                .orElseThrow(() -> new IllegalArgumentException("Utente con ID " + Id + " non trovato"));
     }
 
     @Transactional

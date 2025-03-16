@@ -1,5 +1,7 @@
 package com.example.ticket_platform.security;
 
+import java.security.Principal;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +71,20 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
         System.out.println("Utente salvato: " + existingUser);
 
         DatabaseUserDetails databaseUserDetails = new DatabaseUserDetails(existingUser, authoritiesRepository);
+
         updateAuthorities(databaseUserDetails);
+    }
+
+    public void updateUsernameReferences(String oldUsername, User newUser) {
+        User user = userRepository.findByUsername(oldUsername).get();
+        if (user != null) {
+            user.setUsername(newUser.getUsername());
+            Authorities authorities = authoritiesRepository.findByUsername(oldUsername).get(0);
+            authorities.setUsername(newUser.getUsername());
+            authoritiesRepository.save(authorities);
+            userRepository.save(user);
+
+        }
     }
 
     @Transactional
@@ -86,6 +101,8 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
         Authorities authorities = new Authorities();
         authorities.setUsername(user.getUsername());
         authorities.setAuthority("USER");
+
         authoritiesRepository.save(authorities);
     }
+
 }

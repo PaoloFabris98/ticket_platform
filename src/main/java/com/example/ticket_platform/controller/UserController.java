@@ -70,7 +70,13 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "user/edit";
         }
+        String oldUsername = formUser.getUsername();
         customJdbcUserDetailsManager.updateUser(formUser);
+
+        if (!oldUsername.equals(formUser.getUsername())) {
+            customJdbcUserDetailsManager.updateUsernameReferences(oldUsername, formUser);
+        }
+
         redirectAttributes.addFlashAttribute("message", "Utente aggiornato correttamente!");
         redirectAttributes.addFlashAttribute("messageClass", "alert-success");
         if (utilityFunctions.isAdmin(utilityFunctions.currentUser(principal))) {

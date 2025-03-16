@@ -21,6 +21,8 @@ public class UtilityFunctions {
     private AuthoritiesService authoritiesService;
 
     public User currentUser(Principal principal) {
+        if (principal == null)
+            return null;
         return userService.findByUsernameUser(principal.getName());
     }
 

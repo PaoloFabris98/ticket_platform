@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -16,6 +19,7 @@ import com.example.ticket_platform.repository.AuthoritiesRepository;
 import com.example.ticket_platform.repository.UserRepository;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfiguration {
 
         private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
@@ -55,11 +59,17 @@ public class SecurityConfiguration {
                                                 .loginPage("/login")
                                                 .defaultSuccessUrl("/index", true)
                                                 .permitAll())
-                                .logout(logout -> logout.permitAll())
+                                .logout(logout -> logout.invalidateHttpSession(true).deleteCookies("JSESSIONID")
+                                                .permitAll())
                                 .exceptionHandling(ex -> ex
                                                 .authenticationEntryPoint(customAuthenticationEntryPoint)
                                                 .accessDeniedHandler(customAccessDeniedHandler));
                 return http.build();
+        }
+
+        @Bean
+        public SessionRegistry sessionRegistry() {
+                return new SessionRegistryImpl();
         }
 
         @Bean
