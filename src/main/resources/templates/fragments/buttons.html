@@ -9,30 +9,29 @@
 
 <body>
     <a th:fragment="seeTicket(link)" th:href="@{${link}}" class="btn btn-primary">
-        Visualizza
+        Dettagli Ticket
     </a>
-    <a th:fragment="addNote(link)" th:href="@{${link}}" class="btn btn-primary">
-        Aggiungi Note
+    <a th:fragment="editDescrizione(link)" th:href="@{${link}}" class="btn btn-warning">
+        Modifica Descrizione
     </a>
-
-    <a th:fragment="editTicket(link)" th:href="@{${link}}"
-        class="btn btn-info">
-        Edit
+    <a th:fragment="addNota(link)" th:href="@{${link}}" class="btn btn-success">
+        Aggiungi Nota
     </a>
-
-    <a th:fragment="editUser(link)" th:href="@{${link}}" class="btn btn-info">
-        Edit
+    <a th:fragment="editTicket(link)" th:href="@{${link}}" class="btn btn-info">
+        Modifica Ticket
     </a>
-    <a th:fragment="editOperatore(link)" th:href="@{${link}}" class="btn btn-info">
-        Edit
+    <a th:fragment="editUser(link)" th:href="@{${link}}" class="btn btn-secondary">
+        Modifica Utente
     </a>
-    <a th:fragment="deleteTicket(link)" th:href="@{${link}}" class="btn btn-info">
-        Delete
+    <a th:fragment="editOperatore(link)" th:href="@{${link}}" class="btn btn-secondary">
+        Modifica Operatore
+    </a>
+    <a th:fragment="deleteTicket(link)" th:href="@{${link}}" class="btn btn-danger">
+        Elimina Ticket
     </a>
     <a th:fragment="goToHome" th:href="@{/index}" class="btn btn-primary">
-        Home
+        Torna alla Home
     </a>
-
 </body>
 
 </html>

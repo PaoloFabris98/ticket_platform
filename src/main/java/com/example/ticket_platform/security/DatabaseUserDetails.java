@@ -19,8 +19,8 @@ public class DatabaseUserDetails implements UserDetails {
     private final Integer id;
     private final String username;
     private final String password;
-    private final String email;
     private final Boolean enable;
+    private final String email;
     private UserStatus status;
     private final Set<GrantedAuthority> authorities;
 

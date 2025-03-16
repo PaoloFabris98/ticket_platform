@@ -1,7 +1,9 @@
 package com.example.ticket_platform.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,11 +12,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-public class Ticket {
+public class Ticket implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -33,9 +36,6 @@ public class Ticket {
     @NotBlank(message = "La descrizione non può essere vuota.")
     private String descrizione;
 
-    @Lob
-    private String note;
-
     @ManyToOne
     @JoinColumn(name = "status_id", nullable = false)
     private Status status;
@@ -43,6 +43,9 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
+
+    @OneToMany(mappedBy = "ticket")
+    private List<Nota> note;
 
     public Integer getId() {
         return this.id;
@@ -84,11 +87,11 @@ public class Ticket {
         this.descrizione = descrizione;
     }
 
-    public String getNote() {
+    public List<Nota> getNote() {
         return this.note;
     }
 
-    public void setNote(String note) {
+    public void setNote(List<Nota> note) {
         this.note = note;
     }
 

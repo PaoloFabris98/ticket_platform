@@ -11,19 +11,18 @@ import org.springframework.validation.BindingResult;
 
 import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.Categoria;
+import com.example.ticket_platform.model.Descrizione;
+import com.example.ticket_platform.model.Nota;
 import com.example.ticket_platform.model.Note;
 import com.example.ticket_platform.model.Status;
 import com.example.ticket_platform.model.StatusType;
 import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.repository.CategoriaRepository;
+import com.example.ticket_platform.repository.NotaRepository;
 import com.example.ticket_platform.repository.StatusRepository;
 import com.example.ticket_platform.repository.TicketRepository;
-import com.example.ticket_platform.service.CategoriaService;
-import com.example.ticket_platform.service.StatusService;
-import com.example.ticket_platform.service.TicketService;
-import com.example.ticket_platform.service.UserService;
-
+import com.example.ticket_platform.service.*;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,6 +50,12 @@ public class TicketController {
     private CategoriaService categoriaService;
     @Autowired
     private CategoriaRepository categoriaRepository;
+    @Autowired
+    private NotaService notaService;
+
+    TicketController(NotaService notaService) {
+        this.notaService = notaService;
+    }
 
     @GetMapping("/ticket/{id}")
     public String getMethodName(@PathVariable Integer id, Model model, Principal principal,
@@ -132,27 +137,56 @@ public class TicketController {
         return "redirect:/index";
     }
 
-    @GetMapping("/addNote/{id}")
-    public String addNote(@PathVariable Integer id, Model model) {
-        Note note = new Note();
-        note.setNote(ticketService.getTicketById(id).getNote());
-        model.addAttribute(note);
+    @GetMapping("/editDescrizione/{id}")
+    public String editDescrizione(@PathVariable Integer id, Model model) {
+        Descrizione descrizione = new Descrizione();
+        descrizione.setDescrizione(ticketService.getTicketById(id).getDescrizione());
+        model.addAttribute("descrizione", descrizione);
         model.addAttribute("id", id);
-        return "ticket/addNote";
+        return "ticket/addDescrizione";
     }
 
-    @PostMapping("/addNote/{id}")
-    public String addNote(@PathVariable("id") Integer id, @Valid @ModelAttribute("note") Note formNote,
+    @PostMapping("/editDescrizione/{id}")
+    public String editDescrizione(@PathVariable("id") Integer id,
+            @Valid @ModelAttribute("descrizione") Descrizione formDescrizione,
             BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "ticket/addNote";
+            return "ticket/addDescrizione";
         }
 
         Ticket ticket = ticketRepository.findById(id).get();
-        ticket.setNote(formNote.getNote());
+        ticket.setDescrizione(formDescrizione.getDescrizione());
         ticketService.updateTicket(ticket);
 
-        redirectAttributes.addFlashAttribute("message", "Note aggiunte con successo");
+        redirectAttributes.addFlashAttribute("message", "Descrizione modificata con successo");
+        redirectAttributes.addFlashAttribute("messageClass", "alert-success");
+
+        return "redirect:/index";
+    }
+
+    @GetMapping("/addNota/{id}")
+    public String addNote(@PathVariable Integer id, Model model, Principal principal) {
+        Note note = new Note();
+        model.addAttribute("note", note);
+        return "ticket/addNota";
+    }
+
+    @PostMapping("/addNota/{id}")
+    public String addNote(@PathVariable("id") Integer id,
+            @Valid @ModelAttribute("nota") Note formNota,
+            BindingResult bindingResult, RedirectAttributes redirectAttributes, Principal principal) {
+        if (bindingResult.hasErrors()) {
+            return "ticket/addNota";
+        }
+        Nota nota = new Nota();
+        User user = utilityFunctions.currentUser(principal);
+        System.out.println(utilityFunctions.currentUser(principal).getUsername());
+        nota.setDataCreazione(LocalDate.now());
+        nota.setNota(formNota.getNote());
+        nota.setTicket(ticketService.getTicketById(id));
+        nota.setAutore(user);
+        notaService.save(nota);
+        redirectAttributes.addFlashAttribute("message", "Nota creata con successo");
         redirectAttributes.addFlashAttribute("messageClass", "alert-success");
 
         return "redirect:/index";

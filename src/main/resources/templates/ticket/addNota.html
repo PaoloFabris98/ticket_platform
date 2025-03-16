@@ -20,10 +20,10 @@
     </div>
 
     <div class="m-3 p-2">
-        <h5>Modifica Nota Ticket:</h5>
+        <h5>Aggiungi nota al Ticket</h5>
     </div>
 
-    <form th:action="@{|/addNote/${id}|}" method="post" id="addNote-form" th:object="${note}"
+    <form th:action="@{|/addNota/${id}|}" method="post" id="addNota-form" th:object="${note}"
         class="bg-dark text-white container">
 
         <div class="m-3 p-2">

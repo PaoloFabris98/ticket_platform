@@ -1,14 +1,14 @@
 package com.example.ticket_platform.model;
 
 public class Note {
-    String Note;
+    private String note;
 
     public String getNote() {
-        return this.Note;
+        return this.note;
     }
 
-    public void setNote(String Note) {
-        this.Note = Note;
+    public void setNote(String note) {
+        this.note = note;
     }
 
 }
