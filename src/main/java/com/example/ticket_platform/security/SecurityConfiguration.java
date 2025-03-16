@@ -36,12 +36,11 @@ public class SecurityConfiguration {
                                                 .requestMatchers("/login", "/not_autenticated", "/logout", "/")
                                                 .permitAll()
                                                 .requestMatchers("/operatori", "/addTicket", "/editTicket/**",
-                                                                "/deleteTicket/**",
-                                                                "/editUser/**", "/createUser")
+                                                                "/deleteTicket/**", "/createUser")
                                                 .hasAuthority("ADMIN")
                                                 .requestMatchers("/permissions_missing", "/addNote/**")
                                                 .hasAuthority("USER")
-                                                .requestMatchers("/index")
+                                                .requestMatchers("/index", "/editUser/**")
                                                 .hasAnyAuthority("ADMIN", "USER")
                                                 .requestMatchers(HttpMethod.POST, "/editTicket/**", "/addTicket",
                                                                 "/deleteTicket/**",
@@ -49,6 +48,8 @@ public class SecurityConfiguration {
                                                 .hasAnyAuthority("ADMIN")
                                                 .requestMatchers(HttpMethod.POST, "/addNote/**")
                                                 .hasAnyAuthority("USER")
+                                                .requestMatchers(HttpMethod.POST, "/addNote/**", "/editUser/**")
+                                                .hasAnyAuthority("USER", "ADMIN")
                                                 .anyRequest().authenticated())
                                 .formLogin(form -> form
                                                 .loginPage("/login")

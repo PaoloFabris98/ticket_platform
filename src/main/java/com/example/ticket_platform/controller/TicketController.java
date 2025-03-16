@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
 import com.example.ticket_platform.component.UtilityFunctions;
+import com.example.ticket_platform.model.Note;
 import com.example.ticket_platform.model.Status;
 import com.example.ticket_platform.model.StatusType;
 import com.example.ticket_platform.model.Ticket;
@@ -26,24 +27,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class TicketController {
 
     @Autowired
-    TicketRepository ticketRepository;
+    private TicketRepository ticketRepository;
     @Autowired
-    TicketService ticketService;
+    private TicketService ticketService;
     @Autowired
-    UserService userService;
+    private UserService userService;
     @Autowired
-    StatusRepository statusRepository;
+    private StatusRepository statusRepository;
     @Autowired
-    StatusService statusService;
+    private StatusService statusService;
     @Autowired
-    UtilityFunctions utilityFunctions;
+    private UtilityFunctions utilityFunctions;
 
     @GetMapping("/ticket/{id}")
     public String getMethodName(@PathVariable Integer id, Model model, Principal principal,
@@ -121,19 +121,22 @@ public class TicketController {
 
     @GetMapping("/addNote/{id}")
     public String addNote(@PathVariable Integer id, Model model) {
+        Note note = new Note();
+        note.setNote(ticketService.getTicketById(id).getNote());
+        model.addAttribute(note);
         model.addAttribute("id", id);
         return "ticket/addNote";
     }
 
     @PostMapping("/addNote/{id}")
-    public String addNote(@PathVariable("id") Integer id, @Valid @ModelAttribute("note") String formNote,
+    public String addNote(@PathVariable("id") Integer id, @Valid @ModelAttribute("note") Note formNote,
             BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "ticket/addNote";
         }
 
         Ticket ticket = ticketRepository.findById(id).get();
-        ticket.setNote(formNote);
+        ticket.setNote(formNote.getNote());
         ticketService.updateTicket(ticket);
 
         redirectAttributes.addFlashAttribute("message", "Note aggiunte con successo");
