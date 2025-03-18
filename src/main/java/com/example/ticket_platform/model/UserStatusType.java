@@ -7,4 +7,8 @@ public enum UserStatusType {
     public String getName() {
         return this.name();
     }
+
+    public String getLabel() {
+        return this.name();
+    }
 }

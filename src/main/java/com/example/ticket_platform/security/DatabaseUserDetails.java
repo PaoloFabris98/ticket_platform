@@ -23,6 +23,7 @@ public class DatabaseUserDetails implements UserDetails {
     private final Boolean enable;
     private final String email;
     private final UserStatus status;
+    private final AuthoritiesType authoritiesType;
     private final Set<GrantedAuthority> authorities;
 
     public DatabaseUserDetails(User user, AuthoritiesRepository authoritiesRepository) {
@@ -32,6 +33,7 @@ public class DatabaseUserDetails implements UserDetails {
         this.email = user.getEmail();
         this.enable = user.getEnable();
         this.status = user.getUserStatus();
+        this.authoritiesType = user.getRole();
         this.authorities = new HashSet<>();
 
         List<Authorities> userAuthorities = authoritiesRepository.findByUsername(username);
@@ -73,6 +75,10 @@ public class DatabaseUserDetails implements UserDetails {
 
     public UserStatus getStatus() {
         return this.status;
+    }
+
+    public AuthoritiesType getAuthoritiesType() {
+        return this.authoritiesType;
     }
 
     @Override

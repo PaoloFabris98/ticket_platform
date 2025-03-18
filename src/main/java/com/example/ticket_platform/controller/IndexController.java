@@ -44,6 +44,12 @@ public class IndexController {
         return "redirect:/login";
     }
 
+    @ModelAttribute("currentUserObj")
+    public User getCurrentUserObj(Principal principal) {
+        return utilityFunctions.currentUser(principal);
+
+    }
+
     @GetMapping("/")
     public String index() {
         return "redirect:/login";
@@ -51,6 +57,7 @@ public class IndexController {
 
     @GetMapping("/index")
     public String index(Model model, Principal principal) {
+        System.out.println(principal.getClass());
         if (utilityFunctions.isAdmin(utilityFunctions.currentUser(principal))) {
             List<Ticket> allTickets = ticketService.findAll();
             model.addAttribute("tickets", allTickets);

@@ -29,16 +29,18 @@
                 <div class="col-md-4 d-flex align-items-center justify-content-end gap-3">
                     <h6 class="m-0 d-flex align-items-center gap-2">
                         <span th:text="'Benvenuto, '"></span>
-                        <a th:href="@{'/editUser/' + ${#authentication.principal.id}}" class="text-white">
-                            <span th:text="${#authentication.principal.username}"></span>
+                        <a th:href="@{'/editUser/' + ${currentUserObj.id}}" class="text-white">
+                            <span th:text="${currentUserObj.username}"></span>
                         </a>
                         <span>Cambia status in:</span>
                     </h6>
-                    <div th:switch="${#authentication.principal.userStatus.userStatusType}">
-                        <form th:action="@{'/setOperatoreNonDisponibile/' + ${#authentication.principal.id}}" method="post" th:if="${#authentication.principal.getStatus.getUserStatusType().name()} == 'DISPONIBILE'">
+                    <div th:switch="${currentUserObj.status.userStatusType}">
+                        <form th:action="@{'/setOperatoreNonDisponibile/' + ${currentUserObj.getId()}}" method="post"
+                              th:if="${currentUserObj.getUserStatus().getStatusName() == 'DISPONIBILE'}">
                             <button type="submit" class="btn btn-warning">Non Disponibile</button>
                         </form>
-                        <form th:action="@{'/setOperatoreDisponibile/' + ${#authentication.principal.id}}" method="post" th:if="${#authentication.principal.getStatus.getUserStatusType().name()} == 'NON_DISPONIBILE'">
+                        <form th:action="@{'/setOperatoreDisponibile/' + ${currentUserObj.getId()}}" method="post"
+                              th:if="${currentUserObj.getUserStatus().getStatusName() == 'NON_DISPONIBILE'}">
                             <button type="submit" class="btn btn-success">Disponibile</button>
                         </form>
                     </div>

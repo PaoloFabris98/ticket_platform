@@ -12,12 +12,14 @@ import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.UserStatus;
 import com.example.ticket_platform.model.UserStatusType;
+import com.example.ticket_platform.repository.UserRepository;
 import com.example.ticket_platform.repository.UserStatusRepository;
 import com.example.ticket_platform.security.CustomJdbcUserDetailsManager;
 import com.example.ticket_platform.service.AuthoritiesService;
 import com.example.ticket_platform.service.TicketService;
 import com.example.ticket_platform.service.UserService;
 import com.example.ticket_platform.model.AuthoritiesType;
+import com.example.ticket_platform.model.StatusType;
 
 import jakarta.validation.Valid;
 
@@ -30,8 +32,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class UserController {
 
-    private final UtilityFunctions utilityFunctions;
-
     @Autowired
     private UserService userService;
     @Autowired
@@ -43,14 +43,17 @@ public class UserController {
     @Autowired
     private AuthoritiesService authoritiesService;
 
-    UserController(UtilityFunctions utilityFunctions) {
-        this.utilityFunctions = utilityFunctions;
-    }
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UtilityFunctions utilityFunctions;
 
     @GetMapping("/operatori")
-    public String seeOperators(Model model) {
+    public String seeOperators(Model model, Principal principal) {
         List<User> users = userService.getAll();
         model.addAttribute("users", users);
+
         return "user/index";
     }
 
@@ -91,6 +94,7 @@ public class UserController {
             if (bindingResult.hasErrors()) {
                 return "user/edit";
             }
+            formUser.setRole(userService.findUserById(formUser.getId()).getRole());
             customJdbcUserDetailsManager.updateUser(formUser, principal);
 
             redirectAttributes.addFlashAttribute("message", "Utente aggiornato correttamente!");
@@ -139,13 +143,14 @@ public class UserController {
     }
 
     @PostMapping("/setOperatoreNonDisponibile/{id}")
-    public String setOperatoreNonDisponibile(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+    public String setOperatoreNonDisponibile(@PathVariable Integer id, RedirectAttributes redirectAttributes,
+            Principal principal) {
         User user = userService.findUserById(id);
         List<Ticket> tickets = ticketService.getTicketsByUserId(id);
         for (Ticket ticket : tickets) {
             System.out.println(ticket.getStatus().getStatus().getName());
-            if (ticket.getStatus().getStatus().getName().equals("IN_CORSO")
-                    || ticket.getStatus().getStatus().getName().equals("APERTO")) {
+            if (ticket.getStatus().getStatus() == StatusType.APERTO
+                    || ticket.getStatus().getStatus() == StatusType.IN_CORSO) {
                 redirectAttributes.addFlashAttribute(
                         "Lo status non può essere modificato, ci sono ancora ticket aperti o in corso");
                 redirectAttributes.addFlashAttribute("messageClass", "alert-danger");
@@ -154,15 +159,19 @@ public class UserController {
             }
         }
         user.setUserStatus(userStatusRepository.findByUserStatusType(UserStatusType.NON_DISPONIBILE));
+        userRepository.save(user);
         redirectAttributes.addFlashAttribute("Status modificato con successo.");
         redirectAttributes.addFlashAttribute("messageClass", "alert-success");
         return "redirect:/index";
     }
 
     @PostMapping("/setOperatoreDisponibile/{id}")
-    public String setOperatoreDisponibile(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+    public String setOperatoreDisponibile(@PathVariable Integer id, RedirectAttributes redirectAttributes,
+            Principal principal) {
         User user = userService.findUserById(id);
-        user.setUserStatus(userStatusRepository.findByUserStatusType(UserStatusType.DISPONIBILE));
+        UserStatus userStatus = userStatusRepository.findByUserStatusType(UserStatusType.DISPONIBILE);
+        user.setUserStatus(userStatus);
+        userRepository.save(user);
         redirectAttributes.addFlashAttribute("Status modificato con successo.");
         redirectAttributes.addFlashAttribute("messageClass", "alert-success");
         return "redirect:/index";

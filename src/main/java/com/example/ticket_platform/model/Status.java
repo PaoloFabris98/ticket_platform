@@ -45,4 +45,5 @@ public class Status implements Serializable {
     public void defaultStatusType() {
         this.status = StatusType.APERTO;
     }
+
 }

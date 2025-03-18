@@ -47,4 +47,8 @@ public class UserStatus implements Serializable {
         this.users = users;
     }
 
+    public String getStatusName() {
+        return userStatusType.getName();
+    }
+
 }

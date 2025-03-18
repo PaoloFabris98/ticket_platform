@@ -8,4 +8,8 @@ public enum StatusType {
     public String getName() {
         return this.name();
     }
+
+    public String getLabel() {
+        return this.name();
+    }
 }
