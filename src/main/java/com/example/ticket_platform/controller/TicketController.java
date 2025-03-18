@@ -5,6 +5,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,9 +21,11 @@ import com.example.ticket_platform.model.Status;
 import com.example.ticket_platform.model.StatusType;
 import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.model.User;
+import com.example.ticket_platform.model.UserStatusType;
 import com.example.ticket_platform.repository.CategoriaRepository;
 import com.example.ticket_platform.repository.StatusRepository;
 import com.example.ticket_platform.repository.TicketRepository;
+import com.example.ticket_platform.repository.UserRepository;
 import com.example.ticket_platform.service.*;
 import jakarta.validation.Valid;
 
@@ -51,9 +56,26 @@ public class TicketController {
     private CategoriaRepository categoriaRepository;
     @Autowired
     private NotaService notaService;
+    @Autowired
+    private UserRepository userRepository;
 
     TicketController(NotaService notaService) {
         this.notaService = notaService;
+    }
+
+    @ModelAttribute("currentUser")
+    public String getCurrentUser(Principal principal) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            return utilityFunctions.currentUser(principal).getUsername();
+        }
+        return "redirect:/login";
+    }
+
+    @ModelAttribute("currentUserObj")
+    public User getCurrentUserObj(Principal principal) {
+        return utilityFunctions.currentUser(principal);
+
     }
 
     @GetMapping("/ticket/{id}")
@@ -107,12 +129,11 @@ public class TicketController {
     @GetMapping("/addTicket")
     public String addTicket(Model model) {
         Ticket ticket = new Ticket();
-        List<User> users = userService.getAll();
         ticket.setStatus(statusRepository.findByStatus(StatusType.APERTO));
         ticket.setDataCreazione(LocalDate.now());
         model.addAttribute("statusList", statusService.getAllStatusTypes());
         model.addAttribute("categorie", categoriaService.getAllCategoriaStatusTypes());
-        model.addAttribute("users", users);
+        model.addAttribute("users", userService.finaAllByStatus());
         model.addAttribute("ticket", ticket);
         return "ticket/add";
     }

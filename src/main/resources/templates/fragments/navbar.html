@@ -29,7 +29,7 @@
                 <div class="col-md-4 d-flex align-items-center justify-content-end gap-3">
                     <h6 class="m-0 d-flex align-items-center gap-2">
                         <span th:text="'Benvenuto, '"></span>
-                        <a th:href="@{'/editUser/' + ${currentUserObj.id}}" class="text-white">
+                        <a th:href="@{'/editUser/' + ${currentUserObj.getId()}}" class="text-white">
                             <span th:text="${currentUserObj.username}"></span>
                         </a>
                         <span>Cambia status in:</span>

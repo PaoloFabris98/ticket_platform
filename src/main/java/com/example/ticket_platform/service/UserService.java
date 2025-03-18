@@ -1,5 +1,6 @@
 package com.example.ticket_platform.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,18 @@ public class UserService {
     public User findUserById(Integer Id) {
         return userRepository.findById(Id)
                 .orElseThrow(() -> new IllegalArgumentException("Utente con ID " + Id + " non trovato"));
+    }
+
+    public List<User> finaAllByStatus() {
+        List<User> users = getAll();
+        List<User> aviableUsers = new ArrayList<>();
+        for (User user : users) {
+            if (user.getUserStatus().getStatusName().equals("DISPONIBILE")) {
+
+                aviableUsers.add(user);
+            }
+        }
+        return aviableUsers;
     }
 
     @Transactional
