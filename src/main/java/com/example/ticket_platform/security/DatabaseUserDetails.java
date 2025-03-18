@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.ticket_platform.model.Authorities;
+import com.example.ticket_platform.model.AuthoritiesType;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.UserStatus;
 import com.example.ticket_platform.repository.AuthoritiesRepository;
@@ -21,7 +22,7 @@ public class DatabaseUserDetails implements UserDetails {
     private final String password;
     private final Boolean enable;
     private final String email;
-    private UserStatus status;
+    private final UserStatus status;
     private final Set<GrantedAuthority> authorities;
 
     public DatabaseUserDetails(User user, AuthoritiesRepository authoritiesRepository) {
@@ -74,12 +75,28 @@ public class DatabaseUserDetails implements UserDetails {
         return this.status;
     }
 
-    public void setStatus(UserStatus status) {
-        this.status = status;
-    }
-
     @Override
     public String toString() {
         return this.getUsername();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enable;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 }

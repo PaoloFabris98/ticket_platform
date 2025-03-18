@@ -8,12 +8,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import com.example.ticket_platform.component.UtilityFunctions;
+import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.UserStatus;
 import com.example.ticket_platform.model.UserStatusType;
 import com.example.ticket_platform.repository.UserStatusRepository;
 import com.example.ticket_platform.security.CustomJdbcUserDetailsManager;
+import com.example.ticket_platform.service.AuthoritiesService;
+import com.example.ticket_platform.service.TicketService;
 import com.example.ticket_platform.service.UserService;
+import com.example.ticket_platform.model.AuthoritiesType;
 
 import jakarta.validation.Valid;
 
@@ -34,6 +38,10 @@ public class UserController {
     private CustomJdbcUserDetailsManager customJdbcUserDetailsManager;
     @Autowired
     private UserStatusRepository userStatusRepository;
+    @Autowired
+    private TicketService ticketService;
+    @Autowired
+    private AuthoritiesService authoritiesService;
 
     UserController(UtilityFunctions utilityFunctions) {
         this.utilityFunctions = utilityFunctions;
@@ -52,36 +60,41 @@ public class UserController {
 
         if (utilityFunctions.isAdmin(utilityFunctions.currentUser(principal))) {
             model.addAttribute("user", user);
+            model.addAttribute("roles", authoritiesService.getAllAuthoritiesTypes());
+            model.addAttribute("currentRole", user.getRole());
+
+            return "user/editUserForAdmin";
         } else {
             if (utilityFunctions.currentUser(principal).getId() == id) {
                 model.addAttribute(user);
+                return "user/edit";
             } else {
                 return "redirect:/permissions_missing";
             }
         }
-        return "user/edit";
     }
 
     @PostMapping("/editUser/{id}")
     public String editUser(@Valid @ModelAttribute("user") User formUser,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes, Principal principal) {
-
-        if (bindingResult.hasErrors()) {
-            return "user/edit";
-        }
-        String oldUsername = formUser.getUsername();
-        customJdbcUserDetailsManager.updateUser(formUser);
-
-        if (!oldUsername.equals(formUser.getUsername())) {
-            customJdbcUserDetailsManager.updateUsernameReferences(oldUsername, formUser);
-        }
-
-        redirectAttributes.addFlashAttribute("message", "Utente aggiornato correttamente!");
-        redirectAttributes.addFlashAttribute("messageClass", "alert-success");
         if (utilityFunctions.isAdmin(utilityFunctions.currentUser(principal))) {
+            if (bindingResult.hasErrors()) {
+                return "user/editUserForAdmin";
+            }
+            customJdbcUserDetailsManager.updateUser(formUser, principal);
+            redirectAttributes.addFlashAttribute("message", "Utente aggiornato correttamente!");
+            redirectAttributes.addFlashAttribute("messageClass", "alert-success");
+
             return "redirect:/operatori";
         } else {
+            if (bindingResult.hasErrors()) {
+                return "user/edit";
+            }
+            customJdbcUserDetailsManager.updateUser(formUser, principal);
+
+            redirectAttributes.addFlashAttribute("message", "Utente aggiornato correttamente!");
+            redirectAttributes.addFlashAttribute("messageClass", "alert-success");
             return "redirect:/index";
         }
     }
@@ -123,6 +136,36 @@ public class UserController {
         redirectAttributes.addFlashAttribute("messageClass", "alert-success");
 
         return "redirect:/operatori";
+    }
+
+    @PostMapping("/setOperatoreNonDisponibile/{id}")
+    public String setOperatoreNonDisponibile(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        User user = userService.findUserById(id);
+        List<Ticket> tickets = ticketService.getTicketsByUserId(id);
+        for (Ticket ticket : tickets) {
+            System.out.println(ticket.getStatus().getStatus().getName());
+            if (ticket.getStatus().getStatus().getName().equals("IN_CORSO")
+                    || ticket.getStatus().getStatus().getName().equals("APERTO")) {
+                redirectAttributes.addFlashAttribute(
+                        "Lo status non può essere modificato, ci sono ancora ticket aperti o in corso");
+                redirectAttributes.addFlashAttribute("messageClass", "alert-danger");
+
+                return "redirect:/index";
+            }
+        }
+        user.setUserStatus(userStatusRepository.findByUserStatusType(UserStatusType.NON_DISPONIBILE));
+        redirectAttributes.addFlashAttribute("Status modificato con successo.");
+        redirectAttributes.addFlashAttribute("messageClass", "alert-success");
+        return "redirect:/index";
+    }
+
+    @PostMapping("/setOperatoreDisponibile/{id}")
+    public String setOperatoreDisponibile(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        User user = userService.findUserById(id);
+        user.setUserStatus(userStatusRepository.findByUserStatusType(UserStatusType.DISPONIBILE));
+        redirectAttributes.addFlashAttribute("Status modificato con successo.");
+        redirectAttributes.addFlashAttribute("messageClass", "alert-success");
+        return "redirect:/index";
     }
 
 }

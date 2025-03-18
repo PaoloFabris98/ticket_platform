@@ -10,32 +10,40 @@
 <body>
     <th:block th:fragment="navBar">
         <div class="navbar text-white m-1 p-2 rounded">
-            <div class="row align-items-center w-100">
-                <div class="col-md-8 d-flex align-items-center">
-                    <h4 class="m-0 me-3">
+            <div class="row align-items-center justify-content-between w-100">
+                <div class="col-md-8 d-flex align-items-center gap-4">
+                    <h4 class="m-0">
                         <a th:href="@{'/index'}" class="text-white">Tickets</a>
                     </h4>
-                    <h6 class="m-0 me-3" sec:authorize="hasAuthority('ADMIN')">
+                    <h6 class="m-0" sec:authorize="hasAuthority('ADMIN')">
                         <a th:href="@{'/operatori'}" class="text-white">Operatori</a>
                     </h6>
-                    <h6 class="m-0 me-3" sec:authorize="hasAuthority('ADMIN')">
+                    <h6 class="m-0" sec:authorize="hasAuthority('ADMIN')">
+                        <a th:href="@{'/createUser'}" class="text-white">Crea Operatore</a>
+                    </h6>
+                    <h6 class="m-0" sec:authorize="hasAuthority('ADMIN')">
                         <a th:href="@{'/addTicket'}" class="text-white">Aggiungi Ticket</a>
                     </h6>
                 </div>
-                
+
                 <div class="col-md-4 d-flex align-items-center justify-content-end gap-3">
-                    <h6 class="m-0 me-3">
+                    <h6 class="m-0 d-flex align-items-center gap-2">
                         <span th:text="'Benvenuto, '"></span>
-                        <a th:href="@{'/editUser/' + ${#authentication.principal.id}}" class="text-white"><span th:text="${#authentication.principal.username}"></span></a>
+                        <a th:href="@{'/editUser/' + ${#authentication.principal.id}}" class="text-white">
+                            <span th:text="${#authentication.principal.username}"></span>
+                        </a>
+                        <span>Cambia status in:</span>
                     </h6>
+                    <div th:switch="${#authentication.principal.userStatus.userStatusType}">
+                        <form th:action="@{'/setOperatoreNonDisponibile/' + ${#authentication.principal.id}}" method="post" th:if="${#authentication.principal.getStatus.getUserStatusType().name()} == 'DISPONIBILE'">
+                            <button type="submit" class="btn btn-warning">Non Disponibile</button>
+                        </form>
+                        <form th:action="@{'/setOperatoreDisponibile/' + ${#authentication.principal.id}}" method="post" th:if="${#authentication.principal.getStatus.getUserStatusType().name()} == 'NON_DISPONIBILE'">
+                            <button type="submit" class="btn btn-success">Disponibile</button>
+                        </form>
+                    </div>
                     <form th:action="@{/logout}" method="post">
                         <button type="submit" class="btn btn-danger">Logout</button>
-                    </form>
-                    <form class="d-flex" th:action="@{/searchPizza}" method="GET">
-                        <div class="input-group">
-                            <input type="text" name="pizzas" id="pizzas" class="form-control" placeholder="ticket" aria-label="Cerca pizza">
-                            <button type="submit" class="btn btn-primary">Cerca</button>
-                        </div>
                     </form>
                 </div>
             </div>

@@ -53,6 +53,7 @@ public class DataInitializer {
                         user.setPassword("123");
                         user.setEmail("test@example.com");
                         user.setEnable(true);
+                        user.setRole(AuthoritiesType.USER);
                         user.setUserStatus(statusAttivo);
 
                         Authorities authorities = new Authorities();
@@ -68,6 +69,7 @@ public class DataInitializer {
                         user.setPassword("123");
                         user.setEmail("admin@example.com");
                         user.setEnable(true);
+                        user.setRole(AuthoritiesType.ADMIN);
                         user.setUserStatus(statusAttivo);
 
                         Authorities authorities = new Authorities();
@@ -84,6 +86,7 @@ public class DataInitializer {
                         user.setPassword("guest123");
                         user.setEmail("guest@example.com");
                         user.setEnable(false);
+                        user.setRole(AuthoritiesType.USER);
                         user.setUserStatus(statusNonAttivo);
 
                         Authorities authorities = new Authorities();

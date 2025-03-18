@@ -41,6 +41,16 @@ public class User implements Serializable {
     @JoinColumn(name = "user_status_id")
     private UserStatus userStatus;
 
+    private AuthoritiesType role;
+
+    public AuthoritiesType getRole() {
+        return role;
+    }
+
+    public void setRole(AuthoritiesType role) {
+        this.role = role;
+    }
+
     public Integer getId() {
         return this.id;
     }

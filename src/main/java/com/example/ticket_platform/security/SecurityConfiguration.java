@@ -12,6 +12,7 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import com.example.ticket_platform.component.CustomAccessDeniedHandler;
 import com.example.ticket_platform.component.CustomAuthenticationEntryPoint;
@@ -63,13 +64,23 @@ public class SecurityConfiguration {
                                                 .permitAll())
                                 .exceptionHandling(ex -> ex
                                                 .authenticationEntryPoint(customAuthenticationEntryPoint)
-                                                .accessDeniedHandler(customAccessDeniedHandler));
+                                                .accessDeniedHandler(customAccessDeniedHandler))
+                                .sessionManagement(session -> session
+                                                .maximumSessions(1)
+                                                .expiredUrl("/login?logout")
+                                                .sessionRegistry(sessionRegistry()));
+                ;
                 return http.build();
         }
 
         @Bean
         public SessionRegistry sessionRegistry() {
                 return new SessionRegistryImpl();
+        }
+
+        @Bean
+        public HttpSessionEventPublisher httpSessionEventPublisher() {
+                return new HttpSessionEventPublisher();
         }
 
         @Bean

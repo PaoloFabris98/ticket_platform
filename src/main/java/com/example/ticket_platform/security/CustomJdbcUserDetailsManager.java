@@ -5,17 +5,19 @@ import java.security.Principal;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.Authorities;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.UserStatus;
 import com.example.ticket_platform.repository.UserRepository;
 import com.example.ticket_platform.repository.UserStatusRepository;
-
+import com.example.ticket_platform.service.AuthoritiesService;
 import com.example.ticket_platform.repository.AuthoritiesRepository;
 
 public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
@@ -25,7 +27,13 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
     @Autowired
     private AuthoritiesRepository authoritiesRepository;
     @Autowired
+    private AuthoritiesService authoritiesService;
+    @Autowired
     private UserStatusRepository userStatusRepository;
+    @Autowired
+    private SessionRegistry sessionRegistry;
+    @Autowired
+    private UtilityFunctions utilityFunctions;
 
     public CustomJdbcUserDetailsManager(DataSource dataSource, UserRepository userRepository,
             AuthoritiesRepository authoritiesRepository) {
@@ -45,19 +53,20 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
     @Transactional
     public void create(User user) {
         if (userExists(user.getUsername())) {
-            throw new IllegalArgumentException("L'utente esiste già!");
+            throw new IllegalArgumentException("Lo username " + user.getUsername() + " è già in uso.");
         }
         createUserAuthoriti(user);
         userRepository.save(user);
         DatabaseUserDetails databaseUserDetails = new DatabaseUserDetails(user, authoritiesRepository);
-        updateAuthorities(databaseUserDetails);
+        updateAuthoritiesV1(databaseUserDetails);
 
     }
 
     @Transactional
-    public void updateUser(User user) {
-        User existingUser = userRepository.findById(user.getId()).get();
-
+    public void updateUser(User user, Principal principal) {
+        User existingUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
+        String oldUsername = existingUser.getUsername();
         UserStatus userStatus = userStatusRepository
                 .findByUserStatusType(existingUser.getUserStatus().getUserStatusType());
 
@@ -65,34 +74,42 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
         existingUser.setPassword(user.getPassword());
         existingUser.setEmail(user.getEmail());
         existingUser.setEnable(user.getEnable());
+        existingUser.setRole(user.getRole());
         existingUser.setUserStatus(userStatus);
-        System.out.println("Aggiornando l'utente: " + existingUser);
-        userRepository.save(existingUser);
-        System.out.println("Utente salvato: " + existingUser);
+
+        System.out.println("Aggiornando l'utente: " + existingUser.getUsername());
+        try {
+            userRepository.save(existingUser);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Operazione fallita");
+        }
+        System.out.println("Utente salvato: " + existingUser.getUsername());
 
         DatabaseUserDetails databaseUserDetails = new DatabaseUserDetails(existingUser, authoritiesRepository);
+        System.out.println("creazione databaseUserDetails");
 
-        updateAuthorities(databaseUserDetails);
-    }
+        updateAuthoritiesV3(databaseUserDetails, oldUsername, user);
 
-    public void updateUsernameReferences(String oldUsername, User newUser) {
-        User user = userRepository.findByUsername(oldUsername).get();
-        if (user != null) {
-            user.setUsername(newUser.getUsername());
-            Authorities authorities = authoritiesRepository.findByUsername(oldUsername).get(0);
-            authorities.setUsername(newUser.getUsername());
-            authoritiesRepository.save(authorities);
-            userRepository.save(user);
+        System.out.println("aggiornamento authorities");
 
-        }
+        expiringSessionAfterUserUpdate(oldUsername, databaseUserDetails);
     }
 
     @Transactional
-    private void updateAuthorities(UserDetails userDetails) {
-        authoritiesRepository.deleteByUsername(userDetails.getUsername());
+    private void updateAuthoritiesV3(DatabaseUserDetails databaseUserDetails, String oldUsername, User user) {
+        Authorities oldAuthorities = authoritiesService.findByUsername(oldUsername);
+        oldAuthorities.setUsername(databaseUserDetails.getUsername());
+        oldAuthorities.setAuthority(user.getRole().getName());
+        authoritiesRepository.save(oldAuthorities);
+        System.out.println("Nuove authorities");
+    }
 
-        userDetails.getAuthorities().forEach(authority -> {
-            authoritiesRepository.save(new Authorities(userDetails.getUsername(), authority.getAuthority()));
+    @Transactional
+    private void updateAuthoritiesV1(DatabaseUserDetails databaseUserDetails) {
+        authoritiesRepository.deleteByUsername(databaseUserDetails.getUsername());
+
+        databaseUserDetails.getAuthorities().forEach(authority -> {
+            authoritiesRepository.save(new Authorities(databaseUserDetails.getUsername(), authority.getAuthority()));
         });
     }
 
@@ -103,6 +120,24 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
         authorities.setAuthority("USER");
 
         authoritiesRepository.save(authorities);
+    }
+
+    private void expiringSessionAfterUserUpdate(String oldUsername, DatabaseUserDetails updatedUserDetails) {
+        sessionRegistry.getAllPrincipals().forEach(principal -> {
+            String currentUsername = null;
+
+            if (principal instanceof UserDetails) {
+                currentUsername = ((UserDetails) principal).getUsername();
+            } else {
+                currentUsername = principal.toString();
+            }
+
+            if (currentUsername.equals(oldUsername)) {
+                sessionRegistry.getAllSessions(principal, false).forEach(session -> {
+                    session.expireNow();
+                });
+            }
+        });
     }
 
 }
