@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}" />
     <link th:rel="stylesheet" th:href="@{/css/stile.css}" />
     <link th:rel="stylesheet" th:href="@{/css/card.css}" />
     <link th:rel="stylesheet" th:href="@{/css/navbar.css}" />
@@ -83,11 +84,7 @@
                                 <div th:insert="~{fragments/buttons :: editTicket('/editTicket/' + ${ticket.getId()})}"
                                     sec:authorize="hasAuthority('ADMIN')"></div>
 
-                                <div th:insert="~{fragments/buttons :: editDescrizione('/editDescrizione/' + ${ticket.getId()})}"
-                                    sec:authorize="hasAuthority('USER')"></div>
-
-                                <div th:insert="~{fragments/buttons :: addNota('/addNota/' + ${ticket.getId()})}"
-                                    sec:authorize="hasAuthority('ADMIN')"></div>
+                                <div th:insert="~{fragments/buttons :: addNota('/addNota/' + ${ticket.getId()})}"></div>
 
                                 <form th:if="${ticket.getStatusName() == 'APERTO'}"
                                     th:action="@{/setStatusIn_corso/{id}(id=${ticket.getId()})}" method="post">
@@ -98,16 +95,17 @@
                                     th:action="@{/setStatusChiuso/{id}(id=${ticket.getId()})}" method="post">
                                     <button type="submit" class="btn btn-danger">Concludi</button>
                                 </form>
-
+                                <!--
                                 <form th:if="${ticket.getStatusName() == 'CHIUSO'}"
                                     th:action="@{/setStatusAperto/{id}(id=${ticket.getId()})}" method="post">
                                     <button type="submit" class="btn btn-success">Apri</button>
                                 </form>
+                                -->
 
                                 <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                     th:data-bs-target="'#delete-modal-' + ${ticket.getId()}"
                                     sec:authorize="hasAuthority('ADMIN')">
-                                    Delete
+                                    <i class="bi bi-trash3"></i>
                                 </button>
                             </div>
 

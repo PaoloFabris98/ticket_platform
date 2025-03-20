@@ -24,6 +24,12 @@
                     <h6 class="m-0" sec:authorize="hasAuthority('ADMIN')">
                         <a th:href="@{'/addTicket'}" class="text-white">Aggiungi Ticket</a>
                     </h6>
+                    <h6 class="m-0" sec:authorize="hasAuthority('ADMIN')">
+                        <a th:href="@{'/API'}" class="text-white">Rest</a>
+                    </h6>
+                    <h6 class="m-0" sec:authorize="hasAuthority('ADMIN')">
+                        <a th:href="@{'/addAPI'}" class="text-white">Aggiungi Rest User</a>
+                    </h6>
                 </div>
 
                 <div class="col-md-4 d-flex align-items-center justify-content-end gap-3">
@@ -32,8 +38,10 @@
                         <a th:href="@{'/editUser/' + ${currentUserObj.getId()}}" class="text-white">
                             <span th:text="${currentUserObj.username}"></span>
                         </a>
+                        | 
                         <span>Cambia status in:</span>
                     </h6>
+                    
                     <div th:switch="${currentUserObj.status.userStatusType}">
                         <form th:action="@{'/setOperatoreNonDisponibile/' + ${currentUserObj.getId()}}" method="post"
                               th:if="${currentUserObj.getUserStatus().getStatusName() == 'DISPONIBILE'}">

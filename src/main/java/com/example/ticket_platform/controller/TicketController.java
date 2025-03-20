@@ -56,8 +56,6 @@ public class TicketController {
     private CategoriaRepository categoriaRepository;
     @Autowired
     private NotaService notaService;
-    @Autowired
-    private UserRepository userRepository;
 
     TicketController(NotaService notaService) {
         this.notaService = notaService;
@@ -152,33 +150,6 @@ public class TicketController {
         ticketService.saveTicket(formTicket);
 
         redirectAttributes.addFlashAttribute("message", "Il ticket è stato creato con successo");
-        redirectAttributes.addFlashAttribute("messageClass", "alert-success");
-
-        return "redirect:/index";
-    }
-
-    @GetMapping("/editDescrizione/{id}")
-    public String editDescrizione(@PathVariable Integer id, Model model) {
-        Descrizione descrizione = new Descrizione();
-        descrizione.setDescrizione(ticketService.getTicketById(id).getDescrizione());
-        model.addAttribute("descrizione", descrizione);
-        model.addAttribute("id", id);
-        return "ticket/addDescrizione";
-    }
-
-    @PostMapping("/editDescrizione/{id}")
-    public String editDescrizione(@PathVariable("id") Integer id,
-            @Valid @ModelAttribute("descrizione") Descrizione formDescrizione,
-            BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            return "ticket/addDescrizione";
-        }
-
-        Ticket ticket = ticketRepository.findById(id).get();
-        ticket.setDescrizione(formDescrizione.getDescrizione());
-        ticketService.updateTicket(ticket);
-
-        redirectAttributes.addFlashAttribute("message", "Descrizione modificata con successo");
         redirectAttributes.addFlashAttribute("messageClass", "alert-success");
 
         return "redirect:/index";

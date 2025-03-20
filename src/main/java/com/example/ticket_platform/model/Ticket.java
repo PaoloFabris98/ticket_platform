@@ -5,6 +5,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +28,7 @@ public class Ticket implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id")
     @NotNull
+    @JsonBackReference
     private User operatore;
 
     @NotNull(message = "La data non può essere vuota")
@@ -38,13 +42,16 @@ public class Ticket implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "status_id", nullable = false)
+    @JsonBackReference
     private Status status;
 
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
+    @JsonBackReference
     private Categoria categoria;
 
-    @OneToMany(mappedBy = "ticket")
+    @OneToMany(mappedBy = "ticket", orphanRemoval = true)
+    @JsonManagedReference
     private List<Nota> note;
 
     public Integer getId() {

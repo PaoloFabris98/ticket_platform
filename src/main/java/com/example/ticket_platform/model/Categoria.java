@@ -10,6 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Categoria {
     @Id
@@ -21,6 +23,7 @@ public class Categoria {
     private CategoriaTicketType nome;
 
     @OneToMany(mappedBy = "categoria")
+    @JsonBackReference
     private List<Ticket> tickets;
 
     public Categoria() {

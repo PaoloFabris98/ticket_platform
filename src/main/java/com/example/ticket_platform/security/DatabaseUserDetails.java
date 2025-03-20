@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.ticket_platform.model.Authorities;
 import com.example.ticket_platform.model.AuthoritiesType;
@@ -29,7 +30,8 @@ public class DatabaseUserDetails implements UserDetails {
     public DatabaseUserDetails(User user, AuthoritiesRepository authoritiesRepository) {
         this.id = user.getId();
         this.username = user.getUsername();
-        this.password = user.getPassword();
+        String criptedPassword = user.getPassword();
+        this.password = criptedPassword;
         this.email = user.getEmail();
         this.enable = user.getEnable();
         this.status = user.getUserStatus();
@@ -98,7 +100,7 @@ public class DatabaseUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return this.enable;
     }
 
     @Override

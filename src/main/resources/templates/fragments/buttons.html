@@ -9,26 +9,27 @@
 
 <body>
     <a th:fragment="seeTicket(link)" th:href="@{${link}}" class="btn btn-primary">
-        Dettagli Ticket
+        <i class="bi bi-eye"></i>
     </a>
     <a th:fragment="editDescrizione(link)" th:href="@{${link}}" class="btn btn-warning">
         Modifica Descrizione
     </a>
     <a th:fragment="addNota(link)" th:href="@{${link}}" class="btn btn-success">
-        Aggiungi Nota
+        <i class="bi bi-journal"></i>
     </a>
     <a th:fragment="editTicket(link)" th:href="@{${link}}" class="btn btn-info">
-        Modifica Ticket
+        <i class="bi bi-pencil-square"></i>
     </a>
     <a th:fragment="editUser(link)" th:href="@{${link}}" class="btn btn-secondary">
-        Modifica Utente
+        <i class="bi bi-pencil-square"></i>
     </a>
     <a th:fragment="editOperatore(link)" th:href="@{${link}}" class="btn btn-secondary">
-        Modifica Operatore
+        <i class="bi bi-pencil-square"></i>
     </a>
     <a th:fragment="deleteTicket(link)" th:href="@{${link}}" class="btn btn-danger">
-        Elimina Ticket
+        <i class="bi bi-trash3"></i>
     </a>
+    
     <a th:fragment="goToHome" th:href="@{/index}" class="btn btn-primary">
         Torna alla Home
     </a>

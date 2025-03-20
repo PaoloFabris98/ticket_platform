@@ -7,6 +7,7 @@
     <title>Dettagli Ticket</title>
 
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}" />
     <link th:rel="stylesheet" th:href="@{/css/stile.css}" />
     <link th:rel="stylesheet" th:href="@{/css/card.css}" />
     <link th:rel="stylesheet" th:href="@{/css/navbar.css}" />
@@ -24,7 +25,7 @@
                         <h3 class="card-title text-center">Dettagli Ticket</h3>
                         <hr class="border-light">
                         <div class="mb-3">
-                            <strong>Ticket ID:</strong> 
+                            <strong>Ticket ID:</strong>
                             <span th:text="${ticket.getId()}" class="badge bg-light text-dark"></span>
                         </div>
                         <div class="mb-3">
@@ -43,7 +44,37 @@
                             <strong>Status:</strong>
                             <span th:text="${ticket.getStatusName()}" class="text-light"></span>
                         </div>
-                        <div th:insert="~{fragments/buttons :: goToHome}"></div>
+                        <div class="clas mb-3 card bg-secondary text-white rounded">
+                            <div class="">
+                                <div th:if="${ticket.getNote() != null and not #lists.isEmpty(ticket.getNote())}">
+                                    <div th:each="nota : ${ticket.getNote()}" class=" pb-2 mb-2 row">
+                                        <div class="class col-10 ">
+                                            <p class="fw-bold mb-0"
+                                                th:text="'Autore: ' + ${nota.getAutore().getUsername()}">
+                                            </p>
+                                            <p class="text-white mb-0" th:text="'Data: ' + ${nota.getFormattedDate()}">
+                                            </p>
+                                            <p class="mb-0" th:text="${nota.getNota()}"></p>
+                                        </div>
+                                        <div class="class col-2 d-flex justify-content-center align-items-center" th:if="${currentUser == nota.getAutore().getUsername() or currentUserObj.getRole().getName() == 'ADMIN'}">
+                                            <form th:action="@{/deleteNote/{id}(id=${nota.getId()})}" method="post">
+                                                <button type="submit" class="btn btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:if="${ticket.getNote() == null or #lists.isEmpty(ticket.getNote())}">
+                                    <p class="text-muted">Nessuna nota</p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="d-flex mt-3">
+                            <div th:insert="~{fragments/buttons :: addNota('/addNota/' + ${ticket.getId()})}"></div>
+                            <div th:insert="~{fragments/buttons :: goToHome}" class="ms-3"></div>
+                        </div>
                     </div>
                 </div>
             </div>

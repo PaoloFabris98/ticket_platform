@@ -3,6 +3,8 @@ package com.example.ticket_platform.model;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +31,7 @@ public class Nota {
     private String nota;
 
     @ManyToOne
+    @JsonBackReference
     private Ticket ticket;
 
     public Integer getId() {

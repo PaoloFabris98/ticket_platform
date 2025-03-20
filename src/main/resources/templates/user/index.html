@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}" />
     <link th:rel="stylesheet" th:href="@{/css/stile.css}" />
     <link th:rel="stylesheet" th:href="@{/css/card.css}" />
     <link th:rel="stylesheet" th:href="@{/css/navbar.css}" />
@@ -63,7 +64,7 @@
                                 th:insert="~{fragments/buttons :: editUser('/editUser/' + ${user.getId()})}"></div>
                             <div class="me-2" sec:authorize="hasAuthority('ADMIN')">
                                 <form th:action="@{/deleteUser/{id}(id=${user.getId()})}" method="post">
-                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
                                 </form>
                             </div>
                         </td>

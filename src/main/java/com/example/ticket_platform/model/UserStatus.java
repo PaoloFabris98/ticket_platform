@@ -3,6 +3,8 @@ package com.example.ticket_platform.model;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -21,6 +23,7 @@ public class UserStatus implements Serializable {
     private UserStatusType userStatusType;
 
     @OneToMany(mappedBy = "userStatus")
+    @JsonBackReference
     private List<User> users;
 
     public Integer getId() {

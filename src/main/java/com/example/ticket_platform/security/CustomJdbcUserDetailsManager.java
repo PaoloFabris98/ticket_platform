@@ -5,9 +5,11 @@ import java.security.Principal;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,10 +24,9 @@ import com.example.ticket_platform.repository.AuthoritiesRepository;
 
 public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
 
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
     private AuthoritiesRepository authoritiesRepository;
+
     @Autowired
     private AuthoritiesService authoritiesService;
     @Autowired
@@ -40,6 +41,7 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
         super(dataSource);
         this.userRepository = userRepository;
         this.authoritiesRepository = authoritiesRepository;
+
     }
 
     @Override
@@ -138,6 +140,11 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
                 });
             }
         });
+    }
+
+    @Override
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        super.setAuthenticationManager(authenticationManager);
     }
 
 }

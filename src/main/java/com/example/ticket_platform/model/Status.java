@@ -3,6 +3,8 @@ package com.example.ticket_platform.model;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -16,6 +18,7 @@ public class Status implements Serializable {
     private StatusType status;
 
     @OneToMany(mappedBy = "status")
+    @JsonManagedReference
     private List<Ticket> tickets;
 
     public Integer getId() {

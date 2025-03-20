@@ -3,6 +3,10 @@ package com.example.ticket_platform.model;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,28 +23,34 @@ import jakarta.validation.constraints.NotBlank;
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Integer id;
 
     @NotBlank(message = "Lo Username non può essere vuoto.")
     private String username;
 
     @NotBlank(message = "La Password non può essere vuota.")
+    @JsonIgnore
     private String password;
 
     @NotBlank(message = "La Mail non può essere vuota.")
+    @JsonIgnore
     private String email;
 
     @Column(name = "enabled")
+    @JsonIgnore
     private Boolean enable = true;
 
     @Column(name = "tickets")
     @OneToMany(mappedBy = "operatore")
+    @JsonBackReference
     private List<Ticket> tickets;
 
     @ManyToOne
     @JoinColumn(name = "user_status_id")
+    @JsonIgnore
     private UserStatus userStatus;
-
+    @JsonIgnore
     private AuthoritiesType role;
 
     public AuthoritiesType getRole() {
