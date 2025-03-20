@@ -1,6 +1,7 @@
 package com.example.ticket_platform.component;
 
 import java.security.Principal;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,5 +35,17 @@ public class UtilityFunctions {
     public Boolean isUser(User currentUser) {
         Authorities authorities = authoritiesService.findByUsername(currentUser);
         return "USER".equals(authorities.getAuthority());
+    }
+
+    public String authKeyGenerator(int i) {
+        String allowedChar = "ABCDEFGHIJKLMNOPQRSTUWXYZabcdefghijklmnopqrstuwxyz1234567890";
+        StringBuilder randomString = new StringBuilder();
+        Random random = new Random();
+        while (randomString.length() < i) {
+            int index = random.nextInt(allowedChar.length());
+            randomString.append(allowedChar.charAt(index));
+        }
+        String newAuthKey = randomString.toString();
+        return newAuthKey;
     }
 }

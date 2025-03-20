@@ -1,5 +1,6 @@
 package com.example.ticket_platform.config;
 
+import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.*;
 import com.example.ticket_platform.repository.*;
 import org.springframework.boot.CommandLineRunner;
@@ -15,7 +16,8 @@ public class DataInitializer {
     @Bean
     public CommandLineRunner initData(UserRepository userRepository, TicketRepository ticketRepository,
             StatusRepository statusRepository, AuthoritiesRepository authoritiesRepository,
-            UserStatusRepository userStatusRepository, CategoriaRepository categoriaRepository) {
+            UserStatusRepository userStatusRepository, CategoriaRepository categoriaRepository,
+            ApiUserRepository apiUserRepository, UtilityFunctions utilityFunctions) {
         return args -> {
 
             if (statusRepository.count() == 0) {
@@ -130,6 +132,14 @@ public class DataInitializer {
                     ticket.setCategoria(i % 2 == 0 ? categoriaManutenzione : categoriaAssistenza);
                     ticketRepository.save(ticket);
                 }
+            }
+            if (apiUserRepository.count() == 0) {
+                ApiUser apiUser = new ApiUser();
+                apiUser.setUsername("testUser");
+                apiUser.setPassword("testPassword");
+                apiUser.setAuthKey(utilityFunctions.authKeyGenerator(20));
+
+                apiUserRepository.save(apiUser);
             }
 
         };
