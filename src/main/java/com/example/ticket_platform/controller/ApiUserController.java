@@ -1,11 +1,9 @@
 package com.example.ticket_platform.controller;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +18,9 @@ import com.example.ticket_platform.model.ApiUser;
 import com.example.ticket_platform.model.User;
 
 import com.example.ticket_platform.repository.ApiUserRepository;
+import com.example.ticket_platform.repository.UserRepository;
 import com.example.ticket_platform.service.ApiUserService;
+
 import jakarta.validation.Valid;
 
 @Controller
@@ -32,19 +32,21 @@ public class ApiUserController {
     private UtilityFunctions utilityFunctions;
     @Autowired
     private ApiUserRepository apiUserRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @ModelAttribute("currentUser")
-    public String getCurrentUser(Principal principal) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public String getCurrentUser(Authentication authentication) {
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-            return utilityFunctions.currentUser(principal).getUsername();
+            return authentication.getName();
         }
         return "redirect:/login";
     }
 
     @ModelAttribute("currentUserObj")
-    public User getCurrentUserObj(Principal principal) {
-        return utilityFunctions.currentUser(principal);
+    public User getCurrentUserObj(Authentication authentication) {
+        User currentUser = userRepository.findByUsername(authentication.getName()).get();
+        return currentUser;
 
     }
 
