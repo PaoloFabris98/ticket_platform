@@ -4,7 +4,6 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +21,6 @@ import com.example.ticket_platform.security.CustomJdbcUserDetailsManager;
 import com.example.ticket_platform.service.AuthoritiesService;
 import com.example.ticket_platform.service.TicketService;
 import com.example.ticket_platform.service.UserService;
-import com.example.ticket_platform.model.AuthoritiesType;
 import com.example.ticket_platform.model.StatusType;
 
 import jakarta.validation.Valid;
@@ -128,6 +126,7 @@ public class UserController {
         UserStatus userStatus = userStatusRepository.findByUserStatusType(UserStatusType.DISPONIBILE);
         user.setUserStatus(userStatus);
         model.addAttribute("user", user);
+        model.addAttribute("roles", authoritiesService.getAllAuthoritiesTypes());
         return "user/create";
     }
 

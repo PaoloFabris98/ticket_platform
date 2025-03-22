@@ -9,11 +9,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.Authorities;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.UserStatus;
@@ -33,8 +31,6 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
     private UserStatusRepository userStatusRepository;
     @Autowired
     private SessionRegistry sessionRegistry;
-    @Autowired
-    private UtilityFunctions utilityFunctions;
 
     public CustomJdbcUserDetailsManager(DataSource dataSource, UserRepository userRepository,
             AuthoritiesRepository authoritiesRepository) {

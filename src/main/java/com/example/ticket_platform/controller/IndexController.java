@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.model.User;
-import com.example.ticket_platform.model.UserStatus;
 import com.example.ticket_platform.repository.UserRepository;
 import com.example.ticket_platform.service.TicketService;
-import com.example.ticket_platform.service.UserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -57,7 +55,6 @@ public class IndexController {
 
     @GetMapping("/index")
     public String index(Model model, Principal principal) {
-        System.out.println(principal.getClass());
         if (utilityFunctions.isAdmin(utilityFunctions.currentUser(principal))) {
             List<Ticket> allTickets = ticketService.findAll();
             model.addAttribute("tickets", allTickets);

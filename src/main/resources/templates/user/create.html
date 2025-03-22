@@ -61,7 +61,8 @@
                 <label for="role" class="form-label">Ruolo</label>
                 <select class="form-control" id="role" th:field="*{role}" th:errorClass="is-invalid">
                     <option value="" disabled>Seleziona un ruolo</option>
-                    <option th:each="role : ${roles}"
+                    <option th:each="role : ${roles}" 
+                            th:selected="${currentRole}"
                             th:value="${role}" 
                             th:text="${role}"
                             ></option>

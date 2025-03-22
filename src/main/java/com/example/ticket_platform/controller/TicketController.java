@@ -14,18 +14,15 @@ import org.springframework.validation.BindingResult;
 
 import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.Categoria;
-import com.example.ticket_platform.model.Descrizione;
 import com.example.ticket_platform.model.Nota;
 import com.example.ticket_platform.model.Note;
 import com.example.ticket_platform.model.Status;
 import com.example.ticket_platform.model.StatusType;
 import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.model.User;
-import com.example.ticket_platform.model.UserStatusType;
 import com.example.ticket_platform.repository.CategoriaRepository;
 import com.example.ticket_platform.repository.StatusRepository;
 import com.example.ticket_platform.repository.TicketRepository;
-import com.example.ticket_platform.repository.UserRepository;
 import com.example.ticket_platform.service.*;
 import jakarta.validation.Valid;
 
