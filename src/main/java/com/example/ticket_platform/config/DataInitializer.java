@@ -4,6 +4,7 @@ import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.*;
 import com.example.ticket_platform.repository.*;
 import com.example.ticket_platform.security.CustomJdbcUserDetailsManager;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,20 +15,18 @@ import java.util.Arrays;
 @Configuration
 public class DataInitializer {
 
-    private final UserRepository userRepository;
-
     private final CustomJdbcUserDetailsManager customJdbcUserDetailsManager;
 
-    DataInitializer(CustomJdbcUserDetailsManager customJdbcUserDetailsManager, UserRepository userRepository) {
+    DataInitializer(CustomJdbcUserDetailsManager customJdbcUserDetailsManager) {
         this.customJdbcUserDetailsManager = customJdbcUserDetailsManager;
-        this.userRepository = userRepository;
     }
 
     @Bean
     public CommandLineRunner initData(UserRepository userRepository, TicketRepository ticketRepository,
             StatusRepository statusRepository, AuthoritiesRepository authoritiesRepository,
             UserStatusRepository userStatusRepository, CategoriaRepository categoriaRepository,
-            ApiUserRepository apiUserRepository, UtilityFunctions utilityFunctions) {
+            ApiUserRepository apiUserRepository, UtilityFunctions utilityFunctions,
+            ClienteRepository clienteRepository) {
         return test -> {
 
             if (statusRepository.count() == 0) {
@@ -41,6 +40,21 @@ public class DataInitializer {
                 chiuso.setStatus(StatusType.CHIUSO);
 
                 statusRepository.saveAll(Arrays.asList(aperto, inCorso, chiuso));
+            }
+
+            if (!clienteRepository.findByNome("Boolean").isPresent()) {
+                Cliente cliente = new Cliente();
+                cliente.setNome("Boolean");
+                cliente.setCellulare("3891372590");
+                cliente.setMail("f98paolo@gmail.com");
+                clienteRepository.save(cliente);
+            }
+            if (!clienteRepository.findByNome("mediaword").isPresent()) {
+                Cliente cliente = new Cliente();
+                cliente.setNome("mediaword");
+                cliente.setCellulare("3891372590");
+                cliente.setMail("f98paoloTest@gmail.com");
+                clienteRepository.save(cliente);
             }
 
             Status statusAperto = statusRepository.findByStatus(StatusType.APERTO);
@@ -58,7 +72,7 @@ public class DataInitializer {
             UserStatus statusAttivo = userStatusRepository.findByUserStatusType(UserStatusType.DISPONIBILE);
             UserStatus statusNonAttivo = userStatusRepository.findByUserStatusType(UserStatusType.NON_DISPONIBILE);
 
-            if (!(userRepository.findByUsername("Operatore").isEmpty())) {
+            if (!userRepository.findByUsername("Operatore").isEmpty()) {
                 User user = new User();
                 user.setUsername("Operatore");
                 user.setPassword("123");
@@ -105,7 +119,7 @@ public class DataInitializer {
                 user.setEmail("test@example.com");
                 user.setEnable(true);
                 user.setRole(AuthoritiesType.USER);
-                user.setUserStatus(statusAttivo);
+                user.setUserStatus(statusNonAttivo);
 
                 customJdbcUserDetailsManager.create(user);
             }
@@ -121,6 +135,8 @@ public class DataInitializer {
 
             Categoria categoriaAssistenza = categoriaRepository.findByNome(CategoriaTicketType.ASSISTENZA);
             Categoria categoriaManutenzione = categoriaRepository.findByNome(CategoriaTicketType.MANUTENZIONE);
+            Cliente cliente = clienteRepository.findByNome("Boolean").get();
+            Cliente mediaCliente = clienteRepository.findByNome("mediaword").get();
             User operatore = userRepository.findByUsername("Operatore").get();
 
             if (ticketRepository.countByOperatore(operatore) < 5) {
@@ -130,6 +146,7 @@ public class DataInitializer {
                     ticket.setDataCreazione(LocalDate.now());
                     ticket.setDescrizione("Ticket di test numero " + i);
                     ticket.setStatus(statusAperto);
+                    ticket.setCliente(cliente);
                     ticket.setCategoria(i % 2 == 0 ? categoriaManutenzione : categoriaAssistenza);
                     ticketRepository.save(ticket);
                 }
@@ -142,6 +159,7 @@ public class DataInitializer {
                     ticket.setDataCreazione(LocalDate.now());
                     ticket.setDescrizione("Ticket di test numero " + i);
                     ticket.setStatus(statusAperto);
+                    ticket.setCliente(mediaCliente);
                     ticket.setCategoria(i % 2 == 0 ? categoriaManutenzione : categoriaAssistenza);
                     ticketRepository.save(ticket);
                 }

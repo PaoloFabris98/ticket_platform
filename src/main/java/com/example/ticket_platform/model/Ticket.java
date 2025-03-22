@@ -50,6 +50,10 @@ public class Ticket {
     @JsonBackReference
     private Categoria categoria;
 
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
+
     @OneToMany(mappedBy = "ticket", orphanRemoval = true)
     @JsonManagedReference
     private List<Nota> note;
@@ -116,6 +120,14 @@ public class Ticket {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public Cliente getCliente() {
+        return this.cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     public String getOperatoreUsername() {

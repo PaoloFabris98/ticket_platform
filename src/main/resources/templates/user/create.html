@@ -15,10 +15,8 @@
     <div th:insert="~{fragments/navbar :: navBar}"></div>
 
 
-    <div th:if="${message != null && messageClass != null}">
-        <div class="alert text-center" th:classappend="${messageClass}">
-            <p th:text="${message}"></p>
-        </div>
+    <div th:if="${param.usernameAlredyInUse}" class="alert alert-danger mt-3 text-center">
+        Lo Username è già in uso!
     </div>
 
     <div class="m-3 p-2">
@@ -50,7 +48,7 @@
             </div>
             <div class="m-3 p-2">
                 <label for="email" class="form-label">Email</label>
-                <input type="text" class="form-control" id="email" th:field="*{email}" th:errorClass="is-invalid">
+                <input type="email" class="form-control" id="email" th:field="*{email}" th:errorClass="is-invalid">
                 <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback">
                     <ul>
                         <li th:each="error: ${#fields.errors('email')}" th:text="${error}"></li>
@@ -82,7 +80,7 @@
                     </ul>
                 </div>
             </div>
-            <input type="submit" value="Modifica Operatore" class="btn btn-primary m-3 p-2">
+            <input type="submit" value="Crea Operatore" class="btn btn-primary m-3 p-2">
             <input type="reset" value="Reset" class="btn btn-warning m-3 p-2">
         </form>
     </div>

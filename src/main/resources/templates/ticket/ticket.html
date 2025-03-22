@@ -44,6 +44,20 @@
                             <strong>Status:</strong>
                             <span th:text="${ticket.getStatusName()}" class="text-light"></span>
                         </div>
+                        <div class="mb-3">
+                            <strong>Cliente:</strong>
+                            <div>
+                                <i class="bi bi-people">    </i>
+                                <span th:text="${ticket.getCliente().getNome()}"></span>
+                            </div>
+                            <div>
+                                <i class="bi bi-envelope">      </i><span th:text="${ticket.getCliente().getMail()}"></span>
+                            </div>
+                            <div>
+                                <i class="bi bi-phone">     </i></i><span
+                                    th:text="${ticket.getCliente().getCellulare()}"></span>
+                            </div>
+                        </div>
                         <div class="clas mb-3 card bg-secondary text-white rounded">
                             <div class="">
                                 <div th:if="${ticket.getNote() != null and not #lists.isEmpty(ticket.getNote())}">
@@ -56,7 +70,8 @@
                                             </p>
                                             <p class="mb-0" th:text="${nota.getNota()}"></p>
                                         </div>
-                                        <div class="class col-2 d-flex justify-content-center align-items-center" th:if="${currentUser == nota.getAutore().getUsername() or currentUserObj.getRole().getName() == 'ADMIN'}">
+                                        <div class="class col-2 d-flex justify-content-center align-items-center"
+                                            th:if="${currentUser == nota.getAutore().getUsername() or currentUserObj.getRole().getName() == 'ADMIN'}">
                                             <form th:action="@{/deleteNote/{id}(id=${nota.getId()})}" method="post">
                                                 <button type="submit" class="btn btn-danger">
                                                     <i class="bi bi-trash"></i>

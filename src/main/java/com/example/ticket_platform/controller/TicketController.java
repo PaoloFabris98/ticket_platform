@@ -3,6 +3,7 @@ package com.example.ticket_platform.controller;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,7 @@ import org.springframework.validation.BindingResult;
 
 import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.Categoria;
+import com.example.ticket_platform.model.Cliente;
 import com.example.ticket_platform.model.Nota;
 import com.example.ticket_platform.model.Note;
 import com.example.ticket_platform.model.Status;
@@ -21,6 +23,7 @@ import com.example.ticket_platform.model.StatusType;
 import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.repository.CategoriaRepository;
+import com.example.ticket_platform.repository.ClienteRepository;
 import com.example.ticket_platform.repository.StatusRepository;
 import com.example.ticket_platform.repository.TicketRepository;
 import com.example.ticket_platform.service.*;
@@ -53,10 +56,8 @@ public class TicketController {
     private CategoriaRepository categoriaRepository;
     @Autowired
     private NotaService notaService;
-
-    TicketController(NotaService notaService) {
-        this.notaService = notaService;
-    }
+    @Autowired
+    private ClienteRepository clienteRepository;
 
     @ModelAttribute("currentUser")
     public String getCurrentUser(Principal principal) {
@@ -100,6 +101,7 @@ public class TicketController {
         model.addAttribute("users", users);
         model.addAttribute("statusType", statusTypes);
         model.addAttribute("categorie", categoriaService.getAllCategoriaStatusTypes());
+
         return "ticket/edit";
     }
 
@@ -130,6 +132,7 @@ public class TicketController {
         model.addAttribute("categorie", categoriaService.getAllCategoriaStatusTypes());
         model.addAttribute("users", userService.finaAllByStatus());
         model.addAttribute("ticket", ticket);
+        model.addAttribute("clienti", clienteRepository.findAll());
         return "ticket/add";
     }
 
