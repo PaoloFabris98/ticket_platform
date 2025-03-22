@@ -30,8 +30,7 @@ public class DatabaseUserDetails implements UserDetails {
     public DatabaseUserDetails(User user, AuthoritiesRepository authoritiesRepository) {
         this.id = user.getId();
         this.username = user.getUsername();
-        String criptedPassword = user.getPassword();
-        this.password = criptedPassword;
+        this.password = user.getPassword();
         this.email = user.getEmail();
         this.enable = user.getEnable();
         this.status = user.getUserStatus();

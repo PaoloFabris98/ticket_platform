@@ -38,7 +38,8 @@ public class SecurityConfiguration {
                                 .authorizeHttpRequests(auth -> auth
                                                 .requestMatchers("/webjars/**", "/css/**", "/js/**", "/imgs/**")
                                                 .permitAll()
-                                                .requestMatchers("/login", "/not_autenticated", "/logout", "/")
+                                                .requestMatchers("/login", "/not_autenticated", "/logout", "/",
+                                                                "/API/**")
                                                 .permitAll()
                                                 .requestMatchers("/operatori", "/addTicket", "/editTicket/**",
                                                                 "/deleteTicket/**", "/createUser")

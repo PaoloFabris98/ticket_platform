@@ -117,11 +117,13 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
 
     @Transactional
     private void createUserAuthoriti(User user) {
-        Authorities authorities = new Authorities();
-        authorities.setUsername(user.getUsername());
-        authorities.setAuthority("USER");
+        if (authoritiesRepository.findByUsername(user.getUsername()).isEmpty()) {
+            Authorities authorities = new Authorities();
+            authorities.setUsername(user.getUsername());
+            authorities.setAuthority(user.getRole().getName());
+            authoritiesRepository.save(authorities);
+        }
 
-        authoritiesRepository.save(authorities);
     }
 
     private void expiringSessionAfterUserUpdate(String oldUsername, DatabaseUserDetails updatedUserDetails) {
