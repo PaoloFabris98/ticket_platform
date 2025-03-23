@@ -4,7 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifica Operatore</title>
+
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}" />
     <link th:rel="stylesheet" th:href="@{/css/stile.css}" />
     <link th:rel="stylesheet" th:href="@{/css/card.css}" />
     <link th:rel="stylesheet" th:href="@{/css/navbar.css}" />
@@ -14,108 +17,100 @@
 
     <div th:insert="~{fragments/navbar :: navBar}"></div>
 
-
     <div th:if="${message != null && messageClass != null}">
         <div class="alert text-center" th:classappend="${messageClass}">
             <p th:text="${message}"></p>
         </div>
     </div>
 
-    <div class="m-3 p-2">
-        <h5>Modifica Operatore: <span th:text="${user.username}"></span></h5>
-    </div>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card bg-secondary text-white shadow-lg rounded-4 p-4">
+                    <div class="card-body">
+                        <h3 class="card-title text-center fw-bold">Modifica Operatore: <span th:text="${user.username}"></span></h3>
+                        <hr class="border-light">
 
-    <div>
-        <form th:action="@{|/editUser/${id}|}" method="post" id="editUser-form" th:object="${user}"
-            class="bg-dark text-white">
-            <input type="hidden" th:field="*{id}" />
-            <div class="m-3 p-2">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" th:field="*{username}" th:errorClass="is-invalid">
-                <div th:if="${#fields.hasErrors('username')}" class="invalid-feedback">
-                    <ul>
-                        <li th:each="error: ${#fields.errors('username')}" th:text="${error}"></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="m-3 p-2">
-                <label for="password" class="form-label">Password</label>
-                <input type="text" class="form-control" id="password" th:field="*{password}" th:errorClass="is-invalid">
-                <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback">
-                    <ul>
-                        <li th:each="error: ${#fields.errors('password')}" th:text="${error}"></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="m-3 p-2">
-                <label for="email" class="form-label">Email</label>
-                <input type="text" class="form-control" id="email" th:field="*{email}" th:errorClass="is-invalid">
-                <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback">
-                    <ul>
-                        <li th:each="error: ${#fields.errors('email')}" th:text="${error}"></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="m-3 p-2">
-                <label for="role" class="form-label">Ruolo</label>
-                <select class="form-control" id="role" th:field="*{role}" th:errorClass="is-invalid">
-                    <option value="" disabled>Seleziona un ruolo</option>
-                    <option th:each="role : ${roles}" 
-                            th:selected="${currentRole}"
-                            th:value="${role}" 
-                            th:text="${role}"
-                            ></option>
-                </select>
-                <div th:if="${#fields.hasErrors('role')}" class="invalid-feedback">
-                    <ul>
-                        <li th:each="error: ${#fields.errors('role')}" th:text="${error}"></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="m-3 p-2 d-flex align-items-center" sec:authorize="hasAuthority('ADMIN')">
-                <label for="enable" class="form-label me-2">Abilitato</label>
-                <input class="form-check-input mt-0" type="checkbox" id="enable" th:field="*{enable}">
-                <div th:if="${#fields.hasErrors('enable')}" class="invalid-feedback">
-                    <ul>
-                        <li th:each="error: ${#fields.errors('enable')}" th:text="${error}"></li>
-                    </ul>
-                </div>
-            </div>
-            <input type="button" value="Modifica Operatore" class="btn btn-primary m-3 p-2" data-bs-toggle="modal"
-                data-bs-target="#confirmLogoutModal">
-            <input type="reset" value="Reset" class="btn btn-warning m-3 p-2">
-        </form>
-    </div>
+                        <form th:action="@{|/editUser/${id}|}" method="post" id="editUser-form" th:object="${user}">
+                            <input type="hidden" th:field="*{id}" />
 
-    <div class="modal fade text-black" id="confirmLogoutModal" tabindex="-1" aria-labelledby="confirmLogoutLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content bg-dark text-white border border-warning">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="confirmLogoutLabel">Conferma Disconnessione</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body" sec:authorize="hasAuthority('USER')">
-                    Salvando le modifiche, la tua sessione sarà disconnessa e sarà necessario effettuare
-                    nuovamente il login. Vuoi continuare?
-                </div>
-                <div class="modal-body" sec:authorize="hasAuthority('ADMIN')">
-                    Salvando le modifiche, la sessione dell'utente sarà disconnessa e sarà necessario effettuare
-                    nuovamente il login. Vuoi continuare?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-                    <button type="button" class="btn btn-warning"
-                        onclick="document.getElementById('editUser-form').submit();">Conferma</button>
+                            <div class="m-3 p-2">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" th:field="*{username}" th:errorClass="is-invalid" placeholder="Inserisci username">
+                                <div th:if="${#fields.hasErrors('username')}" class="invalid-feedback">
+                                    <ul>
+                                        <li th:each="error: ${#fields.errors('username')}" th:text="${error}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="m-3 p-2">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" th:field="*{password}" th:errorClass="is-invalid" placeholder="Inserisci password">
+                                <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback">
+                                    <ul>
+                                        <li th:each="error: ${#fields.errors('password')}" th:text="${error}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="m-3 p-2">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" th:field="*{email}" th:errorClass="is-invalid" placeholder="Inserisci email">
+                                <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback">
+                                    <ul>
+                                        <li th:each="error: ${#fields.errors('email')}" th:text="${error}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="m-3 p-2 d-flex align-items-center" sec:authorize="hasAuthority('ADMIN')">
+                                <label for="enable" class="form-label me-2">Abilitato</label>
+                                <input class="form-check-input mt-0" type="checkbox" id="enable" th:field="*{enable}">
+                                <div th:if="${#fields.hasErrors('enable')}" class="invalid-feedback">
+                                    <ul>
+                                        <li th:each="error: ${#fields.errors('enable')}" th:text="${error}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-3 justify-content-center mt-4">
+                                <input type="button" value="Modifica Operatore" class="btn btn-success m-2 p-2" data-bs-toggle="modal" data-bs-target="#confirmLogoutModal">
+                                <input type="reset" value="Reset" class="btn btn-warning m-2 p-2">
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="modal fade text-black" id="confirmLogoutModal" tabindex="-1" aria-labelledby="confirmLogoutLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-white border border-warning">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="confirmLogoutLabel">Conferma Disconnessione</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" sec:authorize="hasAuthority('USER')">
+                    Salvando le modifiche, la tua sessione sarà disconnessa e sarà necessario effettuare nuovamente il login. Vuoi continuare?
+                </div>
+                <div class="modal-body" sec:authorize="hasAuthority('ADMIN')">
+                    Salvando le modifiche, la sessione dell'utente sarà disconnessa e sarà necessario effettuare nuovamente il login. Vuoi continuare?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-warning" onclick="document.getElementById('editUser-form').submit();">Conferma</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div th:insert="~{fragments/footer :: footer}"></div>
-    <!--JS-->
+
     <script th:src="@{/js/app.js}"></script>
     <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
 </body>
 
 </html>

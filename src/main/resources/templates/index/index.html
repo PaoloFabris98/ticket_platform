@@ -21,120 +21,118 @@
                 <p th:text="${message}"></p>
             </div>
         </div>
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped text-center">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Ticket Id</th>
-                        <th> Cliente</th>
-                        <th>Descrizione</th>
-                        <th>Operatore</th>
-                        <th>Status</th>
-                        <th>Categoria</th>
-                        <th>Note</th>
-                        <th>Data Apertura</th>
-                        <th>Data Chiusura</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="ticket : ${tickets}">
-                        <td th:text="${ticket.getId()}"></td>
-                        <td >
-                            <div th:text="${ticket.getCliente().getNome()}"></div>
-                            <div th:text="${ticket.getCliente().getEmail()}"></div>
-                            <div th:text="${ticket.getCliente().getCellulare()}"></div>
-                        </td>
-                        <td th:text="${ticket.getDescrizione()}"></td>
-                        <td class="fs-6" th:text="${ticket.getOperatoreUsername()}"></td>
-                        <td>
-                            <span
-                                th:classappend="${ticket.getStatusName() == 'APERTO' ? 'bg-success text-white' : 
-                                                  (ticket.getStatusName() == 'CHIUSO' ? 'bg-danger text-white' : 
-                                                  (ticket.getStatusName() == 'IN_CORSO' ? 'bg-warning text-dark' : ''))} "
-                                class="badge rounded-pill">
-                                <span th:text="${ticket.getStatusName()}"></span>
-                            </span>
-                        </td>
 
-                        <td>
-                            <span
-                                th:classappend="${ticket.getCategoria().getCategoriaName() == 'ASSISTENZA' ? 'bg-primary text-white' : 
-                                                  (ticket.getCategoria().getCategoriaName() == 'MANUTENZIONE' ? 'bg-success text-white' : 
-                                                  (ticket.getCategoria().getCategoriaName() == 'AMMINISTRAZIONE' ? 'bg-info text-white' : 
-                                                  (ticket.getCategoria().getCategoriaName() == 'TECNICA' ? 'bg-warning text-dark' : '')))}"
-                                class="badge rounded-pill">
-                                <span th:text="${ticket.getCategoria().getCategoriaName()}"></span>
-                            </span>
-                        </td>
-                        <td>
-                            <div th:if="${ticket.getNote() != null and not #lists.isEmpty(ticket.getNote())}">
-                                <div th:each="nota : ${ticket.getNote()}" class="border-bottom pb-2 mb-2">
-                                    <p class="fw-bold mb-0" th:text="'Autore: ' + ${nota.getAutore().getUsername()}">
-                                    </p>
-                                    <p class="text-muted mb-0" th:text="'Data: ' + ${nota.getFormattedDate()}"></p>
-                                    <p class="mb-0" th:text="${nota.getNota()}"></p>
+        <div class="card bg-dark text-white shadow-lg p-3">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped text-center">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Ticket Id</th>
+                            <th>Cliente</th>
+                            <th>Descrizione</th>
+                            <th>Operatore</th>
+                            <th>Status</th>
+                            <th>Categoria</th>
+                            <th>Note</th>
+                            <th>Data Apertura</th>
+                            <th>Data Chiusura</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="ticket : ${tickets}">
+                            <td th:text="${ticket.getId()}"></td>
+                            <td>
+                                <div th:text="${ticket.getCliente().getNome()}"></div>
+                                <div th:text="${ticket.getCliente().getEmail()}"></div>
+                                <div th:text="${ticket.getCliente().getCellulare()}"></div>
+                            </td>
+                            <td th:text="${ticket.getDescrizione()}"></td>
+                            <td class="fs-6" th:text="${ticket.getOperatoreUsername()}"></td>
+                            <td>
+                                <span
+                                    th:classappend="${ticket.getStatusName() == 'APERTO' ? 'bg-success text-white' : 
+                                                      (ticket.getStatusName() == 'CHIUSO' ? 'bg-danger text-white' : 
+                                                      (ticket.getStatusName() == 'IN_CORSO' ? 'bg-warning text-dark' : ''))} "
+                                    class="badge rounded-pill">
+                                    <span th:text="${ticket.getStatusName()}"></span>
+                                </span>
+                            </td>
+
+                            <td>
+                                <span
+                                    th:classappend="${ticket.getCategoria().getCategoriaName() == 'ASSISTENZA' ? 'bg-primary text-white' : 
+                                                      (ticket.getCategoria().getCategoriaName() == 'MANUTENZIONE' ? 'bg-success text-white' : 
+                                                      (ticket.getCategoria().getCategoriaName() == 'AMMINISTRAZIONE' ? 'bg-info text-white' : 
+                                                      (ticket.getCategoria().getCategoriaName() == 'TECNICA' ? 'bg-warning text-dark' : '')))}"
+                                    class="badge rounded-pill">
+                                    <span th:text="${ticket.getCategoria().getCategoriaName()}"></span>
+                                </span>
+                            </td>
+                            <td>
+                                <div th:if="${ticket.getNote() != null and not #lists.isEmpty(ticket.getNote())}">
+                                    <div th:each="nota : ${ticket.getNote()}" class="border-bottom pb-2 mb-2">
+                                        <p class="fw-bold mb-0" th:text="'Autore: ' + ${nota.getAutore().getUsername()}"></p>
+                                        <p class="text-muted mb-0" th:text="'Data: ' + ${nota.getFormattedDate()}"></p>
+                                        <p class="mb-0" th:text="${nota.getNota()}"></p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div th:if="${ticket.getNote() == null or #lists.isEmpty(ticket.getNote())}">
-                                <p class="text-muted">Nessuna nota</p>
-                            </div>
-                        </td>
-                        <td th:text="${ticket.getFormattedDate()}"></td>
-                        <td th:text="${ticket.getFormattedClosedDate()}"></td>
-                        <td class="text-nowrap">
-                            <div class="d-flex flex-wrap gap-2">
-                                <div th:insert="~{fragments/buttons :: seeTicket('/ticket/' + ${ticket.getId()})}"></div>
+                                <div th:if="${ticket.getNote() == null or #lists.isEmpty(ticket.getNote())}">
+                                    <p class="text-muted">Nessuna nota</p>
+                                </div>
+                            </td>
+                            <td th:text="${ticket.getFormattedDate()}"></td>
+                            <td th:text="${ticket.getFormattedClosedDate()}"></td>
+                            <td class="text-nowrap">
+                                <div class="d-flex flex-wrap gap-2">
+                                    <div th:insert="~{fragments/buttons :: seeTicket('/ticket/' + ${ticket.getId()})}"></div>
+                                    <div th:insert="~{fragments/buttons :: editTicket('/editTicket/' + ${ticket.getId()})}" sec:authorize="hasAuthority('ADMIN')"></div>
+                                    <div th:insert="~{fragments/buttons :: addNota('/addNota/' + ${ticket.getId()})}"></div>
 
-                                <div th:insert="~{fragments/buttons :: editTicket('/editTicket/' + ${ticket.getId()})}" sec:authorize="hasAuthority('ADMIN')"></div>
+                                    <form th:if="${ticket.getStatusName() == 'APERTO'}"
+                                        th:action="@{/setStatusIn_corso/{id}(id=${ticket.getId()})}" method="post">
+                                        <button type="submit" class="btn btn-warning">Prendi In Carico</button>
+                                    </form>
 
-                                <div th:insert="~{fragments/buttons :: addNota('/addNota/' + ${ticket.getId()})}"></div>
+                                    <form th:if="${ticket.getStatusName() == 'IN_CORSO'}"
+                                        th:action="@{/setStatusChiuso/{id}(id=${ticket.getId()})}" method="post">
+                                        <button type="submit" class="btn btn-danger">Concludi</button>
+                                    </form>
 
-                                
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        th:data-bs-target="'#delete-modal-' + ${ticket.getId()}"
+                                        sec:authorize="hasAuthority('ADMIN')">
+                                        <i class="bi bi-trash3"></i>
+                                    </button>
+                                </div>
 
-                                <form th:if="${ticket.getStatusName() == 'APERTO'}"
-                                    th:action="@{/setStatusIn_corso/{id}(id=${ticket.getId()})}" method="post">
-                                    <button type="submit" class="btn btn-warning">Prendi In Carico</button>
-                                </form>
-
-                                <form th:if="${ticket.getStatusName() == 'IN_CORSO'}"
-                                    th:action="@{/setStatusChiuso/{id}(id=${ticket.getId()})}" method="post">
-                                    <button type="submit" class="btn btn-danger">Concludi</button>
-                                </form>
-
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                    th:data-bs-target="'#delete-modal-' + ${ticket.getId()}"
-                                    sec:authorize="hasAuthority('ADMIN')">
-                                    <i class="bi bi-trash3"></i>
-                                </button>
-                            </div>
-
-                            <div class="modal fade" th:id="'delete-modal-' + ${ticket.getId()}" tabindex="-1">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Conferma Eliminazione</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>Sei sicuro di voler cancellare il ticket con ID: <strong
-                                                    th:text="${ticket.getId()}"></strong>?</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Annulla</button>
-                                            <form th:action="@{/deleteTicket/{id}(id=${ticket.getId()})}" method="post">
-                                                <button type="submit" class="btn btn-danger">Elimina</button>
-                                            </form>
+                                <div class="modal fade" th:id="'delete-modal-' + ${ticket.getId()}" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Conferma Eliminazione</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Sei sicuro di voler cancellare il ticket con ID: <strong
+                                                        th:text="${ticket.getId()}"></strong>?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Annulla</button>
+                                                <form th:action="@{/deleteTicket/{id}(id=${ticket.getId()})}" method="post">
+                                                    <button type="submit" class="btn btn-danger">Elimina</button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div th:insert="~{fragments/footer :: footer}"></div>
         <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>

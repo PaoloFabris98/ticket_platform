@@ -40,9 +40,9 @@
                         <td th:text="${cliente.getEmail()}"></td>
                         <td th:text="${cliente.getCellulare()}"></td>
                         <td>
-                            <span th:each="ticket, iterStat : ${cliente.tickets}">
-                                <a th:href="@{'/ticket/' + ${ticket.getId()}}"><span th:text="${ticket.id}"></span></a>
-                                <span th:if="${iterStat.index != cliente.tickets.size() - 1}">, </span>
+                            <span th:each="ticket : ${cliente.tickets}">
+                                <a th:href="@{'/ticket/' + ${ticket.getId()}}" class="btn btn-outline-primary"><span
+                                        th:text="${ticket.id}"></span></a>
                             </span>
                         </td>
                         <td>

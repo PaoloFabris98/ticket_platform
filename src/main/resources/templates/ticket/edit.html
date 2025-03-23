@@ -4,123 +4,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifica Ticket</title>
+
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}" />
     <link th:rel="stylesheet" th:href="@{/css/stile.css}" />
     <link th:rel="stylesheet" th:href="@{/css/card.css}" />
     <link th:rel="stylesheet" th:href="@{/css/navbar.css}" />
 </head>
 
 <body class="bg-dark text-white mx-4 m-3">
-
+    
     <div th:insert="~{fragments/navbar :: navBar}"></div>
 
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card bg-secondary text-white shadow-lg rounded-4 p-4">
+                    <div class="card-body">
+                        <h3 class="card-title text-center fw-bold">Modifica Ticket</h3>
+                        <hr class="border-light">
 
-    <div th:if="${message != null && messageClass != null}">
-        <div class="alert text-center" th:classappend="${messageClass}">
-            <p th:text="${message}"></p>
+                        <form th:action="@{|/editTicket/${ticket.id}|}" method="post" th:object="${ticket}">
+                            <input type="hidden" th:field="*{id}" />
+
+                            <div class="mb-3">
+                                <label class="form-label">Cliente</label>
+                                <select class="form-control" th:field="*{cliente.id}" th:errorClass="is-invalid">
+                                    <option value="" disabled selected>Seleziona un cliente</option>
+                                    <option th:each="cliente : ${clienti}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Operatore</label>
+                                <select class="form-control" th:field="*{operatore.id}" th:errorClass="is-invalid">
+                                    <option value="" disabled selected>Seleziona un operatore</option>
+                                    <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.username}"></option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Descrizione</label>
+                                <textarea class="form-control" th:field="*{descrizione}" rows="4" placeholder="Inserisci la descrizione"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Status</label>
+                                <select class="form-control" th:field="*{status.status}">
+                                    <option value="" disabled selected>Seleziona lo status</option>
+                                    <option th:each="status : ${statusType}" th:value="${status}" th:text="${status}"></option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Data Apertura</label>
+                                <input type="date" class="form-control" th:field="*{dataCreazione}" readonly>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Data Chiusura</label>
+                                <input type="date" class="form-control" th:field="*{dataChiusura}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Categoria</label>
+                                <select class="form-control" th:field="*{categoria.nome}">
+                                    <option value="" disabled selected>Seleziona una categoria</option>
+                                    <option th:each="categoria : ${categorie}" th:value="${categoria}" th:text="${categoria}"></option>
+                                </select>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-primary">Salva Modifiche</button>
+                                <button type="reset" class="btn btn-warning">Reset</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="m-3 p-2">
-        <h5>ID Ticket: <span th:text="${ticket.id}"></span></h5>
-    </div>
-
-    <div>
-        <form th:action="@{|/editTicket/${id}|}" method="post" id="editTicket-form" th:object="${ticket}"
-            class="bg-dark text-white">
-            <input type="hidden" th:field="*{id}" />
-
-            <div class="m-3 p-2">
-                <label for="cliente" class="form-label">Cliente</label>
-                <select class="form-control" id="cliente" th:field="*{cliente.id}" th:errorClass="is-invalid">
-                    <option value="" disabled selected>Seleziona un cliente</option>
-                    <option th:each="cliente : ${clienti}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
-                </select>
-                <div th:if="${#fields.hasErrors('cliente')}" class="invalid-feedback">
-                    <ul>
-                        <li th:each="error: ${#fields.errors('cliente')}" th:text="${error}"></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="m-3 p-2">
-                <label for="Operatore" class="form-label">Operatore</label>
-                <select class="form-control" id="Operatore" th:field="*{operatore.id}" th:errorClass="is-invalid">
-                    <option value="" disabled selected>Seleziona un operatore</option>
-                    <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.username}"
-                        th:selected="${ticket.operatore != null && ticket.operatore.id == user.id}" th:errorClass="is-invalid">
-                    </option>
-                </select>
-                <div th:if="${#fields.hasErrors('operatore')}" class="invalid-feedback">
-                    <ul>
-                        <li th:each="error: ${#fields.errors('operatore')}" th:text="${error}"></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="m-3 p-2">
-                <label for="Descrizione" class="form-label">Descrizione</label>
-                <textarea class="form-control" id="Descrizione" th:field="*{descrizione}" rows="5"
-                    placeholder="Inserisci la descrizione del ticket" th:errorClass="is-invalid"></textarea>
-                <div th:if="${#fields.hasErrors('descrizione')}" class="invalid-feedback">
-                    <ul>
-                        <li th:each="error: ${#fields.errors('descrizione')}" th:text="${error}"></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="m-3 p-2">
-                <label for="status" class="form-label">Status</label>
-                <select class="form-control" id="status" th:field="*{status.status}" th:errorClass="is-invalid">
-                    <option value="" disabled selected>Seleziona lo status</option>
-                    <option th:each="status : ${statusType}" 
-                            th:value="${status}" 
-                            th:text="${status}" th:errorClass="is-invalid"></option>
-                </select>
-                <div th:if="${#fields.hasErrors('status')}" class="invalid-feedback">
-                    <ul>
-                        <li th:each="error: ${#fields.errors('status')}" th:text="${error}"></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="m-3 p-2">
-                <label for="dataCreazione" class="form-label">Data di Apertura</label>
-                <input type="date" class="form-control" id="dataCreazione" th:field="*{dataCreazione}" th:errorClass="is-invalid" readonly>
-                <div th:if="${#fields.hasErrors('dataCreazione')}" class="invalid-feedback">
-                    <ul>
-                        <li th:each="error: ${#fields.errors('dataCreazione')}" th:text="${error}"></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="m-3 p-2">
-                <label for="dataChiusura" class="form-label">Data di Chiusura</label>
-                <input type="date" class="form-control" id="dataChiusura" th:field="*{dataChiusura}"
-                    th:errorClass="is-invalid">
-                <div th:if="${#fields.hasErrors('dataChiusura')}" class="invalid-feedback">
-                    <ul>
-                        <li th:each="error: ${#fields.errors('dataChiusura')}" th:text="${error}"></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="m-3 p-2">
-                <label for="Categoria" class="form-label">Categoria</label>
-                <select class="form-control" id="Categoria" th:field="*{categoria.nome}" th:errorClass="is-invalid">
-                    <option value="" disabled selected>Seleziona una categoria</option>
-                    <option th:each="categoria : ${categorie}" th:value="${categoria}" th:text="${categoria}"></option>
-                </select>
-                <div th:if="${#fields.hasErrors('categoria')}" class="invalid-feedback">
-                    <ul>
-                        <li th:each="error: ${#fields.errors('categoria')}" th:text="${error}"></li>
-                    </ul>
-                </div>
-            </div>
-        
-            <input type="submit" value="Modifica Ticket" class="btn btn-primary m-3 p-2">
-            <input type="reset" value="Reset" class="btn btn-warning m-3 p-2">
-        </form>
-    </div>
-
     <div th:insert="~{fragments/footer :: footer}"></div>
-    <!--JS-->
-    <script th:src="@{/js/app.js}"></script>
+
     <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
 </body>
-
 </html>

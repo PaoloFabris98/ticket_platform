@@ -72,7 +72,7 @@ public class DataInitializer {
             UserStatus statusAttivo = userStatusRepository.findByUserStatusType(UserStatusType.DISPONIBILE);
             UserStatus statusNonAttivo = userStatusRepository.findByUserStatusType(UserStatusType.NON_DISPONIBILE);
 
-            if (!userRepository.findByUsername("Operatore").isEmpty()) {
+            if (!userRepository.findByUsername("Operatore").isPresent()) {
                 User user = new User();
                 user.setUsername("Operatore");
                 user.setPassword("123");

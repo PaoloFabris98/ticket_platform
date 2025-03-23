@@ -14,81 +14,109 @@
 </head>
 
 <body class="bg-dark text-white mx-4 m-3">
-
+    
     <div th:insert="~{fragments/navbar :: navBar}"></div>
 
-    <div class="container mt-4">
+    <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card bg-secondary text-white shadow-lg rounded">
+                <div class="card bg-secondary text-white shadow-lg rounded-4 p-4">
                     <div class="card-body">
-                        <h3 class="card-title text-center">Dettagli Ticket</h3>
+                        <h3 class="card-title text-center fw-bold">Dettagli Ticket</h3>
                         <hr class="border-light">
-                        <div class="mb-3">
-                            <strong>Ticket ID:</strong>
-                            <span th:text="${ticket.getId()}" class="badge bg-light text-dark"></span>
-                        </div>
-                        <div class="mb-3">
-                            <strong>Descrizione:</strong>
-                            <p th:text="${ticket.getDescrizione()}" class="text-light"></p>
-                        </div>
-                        <div class="mb-3">
-                            <strong>Categoria:</strong>
-                            <span th:text="${ticket.getCategoria().getCategoriaName()}" class="text-light"></span>
-                        </div>
-                        <div class="mb-3">
-                            <strong>Data Apertura:</strong>
-                            <span th:text="${ticket.getFormattedDate()}" class="text-light"></span>
-                        </div>
-                        <div class="mb-3">
-                            <strong>Status:</strong>
-                            <span th:text="${ticket.getStatusName()}" class="text-light"></span>
-                        </div>
-                        <div class="mb-3">
-                            <strong>Cliente:</strong>
-                            <div>
-                                <i class="bi bi-people">    </i>
-                                <span th:text="${ticket.getCliente().getNome()}"></span>
-                            </div>
-                            <div>
-                                <i class="bi bi-envelope">      </i><span th:text="${ticket.getCliente().getMail()}"></span>
-                            </div>
-                            <div>
-                                <i class="bi bi-phone">     </i></i><span
-                                    th:text="${ticket.getCliente().getCellulare()}"></span>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <strong>Ticket ID:</strong>
+                                <span th:text="${ticket.getId()}" class="badge bg-light text-dark"></span>
                             </div>
                         </div>
-                        <div class="clas mb-3 card bg-secondary text-white rounded">
-                            <div class="">
-                                <div th:if="${ticket.getNote() != null and not #lists.isEmpty(ticket.getNote())}">
-                                    <div th:each="nota : ${ticket.getNote()}" class=" pb-2 mb-2 row">
-                                        <div class="class col-10 ">
-                                            <p class="fw-bold mb-0"
-                                                th:text="'Autore: ' + ${nota.getAutore().getUsername()}">
-                                            </p>
-                                            <p class="text-white mb-0" th:text="'Data: ' + ${nota.getFormattedDate()}">
-                                            </p>
+                        
+                        <div class="row mb-3">
+                            <div class="col">
+                                <strong>Cliente:</strong>
+                                <div class="mt-2">
+                                    <i class="bi bi-person-circle"></i>
+                                    <span th:text="${ticket.getCliente().getNome()}"></span>
+                                </div>
+                                <div>
+                                    <i class="bi bi-envelope"></i>
+                                    <span th:text="${ticket.getCliente().getEmail()}"></span>
+                                </div>
+                                <div>
+                                    <i class="bi bi-telephone"></i>
+                                    <span th:text="${ticket.getCliente().getCellulare()}"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <strong>Descrizione:</strong>
+                                <p th:text="${ticket.getDescrizione()}" class="text-light"></p>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <strong>Categoria:</strong>
+                                <span th:text="${ticket.getCategoria().getCategoriaName()}"
+                                      th:classappend="${ticket.getCategoria().getCategoriaName() == 'ASSISTENZA' ? 'bg-primary' : 
+                                                       (ticket.getCategoria().getCategoriaName() == 'MANUTENZIONE' ? 'bg-success' : 
+                                                       (ticket.getCategoria().getCategoriaName() == 'AMMINISTRAZIONE' ? 'bg-info' : 'bg-warning'))}"
+                                      class="badge text-white"></span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <strong>Data Apertura:</strong>
+                                <span th:text="${ticket.getFormattedDate()}" class="text-light"></span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <strong>Status:</strong>
+                                <span th:text="${ticket.getStatusName()}"
+                                      th:classappend="${ticket.getStatusName() == 'APERTO' ? 'bg-success' : 
+                                                       (ticket.getStatusName() == 'CHIUSO' ? 'bg-danger' : 
+                                                       (ticket.getStatusName() == 'IN_CORSO' ? 'bg-warning text-dark' : 'bg-secondary'))}"
+                                      class="badge text-white"></span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <div class="card bg-dark text-white p-3 rounded-3">
+                                    <h5 class="fw-bold">Note</h5>
+                                    <hr class="border-light">
+                                    <div th:if="${ticket.getNote() != null and not #lists.isEmpty(ticket.getNote())}">
+                                        <div th:each="nota : ${ticket.getNote()}" class="p-2 mb-3 border rounded bg-secondary">
+                                            <p class="fw-bold mb-0" th:text="'Autore: ' + ${nota.getAutore().getUsername()}"></p>
+                                            <p class="text-white mb-0" th:text="'Data: ' + ${nota.getFormattedDate()}"></p>
                                             <p class="mb-0" th:text="${nota.getNota()}"></p>
-                                        </div>
-                                        <div class="class col-2 d-flex justify-content-center align-items-center"
-                                            th:if="${currentUser == nota.getAutore().getUsername() or currentUserObj.getRole().getName() == 'ADMIN'}">
-                                            <form th:action="@{/deleteNote/{id}(id=${nota.getId()})}" method="post">
-                                                <button type="submit" class="btn btn-danger">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </form>
+                                            <div class="text-end" th:if="${currentUser == nota.getAutore().getUsername() or currentUserObj.getRole().getName() == 'ADMIN'}">
+                                                <form th:action="@{/deleteNote/{id}(id=${nota.getId()})}" method="post">
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div th:if="${ticket.getNote() == null or #lists.isEmpty(ticket.getNote())}">
-                                    <p class="text-muted">Nessuna nota</p>
+                                    <div th:if="${ticket.getNote() == null or #lists.isEmpty(ticket.getNote())}" class="text-muted">
+                                        Nessuna nota disponibile
+                                    </div>
                                 </div>
                             </div>
-
                         </div>
-                        <div class="d-flex mt-3">
-                            <div th:insert="~{fragments/buttons :: addNota('/addNota/' + ${ticket.getId()})}"></div>
-                            <div th:insert="~{fragments/buttons :: goToHome}" class="ms-3"></div>
+
+                        <div class="row mt-3">
+                            <div class="col d-flex gap-3">
+                                <div th:insert="~{fragments/buttons :: addNota('/addNota/' + ${ticket.getId()})}"></div>
+                                <div th:insert="~{fragments/buttons :: goToHome}"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -99,7 +127,5 @@
     <div th:insert="~{fragments/footer :: footer}"></div>
 
     <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
-
 </body>
-
 </html>
