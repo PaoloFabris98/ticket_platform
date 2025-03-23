@@ -154,34 +154,6 @@ public class TicketController {
         return "redirect:/index";
     }
 
-    @GetMapping("/addNota/{id}")
-    public String addNote(@PathVariable Integer id, Model model, Principal principal) {
-        Note note = new Note();
-        model.addAttribute("note", note);
-        return "ticket/addNota";
-    }
-
-    @PostMapping("/addNota/{id}")
-    public String addNote(@PathVariable("id") Integer id,
-            @Valid @ModelAttribute("nota") Note formNota,
-            BindingResult bindingResult, RedirectAttributes redirectAttributes, Principal principal) {
-        if (bindingResult.hasErrors()) {
-            return "ticket/addNota";
-        }
-        Nota nota = new Nota();
-        User user = utilityFunctions.currentUser(principal);
-        System.out.println(utilityFunctions.currentUser(principal).getUsername());
-        nota.setDataCreazione(LocalDate.now());
-        nota.setNota(formNota.getNote());
-        nota.setTicket(ticketService.getTicketById(id));
-        nota.setAutore(user);
-        notaService.save(nota);
-        redirectAttributes.addFlashAttribute("message", "Nota creata con successo");
-        redirectAttributes.addFlashAttribute("messageClass", "alert-success");
-
-        return "redirect:/index";
-    }
-
     @PostMapping("/setStatusIn_corso/{id}")
     public String setStatusIn_corso(@PathVariable Integer id) {
         Ticket ticket = ticketService.getTicketById(id);
