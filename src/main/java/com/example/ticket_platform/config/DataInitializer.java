@@ -46,14 +46,14 @@ public class DataInitializer {
                 Cliente cliente = new Cliente();
                 cliente.setNome("Boolean");
                 cliente.setCellulare("3891372590");
-                cliente.setMail("f98paolo@gmail.com");
+                cliente.setEmail("f98paolo@gmail.com");
                 clienteRepository.save(cliente);
             }
             if (!clienteRepository.findByNome("mediaword").isPresent()) {
                 Cliente cliente = new Cliente();
                 cliente.setNome("mediaword");
                 cliente.setCellulare("3891372590");
-                cliente.setMail("f98paoloTest@gmail.com");
+                cliente.setEmail("f98paoloTest@gmail.com");
                 clienteRepository.save(cliente);
             }
 

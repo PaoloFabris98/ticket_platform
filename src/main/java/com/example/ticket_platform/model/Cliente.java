@@ -24,7 +24,7 @@ public class Cliente {
 
     @NotBlank(message = "Il campo della mail non può essere vuoto.")
     @Column(unique = true)
-    private String mail;
+    private String email;
 
     @NotBlank(message = "Il numero di telefono non può essere vuoto.")
     private String cellulare;
@@ -49,12 +49,12 @@ public class Cliente {
         this.nome = nome;
     }
 
-    public String getMail() {
-        return this.mail;
+    public String getEmail() {
+        return this.email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getCellulare() {

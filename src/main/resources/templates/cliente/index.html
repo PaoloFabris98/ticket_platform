@@ -37,7 +37,7 @@
                     <tr th:each="cliente : ${clienti}">
                         <td th:text="${cliente.getId()}"></td>
                         <td th:text="${cliente.getNome()}"></td>
-                        <td th:text="${cliente.getMail()}"></td>
+                        <td th:text="${cliente.getEmail()}"></td>
                         <td th:text="${cliente.getCellulare()}"></td>
                         <td>
                             <span th:each="ticket, iterStat : ${cliente.tickets}">
@@ -46,25 +46,32 @@
                             </span>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                th:data-bs-target="'#delete-modal-' + ${cliente.getId()}"
-                                sec:authorize="hasAuthority('ADMIN')">
-                                <i class="bi bi-trash3"></i>
-                            </button>
+                            <div class="d-flex flex-wrap gap-2">
+                                <div
+                                    th:insert="~{fragments/buttons :: editCliente('/editCliente/' + ${cliente.getId()})}">
+                                </div>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    th:data-bs-target="'#delete-modal-' + ${cliente.getId()}"
+                                    sec:authorize="hasAuthority('ADMIN')">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            </div>
                         </td>
                         <div class="modal fade" th:id="'delete-modal-' + ${cliente.getId()}" tabindex="-1">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title">Conferma Eliminazione</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <p>Sei sicuro di voler cancellare il cliente con ID: <strong
                                                 th:text="${cliente.getId()}"></strong>?</p>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Annulla</button>
                                         <form th:action="@{/deleteCliente/{id}(id=${cliente.getId()})}" method="post">
                                             <button type="submit" class="btn btn-danger">Elimina</button>
                                         </form>
@@ -75,7 +82,7 @@
                     </tr>
                 </tbody>
             </table>
-            
+
         </div>
         <div th:insert="~{fragments/footer :: footer}"></div>
         <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
