@@ -29,7 +29,7 @@ public class Cliente {
     @NotBlank(message = "Il numero di telefono non può essere vuoto.")
     private String cellulare;
 
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente", orphanRemoval = true)
     @JsonBackReference
     private List<Ticket> tickets;
 

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/stile.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/card.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/navbar.css}" />
+</head>
+
+<body class="bg-dark d-flex justify-content-center">
+
+    <div class="w-100 mx-4 m-3">
+
+        <div th:insert="~{fragments/navbar :: navBar}"></div>
+        <div th:if="${message != null && messageClass != null}">
+            <div class="alert text-center" th:classappend="${messageClass}">
+                <p th:text="${message}"></p>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Cliente Id</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Numero di Telefono</th>
+                        <th>Ticket</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="cliente : ${clienti}">
+                        <td th:text="${cliente.getId()}"></td>
+                        <td th:text="${cliente.getNome()}"></td>
+                        <td th:text="${cliente.getMail()}"></td>
+                        <td th:text="${cliente.getCellulare()}"></td>
+                        <td>
+                            <span th:each="ticket, iterStat : ${cliente.tickets}">
+                                <a th:href="@{'/ticket/' + ${ticket.getId()}}"><span th:text="${ticket.id}"></span></a>
+                                <span th:if="${iterStat.index != cliente.tickets.size() - 1}">, </span>
+                            </span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                th:data-bs-target="'#delete-modal-' + ${cliente.getId()}"
+                                sec:authorize="hasAuthority('ADMIN')">
+                                <i class="bi bi-trash3"></i>
+                            </button>
+                        </td>
+                        <div class="modal fade" th:id="'delete-modal-' + ${cliente.getId()}" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Conferma Eliminazione</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Sei sicuro di voler cancellare il cliente con ID: <strong
+                                                th:text="${cliente.getId()}"></strong>?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                                        <form th:action="@{/deleteCliente/{id}(id=${cliente.getId()})}" method="post">
+                                            <button type="submit" class="btn btn-danger">Elimina</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </tr>
+                </tbody>
+            </table>
+            
+        </div>
+        <div th:insert="~{fragments/footer :: footer}"></div>
+        <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    </div>
+
+</body>
+
+</html>

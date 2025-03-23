@@ -30,6 +30,9 @@
                     <h6 class="m-0" sec:authorize="hasAuthority('ADMIN')">
                         <a th:href="@{'/addAPI'}" class="text-white">Aggiungi Rest User</a>
                     </h6>
+                    <h6 class="m-0" sec:authorize="hasAuthority('ADMIN')">
+                        <a th:href="@{'/clienti'}" class="text-white">Clienti</a>
+                    </h6>
                 </div>
 
                 <div class="col-md-4 d-flex align-items-center justify-content-end gap-3">

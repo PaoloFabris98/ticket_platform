@@ -8,17 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.ticket_platform.model.ApiUser;
-import com.example.ticket_platform.model.Status;
 import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.repository.ApiUserRepository;
-import com.example.ticket_platform.repository.StatusRepository;
 import com.example.ticket_platform.repository.TicketRepository;
 import com.example.ticket_platform.service.StatusService;
 import com.example.ticket_platform.service.TicketService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @CrossOrigin
@@ -29,8 +25,6 @@ public class ApiController {
     private TicketService ticketService;
     @Autowired
     private ApiUserRepository apiUserRepository;
-    @Autowired
-    private StatusRepository statusRepository;
     @Autowired
     private StatusService statusService;
 

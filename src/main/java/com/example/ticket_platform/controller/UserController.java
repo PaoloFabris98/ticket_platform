@@ -149,17 +149,6 @@ public class UserController {
         return "redirect:/operatori";
     }
 
-    @PostMapping("/deleteUser/{id}")
-    public String postMethodName(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
-        String temp = userService.findUserById(id).getUsername();
-        userService.deleteUser(userService.findUserById(id).getUsername());
-
-        redirectAttributes.addFlashAttribute("message", "L'operatore " + temp + " è stato eliminato correttamente!");
-        redirectAttributes.addFlashAttribute("messageClass", "alert-success");
-
-        return "redirect:/operatori";
-    }
-
     @PostMapping("/setOperatoreNonDisponibile/{id}")
     public String setOperatoreNonDisponibile(@PathVariable Integer id, RedirectAttributes redirectAttributes,
             Principal principal) {
@@ -195,4 +184,14 @@ public class UserController {
         return "redirect:/index";
     }
 
+    @PostMapping("/deleteUser/{id}")
+    public String postMethodName(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        String temp = userService.findUserById(id).getUsername();
+        userService.deleteUser(userService.findUserById(id).getUsername());
+
+        redirectAttributes.addFlashAttribute("message", "L'operatore " + temp + " è stato eliminato correttamente!");
+        redirectAttributes.addFlashAttribute("messageClass", "alert-success");
+
+        return "redirect:/operatori";
+    }
 }

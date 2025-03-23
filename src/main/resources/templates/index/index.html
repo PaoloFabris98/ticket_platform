@@ -90,6 +90,8 @@
 
                                 <div th:insert="~{fragments/buttons :: addNota('/addNota/' + ${ticket.getId()})}"></div>
 
+                                
+
                                 <form th:if="${ticket.getStatusName() == 'APERTO'}"
                                     th:action="@{/setStatusIn_corso/{id}(id=${ticket.getId()})}" method="post">
                                     <button type="submit" class="btn btn-warning">Prendi In Carico</button>

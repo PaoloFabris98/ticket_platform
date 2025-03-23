@@ -42,7 +42,8 @@ public class SecurityConfiguration {
                                                                 "/API/**")
                                                 .permitAll()
                                                 .requestMatchers("/operatori", "/addTicket", "/editTicket/**",
-                                                                "/deleteTicket/**", "/createUser")
+                                                                "/deleteTicket/**", "/createUser", "/clienti", "/API",
+                                                                "/addAPI")
                                                 .hasAuthority("ADMIN")
                                                 .requestMatchers("/permissions_missing", "/addNote/**")
                                                 .hasAuthority("USER")
@@ -50,7 +51,8 @@ public class SecurityConfiguration {
                                                 .hasAnyAuthority("ADMIN", "USER")
                                                 .requestMatchers(HttpMethod.POST, "/editTicket/**", "/addTicket",
                                                                 "/deleteTicket/**",
-                                                                "/editUser/**", "/createUser")
+                                                                "/editUser/**", "/createUser", "/deleteCliente/**",
+                                                                "/deleteNote/**")
                                                 .hasAnyAuthority("ADMIN")
                                                 .requestMatchers(HttpMethod.POST, "/addNote/**")
                                                 .hasAnyAuthority("USER")

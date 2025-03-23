@@ -3,7 +3,6 @@ package com.example.ticket_platform.controller;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -15,7 +14,6 @@ import org.springframework.validation.BindingResult;
 
 import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.Categoria;
-import com.example.ticket_platform.model.Cliente;
 import com.example.ticket_platform.model.Nota;
 import com.example.ticket_platform.model.Note;
 import com.example.ticket_platform.model.Status;
@@ -101,6 +99,7 @@ public class TicketController {
         model.addAttribute("users", users);
         model.addAttribute("statusType", statusTypes);
         model.addAttribute("categorie", categoriaService.getAllCategoriaStatusTypes());
+        model.addAttribute("clienti", clienteRepository.findAll());
 
         return "ticket/edit";
     }

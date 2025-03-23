@@ -29,6 +29,19 @@
         <form th:action="@{|/editTicket/${id}|}" method="post" id="editTicket-form" th:object="${ticket}"
             class="bg-dark text-white">
             <input type="hidden" th:field="*{id}" />
+
+            <div class="m-3 p-2">
+                <label for="cliente" class="form-label">Cliente</label>
+                <select class="form-control" id="cliente" th:field="*{cliente.id}" th:errorClass="is-invalid">
+                    <option value="" disabled selected>Seleziona un cliente</option>
+                    <option th:each="cliente : ${clienti}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
+                </select>
+                <div th:if="${#fields.hasErrors('cliente')}" class="invalid-feedback">
+                    <ul>
+                        <li th:each="error: ${#fields.errors('cliente')}" th:text="${error}"></li>
+                    </ul>
+                </div>
+            </div>
             <div class="m-3 p-2">
                 <label for="Operatore" class="form-label">Operatore</label>
                 <select class="form-control" id="Operatore" th:field="*{operatore.id}" th:errorClass="is-invalid">
@@ -98,6 +111,7 @@
                     </ul>
                 </div>
             </div>
+        
             <input type="submit" value="Modifica Ticket" class="btn btn-primary m-3 p-2">
             <input type="reset" value="Reset" class="btn btn-warning m-3 p-2">
         </form>
