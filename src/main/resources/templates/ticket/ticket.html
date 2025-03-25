@@ -14,7 +14,7 @@
 </head>
 
 <body class="bg-dark text-white mx-4 m-3">
-    
+
     <div th:insert="~{fragments/navbar :: navBar}"></div>
 
     <div class="container mt-5">
@@ -31,7 +31,7 @@
                                 <span th:text="${ticket.getId()}" class="badge bg-light text-dark"></span>
                             </div>
                         </div>
-                        
+
                         <div class="row mb-3">
                             <div class="col">
                                 <strong>Cliente:</strong>
@@ -61,10 +61,10 @@
                             <div class="col">
                                 <strong>Categoria:</strong>
                                 <span th:text="${ticket.getCategoria().getCategoriaName()}"
-                                      th:classappend="${ticket.getCategoria().getCategoriaName() == 'ASSISTENZA' ? 'bg-primary' : 
+                                    th:classappend="${ticket.getCategoria().getCategoriaName() == 'ASSISTENZA' ? 'bg-primary' : 
                                                        (ticket.getCategoria().getCategoriaName() == 'MANUTENZIONE' ? 'bg-success' : 
                                                        (ticket.getCategoria().getCategoriaName() == 'AMMINISTRAZIONE' ? 'bg-info' : 'bg-warning'))}"
-                                      class="badge text-white"></span>
+                                    class="badge text-white"></span>
                             </div>
                         </div>
 
@@ -79,10 +79,10 @@
                             <div class="col">
                                 <strong>Status:</strong>
                                 <span th:text="${ticket.getStatusName()}"
-                                      th:classappend="${ticket.getStatusName() == 'APERTO' ? 'bg-success' : 
+                                    th:classappend="${ticket.getStatusName() == 'APERTO' ? 'bg-success' : 
                                                        (ticket.getStatusName() == 'CHIUSO' ? 'bg-danger' : 
                                                        (ticket.getStatusName() == 'IN_CORSO' ? 'bg-warning text-dark' : 'bg-secondary'))}"
-                                      class="badge text-white"></span>
+                                    class="badge text-white"></span>
                             </div>
                         </div>
 
@@ -92,11 +92,15 @@
                                     <h5 class="fw-bold">Note</h5>
                                     <hr class="border-light">
                                     <div th:if="${ticket.getNote() != null and not #lists.isEmpty(ticket.getNote())}">
-                                        <div th:each="nota : ${ticket.getNote()}" class="p-2 mb-3 border rounded bg-secondary">
-                                            <p class="fw-bold mb-0" th:text="'Autore: ' + ${nota.getAutore().getUsername()}"></p>
-                                            <p class="text-white mb-0" th:text="'Data: ' + ${nota.getFormattedDate()}"></p>
+                                        <div th:each="nota : ${ticket.getNote()}"
+                                            class="p-2 mb-3 border rounded bg-secondary">
+                                            <p class="fw-bold mb-0"
+                                                th:text="'Autore: ' + ${nota.getAutore().getUsername()}"></p>
+                                            <p class="text-white mb-0" th:text="'Data: ' + ${nota.getFormattedDate()}">
+                                            </p>
                                             <p class="mb-0" th:text="${nota.getNota()}"></p>
-                                            <div class="text-end" th:if="${currentUser == nota.getAutore().getUsername() or currentUserObj.getRole().getName() == 'ADMIN'}">
+                                            <div class="text-end"
+                                                th:if="${currentUser == nota.getAutore().getUsername() or currentUserObj.getRole().getName() == 'ADMIN'}">
                                                 <form th:action="@{/deleteNote/{id}(id=${nota.getId()})}" method="post">
                                                     <button type="submit" class="btn btn-sm btn-danger">
                                                         <i class="bi bi-trash"></i>
@@ -105,7 +109,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div th:if="${ticket.getNote() == null or #lists.isEmpty(ticket.getNote())}" class="text-muted">
+                                    <div th:if="${ticket.getNote() == null or #lists.isEmpty(ticket.getNote())}"
+                                        class="text-muted">
                                         Nessuna nota disponibile
                                     </div>
                                 </div>
@@ -114,6 +119,15 @@
 
                         <div class="row mt-3">
                             <div class="col d-flex gap-3">
+                                <form th:if="${ticket.getStatusName() == 'APERTO'}"
+                                    th:action="@{/setStatusIn_corso/{id}(id=${ticket.getId()})}" method="post">
+                                    <button type="submit" class="btn btn-warning">Prendi In Carico</button>
+                                </form>
+
+                                <form th:if="${ticket.getStatusName() == 'IN_CORSO'}"
+                                    th:action="@{/setStatusChiuso/{id}(id=${ticket.getId()})}" method="post">
+                                    <button type="submit" class="btn btn-danger">Concludi</button>
+                                </form>
                                 <div th:insert="~{fragments/buttons :: addNota('/addNota/' + ${ticket.getId()})}"></div>
                                 <div th:insert="~{fragments/buttons :: goToHome}"></div>
                             </div>
@@ -128,4 +142,5 @@
 
     <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
 </body>
+
 </html>

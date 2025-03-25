@@ -47,9 +47,11 @@
                             <div class="m-3 p-2">
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="password" th:field="*{password}" th:errorClass="is-invalid" placeholder="Inserisci password">
+                                <p>Se lasciata vuota, la password non verrà modificata</p>
                                 <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback">
                                     <ul>
                                         <li th:each="error: ${#fields.errors('password')}" th:text="${error}"></li>
+                                        <span th:text="${#messages.msgOrNull('user.password') ?: 'Messaggio non disponibile'}"></span>
                                     </ul>
                                 </div>
                             </div>
@@ -63,7 +65,21 @@
                                     </ul>
                                 </div>
                             </div>
-
+                            <div class="m-3 p-2">
+                                <label for="role" class="form-label">Ruolo</label>
+                                <select class="form-control" id="role" th:field="*{role}" th:errorClass="is-invalid">
+                                    <option value="" disabled>Seleziona un ruolo</option>
+                                    <option th:each="role : ${roles}"
+                                            th:value="${role}" 
+                                            th:text="${role}"
+                                            ></option>
+                                </select>
+                                <div th:if="${#fields.hasErrors('role')}" class="invalid-feedback">
+                                    <ul>
+                                        <li th:each="error: ${#fields.errors('role')}" th:text="${error}"></li>
+                                    </ul>
+                                </div>
+                            </div>
                             <div class="m-3 p-2 d-flex align-items-center" sec:authorize="hasAuthority('ADMIN')">
                                 <label for="enable" class="form-label me-2">Abilitato</label>
                                 <input class="form-check-input mt-0" type="checkbox" id="enable" th:field="*{enable}">

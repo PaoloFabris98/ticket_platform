@@ -28,10 +28,10 @@
             <div class="col-md-8">
                 <div class="card bg-secondary text-white shadow-lg rounded-4 p-4">
                     <div class="card-body">
-                        <h3 class="card-title text-center fw-bold">Modifica Operatore: <span th:text="${user.username}"></span></h3>
+                        <h3 class="card-title text-center fw-bold">Modifica API user: <span th:text="${api.username}"></span></h3>
                         <hr class="border-light">
 
-                        <form th:action="@{|/editUser/${id}|}" method="post" id="editUser-form" th:object="${user}">
+                        <form th:action="@{'/editApi/' + ${api.getId()}}" method="post" id="editApiUser-form" th:object="${api}">
                             <input type="hidden" th:field="*{id}" />
 
                             <div class="m-3 p-2">
@@ -56,27 +56,18 @@
                             </div>
 
                             <div class="m-3 p-2">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" th:field="*{email}" th:errorClass="is-invalid" placeholder="Inserisci email">
-                                <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback">
+                                <label for="authKey" class="form-label">Auth Key</label>
+                                <input type="text" class="form-control" id="authKey" th:field="*{authKey}" th:errorClass="is-invalid" placeholder="Modifica la AuthKey">
+                                <div th:if="${#fields.hasErrors('authKey')}" class="invalid-feedback">
                                     <ul>
-                                        <li th:each="error: ${#fields.errors('email')}" th:text="${error}"></li>
+                                        <li th:each="error: ${#fields.errors('authKey')}" th:text="${authKey}"></li>
                                     </ul>
                                 </div>
                             </div>
 
-                            <div class="m-3 p-2 d-flex align-items-center" sec:authorize="hasAuthority('ADMIN')">
-                                <label for="enable" class="form-label me-2">Abilitato</label>
-                                <input class="form-check-input mt-0" type="checkbox" id="enable" th:field="*{enable}">
-                                <div th:if="${#fields.hasErrors('enable')}" class="invalid-feedback">
-                                    <ul>
-                                        <li th:each="error: ${#fields.errors('enable')}" th:text="${error}"></li>
-                                    </ul>
-                                </div>
-                            </div>
 
                             <div class="d-flex gap-3 justify-content-center mt-4">
-                                <input type="button" value="Modifica Operatore" class="btn btn-success m-2 p-2" data-bs-toggle="modal" data-bs-target="#confirmLogoutModal">
+                                <input type="submit" value="Modifica Api User" class="btn btn-success m-2 p-2">
                                 <input type="reset" value="Reset" class="btn btn-warning m-2 p-2">
                             </div>
                         </form>
@@ -86,26 +77,7 @@
         </div>
     </div>
 
-    <div class="modal fade text-black" id="confirmLogoutModal" tabindex="-1" aria-labelledby="confirmLogoutLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content bg-dark text-white border border-warning">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="confirmLogoutLabel">Conferma Disconnessione</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" sec:authorize="hasAuthority('USER')">
-                    Salvando le modifiche, la tua sessione sarà disconnessa e sarà necessario effettuare nuovamente il login. Vuoi continuare?
-                </div>
-                <div class="modal-body" sec:authorize="hasAuthority('ADMIN')">
-                    Salvando le modifiche, la sessione dell'utente sarà disconnessa e sarà necessario effettuare nuovamente il login. Vuoi continuare?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-                    <button type="button" class="btn btn-warning" onclick="document.getElementById('editUser-form').submit();">Conferma</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <div th:insert="~{fragments/footer :: footer}"></div>
 

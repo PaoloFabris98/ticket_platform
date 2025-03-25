@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Utente</title>
+
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/stile.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/card.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/navbar.css}" />
+</head>
+
+<body class="bg-dark text-white mx-4 m-3">
+
+    <div th:insert="~{fragments/navbar :: navBar}"></div>
+
+    <div th:if="${message != null && messageClass != null}">
+        <div class="alert text-center" th:classappend="${messageClass}">
+            <p th:text="${message}"></p>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card bg-secondary text-white shadow-lg rounded-4 p-4">
+                    <div class="card-body">
+                        <h3 class="card-title text-center fw-bold">Dashboard Operatore: <span th:text="${user.username}"></span></h3>
+                        <hr>
+                        <p><strong>Nome:</strong> <span th:text="${user.username}"></span></p>
+                        <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+                        <p><strong>Stato:</strong> <span th:text="${user.userStatus.getStatusName()}"></span></p>
+                        <p><strong>Ruolo:</strong> <span th:text="${user.role.getName()}"></span></p>
+                        <p><div class="me-2"
+                            th:insert="~{fragments/buttons :: editUser('/editUser/' + ${user.getId()})}"></div></p>
+                        <hr>
+                        <h4 class="fw-bold">Tickets Associati</h4>
+                        <ul class="list-group">
+                            <li class="list-group-item bg-dark text-white" th:each="ticket : ${user.tickets}">
+                                <p><strong>ID Ticket:</strong> <span th:text="${ticket.id}"></span></p>
+                                <p><strong>Descrizione:</strong> <span th:text="${ticket.descrizione}"></span></p>
+                                <p><strong>Stato:</strong> <span th:text="${ticket.status.getStatus().getName()}"></span></p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:insert="~{fragments/footer :: footer}"></div>
+
+    <script th:src="@{/js/app.js}"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+</body>
+
+</html>

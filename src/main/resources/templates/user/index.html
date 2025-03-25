@@ -41,7 +41,8 @@
                         <td class="fs-6" style="width: 10%;" th:text="${user.getEmail()}"></td>
                         <td class="fs-6" style="width: 10%;">
                             <span th:each="ticket : ${user.tickets}">
-                                <a th:href="@{'/ticket/' + ${ticket.getId()}}" class="btn btn-outline-primary"><span th:text="${ticket.id}"></span></a>
+                                <a th:href="@{'/ticket/' + ${ticket.getId()}}" class="btn btn-outline-primary"><span
+                                        th:text="${ticket.id}"></span></a>
                             </span>
                         </td>
                         <td style="width: 10%;">
@@ -58,13 +59,21 @@
                                 <span th:text="${user.isEnable() ? 'Abilitato' : 'Disabilitato'}"></span>
                             </span>
                         </td>
-                        <td class="d-flex justify-content-start">
-                            <div class="me-2"
-                                th:insert="~{fragments/buttons :: editUser('/editUser/' + ${user.getId()})}"></div>
-                            <div class="me-2" sec:authorize="hasAuthority('ADMIN')">
-                                <form th:action="@{/deleteUser/{id}(id=${user.getId()})}" method="post">
-                                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
-                                </form>
+                        <td>
+                            <div class="d-flex">
+                                <div class="me-2">
+                                    <a th:href="@{'/dashboard/' + ${user.getId()}}" class="text-white btn btn-primary">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </div>
+                                <div class="me-2"
+                                    th:insert="~{fragments/buttons :: editUser('/editUser/' + ${user.getId()})}"></div>
+                                <div class="me-2" sec:authorize="hasAuthority('ADMIN')">
+                                    <form th:action="@{/deleteUser/{id}(id=${user.getId()})}" method="post">
+                                        <button type="submit" class="btn btn-danger"><i
+                                                class="bi bi-trash"></i></button>
+                                    </form>
+                                </div>
                             </div>
                         </td>
 

@@ -15,7 +15,6 @@ public class ApiUser {
     @NotBlank(message = "Il campo username è obbligatorio")
     private String username;
 
-    @NotBlank(message = "Il campo password è obbligatorio")
     private String password;
 
     @NotBlank(message = "L'authKey è obbligatoria")

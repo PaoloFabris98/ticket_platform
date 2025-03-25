@@ -14,8 +14,6 @@ import org.springframework.validation.BindingResult;
 
 import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.Categoria;
-import com.example.ticket_platform.model.Nota;
-import com.example.ticket_platform.model.Note;
 import com.example.ticket_platform.model.Status;
 import com.example.ticket_platform.model.StatusType;
 import com.example.ticket_platform.model.Ticket;
@@ -52,8 +50,6 @@ public class TicketController {
     private CategoriaService categoriaService;
     @Autowired
     private CategoriaRepository categoriaRepository;
-    @Autowired
-    private NotaService notaService;
     @Autowired
     private ClienteRepository clienteRepository;
 
@@ -93,10 +89,9 @@ public class TicketController {
     @GetMapping("/editTicket/{id}")
     public String editTicket(@PathVariable Integer id, Model model) {
         Ticket ticket = ticketService.getTicketById(id);
-        List<User> users = userService.getAll();
         List<StatusType> statusTypes = statusService.getAllStatusTypes();
         model.addAttribute("ticket", ticket);
-        model.addAttribute("users", users);
+        model.addAttribute("users", userService.finaAllByStatus());
         model.addAttribute("statusType", statusTypes);
         model.addAttribute("categorie", categoriaService.getAllCategoriaStatusTypes());
         model.addAttribute("clienti", clienteRepository.findAll());

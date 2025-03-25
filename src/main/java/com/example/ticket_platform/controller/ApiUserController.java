@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -22,6 +23,7 @@ import com.example.ticket_platform.repository.UserRepository;
 import com.example.ticket_platform.service.ApiUserService;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class ApiUserController {
@@ -88,6 +90,39 @@ public class ApiUserController {
         redirectAttributes.addFlashAttribute("message", "Lo User per il Rest è stato creato correttamente");
         redirectAttributes.addFlashAttribute("messageClass", "alert-success");
 
+        return "redirect:/API";
+    }
+
+    @GetMapping("/editApi/{id}")
+    public String editApi(@PathVariable Integer id, Model model) {
+        model.addAttribute("api", apiUserRepository.findById(id).get());
+        return "api/edit";
+    }
+
+    @PostMapping("/editApi/{id}")
+    public String editApi(@PathVariable Integer id, @Valid @ModelAttribute("api") ApiUser editAPIUserForm,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes) {
+        if (editAPIUserForm.getPassword().equals("")) {
+            editAPIUserForm.setPassword(apiUserRepository.findById(id).get().getPassword());
+        }
+        if (bindingResult.hasErrors()) {
+            return "api/edit";
+        }
+
+        apiUserService.saveApiUser(editAPIUserForm);
+
+        redirectAttributes.addFlashAttribute("message", "Lo User per il Rest è stato creato correttamente");
+        redirectAttributes.addFlashAttribute("messageClass", "alert-success");
+
+        return "redirect:/API";
+    }
+
+    @PostMapping("/deleteApi/{id}")
+    public String deleteApi(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        apiUserRepository.delete(apiUserRepository.findById(id).get());
+        redirectAttributes.addFlashAttribute("message", "Lo User per il Rest è stato cancellato correttamente");
+        redirectAttributes.addFlashAttribute("messageClass", "alert-success");
         return "redirect:/API";
     }
 }

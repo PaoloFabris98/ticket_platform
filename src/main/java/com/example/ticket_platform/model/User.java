@@ -27,7 +27,6 @@ public class User {
     @NotBlank(message = "Lo Username non può essere vuoto.")
     private String username;
 
-    @NotBlank(message = "La Password non può essere vuota.")
     @JsonIgnore
     private String password;
 

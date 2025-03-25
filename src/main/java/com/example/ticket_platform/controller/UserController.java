@@ -59,6 +59,24 @@ public class UserController {
         return "user/index";
     }
 
+    @GetMapping("/dashboard/{id}")
+    public String dashboard(@PathVariable Integer id, Model model, Principal principal) {
+        User currentUser = userService.findByUsernameUser(principal.getName());
+        User user = userService.findUserById(id);
+
+        if (currentUser.getRole().name().equals("ADMIN")) {
+            model.addAttribute("user", user);
+        } else {
+            if (currentUser.getId() == id) {
+                model.addAttribute(user);
+            } else {
+                return "redirect:/permissions_missing";
+            }
+        }
+
+        return "user/dashboard";
+    }
+
     @ModelAttribute("currentUser")
     public String getCurrentUser(Principal principal) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -95,12 +113,19 @@ public class UserController {
     }
 
     @PostMapping("/editUser/{id}")
-    public String editUser(@Valid @ModelAttribute("user") User formUser,
-            BindingResult bindingResult,
+    public String editUser(@PathVariable Integer id, @Valid @ModelAttribute("user") User formUser,
+            BindingResult bindingResult, Model model,
             RedirectAttributes redirectAttributes, Principal principal) {
+        User user = userService.findUserById(id);
         if (utilityFunctions.isAdmin(utilityFunctions.currentUser(principal))) {
             if (bindingResult.hasErrors()) {
+
+                model.addAttribute("roles", authoritiesService.getAllAuthoritiesTypes());
+                model.addAttribute("currentRole", user.getRole());
                 return "user/editUserForAdmin";
+            }
+            if (formUser.getPassword().equals("")) {
+                formUser.setPassword(user.getPassword());
             }
             customJdbcUserDetailsManager.updateUser(formUser, principal);
             redirectAttributes.addFlashAttribute("message", "Utente aggiornato correttamente!");
@@ -110,6 +135,9 @@ public class UserController {
         } else {
             if (bindingResult.hasErrors()) {
                 return "user/edit";
+            }
+            if (formUser.getPassword().equals("")) {
+                formUser.setPassword(user.getPassword());
             }
             formUser.setRole(userService.findUserById(formUser.getId()).getRole());
             customJdbcUserDetailsManager.updateUser(formUser, principal);
@@ -135,6 +163,10 @@ public class UserController {
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
+            return "user/create";
+        }
+        if (formUser.getPassword() == null || formUser.getPassword().trim().isEmpty()) {
+            bindingResult.rejectValue("password", "error.user", "La password non può essere vuota.");
             return "user/create";
         }
 
