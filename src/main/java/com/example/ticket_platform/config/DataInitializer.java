@@ -104,7 +104,7 @@ public class DataInitializer {
                 User user = new User();
                 user.setUsername("Admin");
                 user.setPassword("123");
-                user.setEmail("test@example.com");
+                user.setEmail("tes1@example.com");
                 user.setEnable(true);
                 user.setRole(AuthoritiesType.ADMIN);
                 user.setUserStatus(statusAttivo);
@@ -116,7 +116,7 @@ public class DataInitializer {
                 User user = new User();
                 user.setUsername("Guest");
                 user.setPassword("123");
-                user.setEmail("test@example.com");
+                user.setEmail("te2st@example.com");
                 user.setEnable(true);
                 user.setRole(AuthoritiesType.USER);
                 user.setUserStatus(statusNonAttivo);

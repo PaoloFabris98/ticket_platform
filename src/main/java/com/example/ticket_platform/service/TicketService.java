@@ -1,6 +1,7 @@
 package com.example.ticket_platform.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,11 @@ public class TicketService {
     }
 
     public Ticket getTicketById(Integer id) {
-        return ticketRepository.findById(id).get();
+        Optional<Ticket> temp = ticketRepository.findById(id);
+        if (temp.isEmpty()) {
+            return null;
+        }
+        return temp.get();
     }
 
     public void updateTicket(Ticket ticket) {

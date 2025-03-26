@@ -72,6 +72,9 @@ public class TicketController {
     public String getMethodName(@PathVariable Integer id, Model model, Principal principal,
             RedirectAttributes redirectAttributes) {
         Ticket ticket = ticketService.getTicketById(id);
+        if (ticket == null) {
+            return "redirect:/permissions_missing";
+        }
         if (utilityFunctions.isAdmin(utilityFunctions.currentUser(principal))) {
             model.addAttribute("ticket", ticket);
             return "ticket/ticket";

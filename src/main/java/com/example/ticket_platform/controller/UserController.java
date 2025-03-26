@@ -44,7 +44,6 @@ public class UserController {
     private TicketService ticketService;
     @Autowired
     private AuthoritiesService authoritiesService;
-
     @Autowired
     private UserRepository userRepository;
 
@@ -176,7 +175,7 @@ public class UserController {
 
     @PostMapping("/createUser")
     public String addUser(@Valid @ModelAttribute("user") User formUser,
-            BindingResult bindingResult,
+            BindingResult bindingResult, Model model,
             RedirectAttributes redirectAttributes) {
         if (userRepository.existsByUsername(formUser.getUsername())) {
             bindingResult.rejectValue("username", "duplicate", "Username già esistente.");
@@ -186,11 +185,11 @@ public class UserController {
             bindingResult.rejectValue("email", "duplicate", "Email già esistente.");
         }
 
-        if (bindingResult.hasErrors()) {
-            return "user/create";
-        }
         if (formUser.getPassword() == null || formUser.getPassword().trim().isEmpty()) {
             bindingResult.rejectValue("password", "error.user", "La password non può essere vuota.");
+        }
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("roles", authoritiesService.getAllAuthoritiesTypes());
             return "user/create";
         }
 

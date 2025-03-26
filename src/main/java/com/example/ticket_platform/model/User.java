@@ -31,6 +31,7 @@ public class User {
     private String password;
 
     @NotBlank(message = "La Mail non può essere vuota.")
+    @Column(unique = true)
     @JsonIgnore
     private String email;
 
@@ -39,7 +40,7 @@ public class User {
     private Boolean enable = true;
 
     @Column(name = "tickets")
-    @OneToMany(mappedBy = "operatore")
+    @OneToMany(mappedBy = "operatore", orphanRemoval = true)
     @JsonBackReference
     private List<Ticket> tickets;
 
