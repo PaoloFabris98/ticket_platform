@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -73,9 +74,21 @@ public class ClienteController {
         if (bindingResult.hasErrors()) {
             return "cliente/add";
         }
+        if (clienteRepository.existsByNome(formCliente.getNome())) {
+            bindingResult.rejectValue("nome", "duplicate", "Il nome è già esistente.");
+        }
+        if (clienteRepository.existsByEmail(formCliente.getEmail())) {
+            bindingResult.rejectValue("email", "duplicate", "L'email è già esistente.");
+        }
+        if (clienteRepository.existsByCellulare(formCliente.getCellulare())) {
+            bindingResult.rejectValue("cellulare", "duplicate", "Il numero di cellulare è già esistente.");
+        }
+        if (bindingResult.hasErrors()) {
+            return "cliente/add";
+        }
         clienteRepository.save(formCliente);
         redirectAttributes.addFlashAttribute("message",
-                "Il cliente " + formCliente.getNome() + " è stato creato correttamente!");
+                "Il cliente " + formCliente.getNome() + " è stato aggiunto correttamente!");
         redirectAttributes.addFlashAttribute("messageClass", "alert-success");
         return "redirect:/clienti";
     }
@@ -92,8 +105,21 @@ public class ClienteController {
         if (bindingResult.hasErrors()) {
             return "cliente/edit";
         }
-        List<Ticket> tickets = ticketRepository
-                .findByCliente(clienteRepository.findById(formCliente.getId()).get());
+        if (clienteRepository.existsByNome(formCliente.getNome())) {
+            bindingResult.rejectValue("nome", "duplicate", "Il nome è già esistente.");
+        }
+        if (clienteRepository.existsByEmail(formCliente.getEmail())) {
+            bindingResult.rejectValue("email", "duplicate", "L'email è già esistente.");
+        }
+        if (clienteRepository.existsByCellulare(formCliente.getCellulare())) {
+            bindingResult.rejectValue("cellulare", "duplicate", "Il numero di cellulare è già esistente.");
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "cliente/edit";
+        }
+
+        List<Ticket> tickets = ticketRepository.findByCliente(clienteRepository.findById(formCliente.getId()).get());
         formCliente.setTickets(tickets);
 
         clienteRepository.save(formCliente);
@@ -101,7 +127,6 @@ public class ClienteController {
         redirectAttributes.addFlashAttribute("message",
                 "Il cliente " + formCliente.getNome() + " è stato modificato correttamente!");
         redirectAttributes.addFlashAttribute("messageClass", "alert-success");
-
         return "redirect:/clienti";
     }
 

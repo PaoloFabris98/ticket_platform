@@ -52,7 +52,7 @@ public class DataInitializer {
             if (!clienteRepository.findByNome("mediaword").isPresent()) {
                 Cliente cliente = new Cliente();
                 cliente.setNome("mediaword");
-                cliente.setCellulare("3891372590");
+                cliente.setCellulare("3891372591");
                 cliente.setEmail("f98paoloTest@gmail.com");
                 clienteRepository.save(cliente);
             }

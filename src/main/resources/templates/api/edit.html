@@ -30,7 +30,7 @@
                     <div class="card-body">
                         <h3 class="card-title text-center fw-bold">Modifica API user: <span th:text="${api.username}"></span></h3>
                         <hr class="border-light">
-
+                        
                         <form th:action="@{'/editApi/' + ${api.getId()}}" method="post" id="editApiUser-form" th:object="${api}">
                             <input type="hidden" th:field="*{id}" />
 
@@ -57,7 +57,7 @@
 
                             <div class="m-3 p-2">
                                 <label for="authKey" class="form-label">Auth Key</label>
-                                <input type="text" class="form-control" id="authKey" th:field="*{authKey}" th:errorClass="is-invalid" placeholder="Modifica la AuthKey">
+                                <input type="text" class="form-control" id="authKey" th:field="*{authKey}" th:errorClass="is-invalid" placeholder="Modifica la AuthKey" readonly>
                                 <div th:if="${#fields.hasErrors('authKey')}" class="invalid-feedback">
                                     <ul>
                                         <li th:each="error: ${#fields.errors('authKey')}" th:text="${authKey}"></li>

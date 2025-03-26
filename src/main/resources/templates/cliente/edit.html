@@ -25,42 +25,41 @@
             <div class="col-md-8">
                 <div class="card bg-secondary text-white shadow-lg rounded-4 p-4">
                     <div class="card-body">
-                        <h5 class="card-title text-center fw-bold">Modifica Operatore: <span th:text="${cliente.nome}"></span></h5>
+                        <h5 class="card-title text-center fw-bold">Modifica Cliente: <span th:text="${cliente.nome}"></span></h5>
                         <hr class="border-light">
-
-                        <form th:action="@{|/editCliente/${id}|}" method="post" id="editCliente-form" th:object="${cliente}">
+                        <form th:action="@{|/editCliente/${cliente.id}|}" method="post" id="editCliente-form" th:object="${cliente}">
                             <input type="hidden" th:field="*{id}" />
-
+                        
                             <div class="m-3 p-2">
                                 <label for="nome" class="form-label">Nome</label>
-                                <input type="text" class="form-control" id="nome" th:field="*{nome}" th:errorClass="is-invalid">
+                                <input type="text" class="form-control" id="nome" th:field="*{nome}" th:errorclass="is-invalid" />
                                 <div th:if="${#fields.hasErrors('nome')}" class="invalid-feedback">
                                     <ul>
-                                        <li th:each="error: ${#fields.errors('nome')}" th:text="${error}"></li>
+                                        <li th:each="error : ${#fields.errors('nome')}" th:text="${error}"></li>
                                     </ul>
                                 </div>
                             </div>
-
+                        
                             <div class="m-3 p-2">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" th:field="*{email}" th:errorClass="is-invalid">
+                                <input type="email" class="form-control" id="email" th:field="*{email}" th:errorclass="is-invalid" />
                                 <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback">
                                     <ul>
-                                        <li th:each="error: ${#fields.errors('email')}" th:text="${error}"></li>
+                                        <li th:each="error : ${#fields.errors('email')}" th:text="${error}"></li>
                                     </ul>
                                 </div>
                             </div>
-
+                        
                             <div class="m-3 p-2">
                                 <label for="cellulare" class="form-label">Numero Di Cellulare</label>
-                                <input type="text" class="form-control" id="cellulare" th:field="*{cellulare}" th:errorClass="is-invalid">
+                                <input type="text" class="form-control" id="cellulare" th:field="*{cellulare}" th:errorclass="is-invalid" />
                                 <div th:if="${#fields.hasErrors('cellulare')}" class="invalid-feedback">
                                     <ul>
-                                        <li th:each="error: ${#fields.errors('cellulare')}" th:text="${error}"></li>
+                                        <li th:each="error : ${#fields.errors('cellulare')}" th:text="${error}"></li>
                                     </ul>
                                 </div>
                             </div>
-
+                        
                             <div class="d-flex gap-3 justify-content-center mt-4">
                                 <input type="submit" value="Modifica Cliente" class="btn btn-primary m-2 p-2">
                                 <input type="reset" value="Reset" class="btn btn-warning m-2 p-2">

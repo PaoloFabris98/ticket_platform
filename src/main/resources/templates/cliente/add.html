@@ -25,9 +25,11 @@
             <div class="col-md-8">
                 <div class="card bg-secondary text-white shadow-lg rounded-4 p-4">
                     <div class="card-body">
-                        <h5 class="card-title text-center fw-bold">Modifica Operatore: <span th:text="${cliente.nome}"></span></h5>
+                        <h5 class="card-title text-center fw-bold">Modifica Utente: <span th:text="${cliente.nome}"></span></h5>
                         <hr class="border-light">
-                        
+                        <div th:if="${message != null}" class="alert text-center" th:classappend="${messageClass}">
+                            <p th:text="${message}"></p>
+                        </div>
                         <form th:action="@{/addCliente}" method="post" id="editCliente-form" th:object="${cliente}">
                             <input type="hidden" th:field="*{id}" />
 

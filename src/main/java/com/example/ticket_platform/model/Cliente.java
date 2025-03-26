@@ -27,6 +27,7 @@ public class Cliente {
     private String email;
 
     @NotBlank(message = "Il numero di telefono non può essere vuoto.")
+    @Column(unique = true)
     private String cellulare;
 
     @OneToMany(mappedBy = "cliente", orphanRemoval = true)

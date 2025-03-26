@@ -118,6 +118,14 @@ public class UserController {
             RedirectAttributes redirectAttributes, Principal principal) {
         User user = userService.findUserById(id);
         if (utilityFunctions.isAdmin(utilityFunctions.currentUser(principal))) {
+            if (userRepository.existsByUsername(formUser.getUsername())
+                    && !formUser.getUsername().equals(user.getUsername())) {
+                bindingResult.rejectValue("username", "duplicate", "Username già esistente.");
+            }
+
+            if (userRepository.existsByEmail(formUser.getEmail()) && !formUser.getEmail().equals(user.getEmail())) {
+                bindingResult.rejectValue("email", "duplicate", "Email già esistente.");
+            }
             if (bindingResult.hasErrors()) {
 
                 model.addAttribute("roles", authoritiesService.getAllAuthoritiesTypes());
@@ -133,6 +141,14 @@ public class UserController {
 
             return "redirect:/operatori";
         } else {
+            if (userRepository.existsByUsername(formUser.getUsername())
+                    && !formUser.getUsername().equals(user.getUsername())) {
+                bindingResult.rejectValue("username", "duplicate", "Username già esistente.");
+            }
+
+            if (userRepository.existsByEmail(formUser.getEmail()) && !formUser.getEmail().equals(user.getEmail())) {
+                bindingResult.rejectValue("email", "duplicate", "Email già esistente.");
+            }
             if (bindingResult.hasErrors()) {
                 return "user/edit";
             }
@@ -162,6 +178,14 @@ public class UserController {
     public String addUser(@Valid @ModelAttribute("user") User formUser,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
+        if (userRepository.existsByUsername(formUser.getUsername())) {
+            bindingResult.rejectValue("username", "duplicate", "Username già esistente.");
+        }
+
+        if (userRepository.existsByEmail(formUser.getEmail())) {
+            bindingResult.rejectValue("email", "duplicate", "Email già esistente.");
+        }
+
         if (bindingResult.hasErrors()) {
             return "user/create";
         }
