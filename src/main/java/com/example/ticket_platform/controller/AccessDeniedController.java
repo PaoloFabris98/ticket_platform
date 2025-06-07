@@ -15,4 +15,15 @@ public class AccessDeniedController {
     public String accessDeniedAutenticated() {
         return "accessDenied/accessDeniedAutenticated";
     }
+
+    @GetMapping("/ticket_Index_Out_Of_Bound")
+    public String ticketIndexOutOfBound() {
+        return "accessDenied/ticketIndexOutOfBound";
+    }
+
+    @GetMapping("/user_Index_Out_Of_Bound")
+    public String userIndexOutOfBound() {
+        return "accessDenied/userIndexOutOfBound";
+    }
+
 }

@@ -40,9 +40,13 @@
                         <td style="width: 30%;" th:text="${user.getUsername()}"></td>
                         <td class="fs-6" style="width: 10%;" th:text="${user.getEmail()}"></td>
                         <td class="fs-6" style="width: 10%;">
-                            <span th:each="ticket : ${user.tickets}">
-                                <a th:href="@{'/ticket/' + ${ticket.getId()}}" class="btn btn-outline-primary"><span
-                                        th:text="${ticket.id}"></span></a>
+                            <span th:each="ticket : ${user.tickets}" class="d-inline-block me-1">
+                                <a th:href="@{/ticket/{id}(id=${ticket.id})}" th:classappend="${ticket.statusName == 'APERTO'} ? ' btn-primary' :
+                   (${ticket.statusName == 'CHIUSO'} ? ' btn-danger' :
+                   (${ticket.statusName == 'IN_CORSO'} ? ' btn-warning' : ''))"
+                                    class="btn btn-primary btn-sm">
+                                    <span th:text="${ticket.id}"></span>
+                                </a>
                             </span>
                         </td>
                         <td style="width: 10%;">

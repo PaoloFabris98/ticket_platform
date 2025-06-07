@@ -60,10 +60,10 @@
                         <div class="row mb-3">
                             <div class="col">
                                 <strong>Categoria:</strong>
-                                <span th:text="${ticket.getCategoria().getCategoriaName()}"
-                                    th:classappend="${ticket.getCategoria().getCategoriaName() == 'ASSISTENZA' ? 'bg-primary' : 
-                                                       (ticket.getCategoria().getCategoriaName() == 'MANUTENZIONE' ? 'bg-success' : 
-                                                       (ticket.getCategoria().getCategoriaName() == 'AMMINISTRAZIONE' ? 'bg-info' : 'bg-warning'))}"
+                                <span th:text="${ticket.getCategoria().getNome()}"
+                                    th:classappend="${ticket.getCategoria().getNome() == 'ASSISTENZA' ? 'bg-primary' : 
+                                                       (ticket.getCategoria().getNome() == 'MANUTENZIONE' ? 'bg-success' : 
+                                                       (ticket.getCategoria().getNome() == 'AMMINISTRAZIONE' ? 'bg-info' : 'bg-warning'))}"
                                     class="badge text-white"></span>
                             </div>
                         </div>

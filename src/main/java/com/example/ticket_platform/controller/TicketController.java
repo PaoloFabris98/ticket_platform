@@ -73,7 +73,7 @@ public class TicketController {
             RedirectAttributes redirectAttributes) {
         Ticket ticket = ticketService.getTicketById(id);
         if (ticket == null) {
-            return "redirect:/permissions_missing";
+            return "redirect:/ticket_Index_Out_Of_Bound";
         }
         if (utilityFunctions.isAdmin(utilityFunctions.currentUser(principal))) {
             model.addAttribute("ticket", ticket);
@@ -92,6 +92,9 @@ public class TicketController {
     @GetMapping("/editTicket/{id}")
     public String editTicket(@PathVariable Integer id, Model model) {
         Ticket ticket = ticketService.getTicketById(id);
+        if (ticket == null) {
+            return "redirect:/ticket_Index_Out_Of_Bound";
+        }
         List<StatusType> statusTypes = statusService.getAllStatusTypes();
         model.addAttribute("ticket", ticket);
         model.addAttribute("users", userService.finaAllByStatus());

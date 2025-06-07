@@ -42,7 +42,7 @@
                             <li class="list-group-item bg-dark text-white" th:each="ticket : ${user.tickets}">
                                 <p><strong>ID Ticket:</strong> <span th:text="${ticket.id}"></span></p>
                                 <p><strong>Descrizione:</strong> <span th:text="${ticket.descrizione}"></span></p>
-                                <p><strong>Stato:</strong> <span th:text="${ticket.status.getStatus().getName()}"></span></p>
+                                <p><strong>Stato:</strong> <span th:text="${ticket.getStatusName()}"></span></p>
                             </li>
                         </ul>
                     </div>

@@ -21,7 +21,6 @@ import com.example.ticket_platform.security.CustomJdbcUserDetailsManager;
 import com.example.ticket_platform.service.AuthoritiesService;
 import com.example.ticket_platform.service.TicketService;
 import com.example.ticket_platform.service.UserService;
-import com.example.ticket_platform.model.StatusType;
 
 import jakarta.validation.Valid;
 
@@ -61,19 +60,23 @@ public class UserController {
     @GetMapping("/dashboard/{id}")
     public String dashboard(@PathVariable Integer id, Model model, Principal principal) {
         User currentUser = userService.findByUsernameUser(principal.getName());
-        User user = userService.findUserById(id);
-
-        if (currentUser.getRole().name().equals("ADMIN")) {
-            model.addAttribute("user", user);
-        } else {
-            if (currentUser.getId() == id) {
-                model.addAttribute(user);
+        try {
+            User user = userService.findUserById(id);
+            if (currentUser.getRole().name().equals("ADMIN")) {
+                model.addAttribute("user", user);
             } else {
-                return "redirect:/permissions_missing";
+                if (currentUser.getId() == id) {
+                    model.addAttribute(user);
+                } else {
+                    return "redirect:/permissions_missing";
+                }
             }
+
+            return "user/dashboard";
+        } catch (Exception e) {
+            return "redirect:/user_Index_Out_Of_Bound";
         }
 
-        return "user/dashboard";
     }
 
     @ModelAttribute("currentUser")
