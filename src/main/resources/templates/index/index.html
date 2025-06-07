@@ -61,12 +61,12 @@
 
                             <td>
                                 <span
-                                    th:classappend="${ticket.getCategoria().getCategoriaName() == 'ASSISTENZA' ? 'bg-primary text-white' : 
-                                                      (ticket.getCategoria().getCategoriaName() == 'MANUTENZIONE' ? 'bg-success text-white' : 
-                                                      (ticket.getCategoria().getCategoriaName() == 'AMMINISTRAZIONE' ? 'bg-info text-white' : 
-                                                      (ticket.getCategoria().getCategoriaName() == 'TECNICA' ? 'bg-warning text-dark' : '')))}"
+                                    th:classappend="${ticket.getCategoria().getNome() == 'ASSISTENZA' ? 'bg-primary text-white' : 
+                                                      (ticket.getCategoria().getNome() == 'MANUTENZIONE' ? 'bg-success text-white' : 
+                                                      (ticket.getCategoria().getNome() == 'AMMINISTRAZIONE' ? 'bg-info text-white' : 
+                                                      (ticket.getCategoria().getNome() == 'TECNICA' ? 'bg-warning text-dark' : '')))}"
                                     class="badge rounded-pill">
-                                    <span th:text="${ticket.getCategoria().getCategoriaName()}"></span>
+                                    <span th:text="${ticket.getCategoria().getNome()}"></span>
                                 </span>
                             </td>
                             <td>

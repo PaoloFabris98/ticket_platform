@@ -2,8 +2,6 @@ package com.example.ticket_platform.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,9 +16,8 @@ public class Categoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Enumerated(EnumType.STRING)
     @Column(unique = false, nullable = false)
-    private CategoriaTicketType nome;
+    private String nome;
 
     @OneToMany(mappedBy = "categoria")
     @JsonBackReference
@@ -29,7 +26,7 @@ public class Categoria {
     public Categoria() {
     }
 
-    public Categoria(CategoriaTicketType nome) {
+    public Categoria(String nome) {
         this.nome = nome;
     }
 
@@ -41,11 +38,11 @@ public class Categoria {
         this.id = id;
     }
 
-    public CategoriaTicketType getNome() {
+    public String getNome() {
         return this.nome;
     }
 
-    public void setNome(CategoriaTicketType nome) {
+    public void setNome(String nome) {
         this.nome = nome;
     }
 
@@ -57,7 +54,4 @@ public class Categoria {
         this.tickets = tickets;
     }
 
-    public String getCategoriaName() {
-        return nome.getLabel();
-    }
 }

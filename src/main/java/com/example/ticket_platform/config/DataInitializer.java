@@ -31,13 +31,13 @@ public class DataInitializer {
 
             if (statusRepository.count() == 0) {
                 Status aperto = new Status();
-                aperto.setStatus(StatusType.APERTO);
+                aperto.setStatus("APERTO");
 
                 Status inCorso = new Status();
-                inCorso.setStatus(StatusType.IN_CORSO);
+                inCorso.setStatus("IN_CORSO");
 
                 Status chiuso = new Status();
-                chiuso.setStatus(StatusType.CHIUSO);
+                chiuso.setStatus("CHIUSO");
 
                 statusRepository.saveAll(Arrays.asList(aperto, inCorso, chiuso));
             }
@@ -57,7 +57,7 @@ public class DataInitializer {
                 clienteRepository.save(cliente);
             }
 
-            Status statusAperto = statusRepository.findByStatus(StatusType.APERTO);
+            Status statusAperto = statusRepository.findByStatus("APERTO");
 
             if (userStatusRepository.count() == 0) {
                 UserStatus attivo = new UserStatus();
@@ -80,7 +80,6 @@ public class DataInitializer {
                 user.setEnable(true);
                 user.setRole(AuthoritiesType.USER);
                 user.setUserStatus(statusAttivo);
-
                 Authorities authorities = new Authorities();
                 authorities.setUsername(user.getUsername());
                 authorities.setAuthority("USER");
@@ -88,15 +87,18 @@ public class DataInitializer {
                 customJdbcUserDetailsManager.create(user);
             }
 
-            if (!userRepository.findByUsername("Operatore").isPresent()) {
+            if (!userRepository.findByUsername("Non Assegnati").isPresent()) {
                 User user = new User();
-                user.setUsername("Operatore");
+                user.setUsername("Non Assegnati");
                 user.setPassword("123");
-                user.setEmail("test@example.com");
-                user.setEnable(true);
+                user.setEmail("NonAssegnati@example.com");
+                user.setEnable(false);
                 user.setRole(AuthoritiesType.USER);
-                user.setUserStatus(statusAttivo);
-
+                user.setUserStatus(statusNonAttivo);
+                Authorities authorities = new Authorities();
+                authorities.setUsername(user.getUsername());
+                authorities.setAuthority("USER");
+                authoritiesRepository.save(authorities);
                 customJdbcUserDetailsManager.create(user);
             }
 
@@ -104,7 +106,7 @@ public class DataInitializer {
                 User user = new User();
                 user.setUsername("Admin");
                 user.setPassword("123");
-                user.setEmail("tes1@example.com");
+                user.setEmail("tesAdmin@example.com");
                 user.setEnable(true);
                 user.setRole(AuthoritiesType.ADMIN);
                 user.setUserStatus(statusAttivo);
@@ -125,16 +127,16 @@ public class DataInitializer {
             }
 
             if (categoriaRepository.count() == 0) {
-                Categoria assistenza = new Categoria(CategoriaTicketType.ASSISTENZA);
-                Categoria manutenzione = new Categoria(CategoriaTicketType.MANUTENZIONE);
-                Categoria amministrazione = new Categoria(CategoriaTicketType.AMMINISTRAZIONE);
-                Categoria tecnica = new Categoria(CategoriaTicketType.TECNICA);
+                Categoria assistenza = new Categoria("ASSISTENZA");
+                Categoria manutenzione = new Categoria("MANUTENZIONE");
+                Categoria amministrazione = new Categoria("AMMINISTRAZIONE");
+                Categoria tecnica = new Categoria("TECNICA");
 
                 categoriaRepository.saveAll(Arrays.asList(assistenza, manutenzione, amministrazione, tecnica));
             }
 
-            Categoria categoriaAssistenza = categoriaRepository.findByNome(CategoriaTicketType.ASSISTENZA);
-            Categoria categoriaManutenzione = categoriaRepository.findByNome(CategoriaTicketType.MANUTENZIONE);
+            Categoria categoriaAssistenza = categoriaRepository.findByNome("ASSISTENZA");
+            Categoria categoriaManutenzione = categoriaRepository.findByNome("MANUTENZIONE");
             Cliente cliente = clienteRepository.findByNome("Boolean").get();
             Cliente mediaCliente = clienteRepository.findByNome("mediaword").get();
             User operatore = userRepository.findByUsername("Operatore").get();

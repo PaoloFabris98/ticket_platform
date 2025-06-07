@@ -46,7 +46,7 @@ public class SecurityConfiguration {
                                                                 "/addAPI", "/addCliente", "/editCliente/**")
                                                 .hasAuthority("ADMIN")
                                                 .requestMatchers("/permissions_missing", "/addNote/**")
-                                                .hasAuthority("USER")
+                                                .hasAnyAuthority("USER", "ADMIN")
                                                 .requestMatchers("/index", "/editUser/**")
                                                 .hasAnyAuthority("ADMIN", "USER")
                                                 .requestMatchers(HttpMethod.POST, "/editTicket/**", "/addTicket",

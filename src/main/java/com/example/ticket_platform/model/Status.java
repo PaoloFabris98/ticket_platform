@@ -13,9 +13,8 @@ public class Status implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Enumerated(EnumType.STRING)
     @Column(unique = false, nullable = false)
-    private StatusType status;
+    private String status;
 
     @OneToMany(mappedBy = "status")
     @JsonManagedReference
@@ -29,11 +28,11 @@ public class Status implements Serializable {
         this.id = id;
     }
 
-    public StatusType getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(StatusType status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -46,7 +45,7 @@ public class Status implements Serializable {
     }
 
     public void defaultStatusType() {
-        this.status = StatusType.APERTO;
+        this.status = "APERTO";
     }
 
 }

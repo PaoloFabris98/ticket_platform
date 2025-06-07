@@ -25,7 +25,7 @@ public class StatusService {
         List<Status> status = statusRepository.findAll();
         Status finalStatus = new Status();
         for (Status statusname : status) {
-            if (statusname.getStatus().getName().equals(statusName)) {
+            if (statusname.getStatus().equals(statusName)) {
                 finalStatus = statusRepository.findByStatus(statusname.getStatus());
             }
 

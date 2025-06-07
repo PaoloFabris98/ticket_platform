@@ -210,9 +210,9 @@ public class UserController {
         User user = userService.findUserById(id);
         List<Ticket> tickets = ticketService.getTicketsByUserId(id);
         for (Ticket ticket : tickets) {
-            System.out.println(ticket.getStatus().getStatus().getName());
-            if (ticket.getStatus().getStatus() == StatusType.APERTO
-                    || ticket.getStatus().getStatus() == StatusType.IN_CORSO) {
+            System.out.println(ticket.getStatus().getStatus());
+            if (ticket.getStatus().getStatus().equals("APERTO")
+                    || ticket.getStatus().getStatus().equals("IN_CORSO")) {
                 redirectAttributes.addFlashAttribute(
                         "Lo status non può essere modificato, ci sono ancora ticket aperti o in corso");
                 redirectAttributes.addFlashAttribute("messageClass", "alert-danger");
@@ -242,10 +242,23 @@ public class UserController {
     @PostMapping("/deleteUser/{id}")
     public String postMethodName(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         String temp = userService.findUserById(id).getUsername();
-        userService.deleteUser(userService.findUserById(id).getUsername());
+        List<Ticket> tickets = ticketService.getTicketsByUserId(id);
 
-        redirectAttributes.addFlashAttribute("message", "L'operatore " + temp + " è stato eliminato correttamente!");
-        redirectAttributes.addFlashAttribute("messageClass", "alert-success");
+        try {
+            User nonAssegnati = userService.findByUsernameUser("Non Assegnati");
+            for (int i = 0; i < tickets.size(); i++) {
+                tickets.get(i).setOperatore(nonAssegnati);
+                ticketService.saveTicket(tickets.get(i));
+            }
+            userService.deleteUser(userService.findUserById(id).getUsername());
+            redirectAttributes.addFlashAttribute("message",
+                    "L'operatore " + temp + " è stato eliminato correttamente!");
+            redirectAttributes.addFlashAttribute("messageClass", "alert-success");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("message",
+                    "Si è verificato un errore durante l'eliminazione dell'operatore.");
+            redirectAttributes.addFlashAttribute("messageClass", "alert-danger");
+        }
 
         return "redirect:/operatori";
     }

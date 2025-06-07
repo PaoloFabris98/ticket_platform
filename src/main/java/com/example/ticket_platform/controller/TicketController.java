@@ -123,7 +123,7 @@ public class TicketController {
     @GetMapping("/addTicket")
     public String addTicket(Model model) {
         Ticket ticket = new Ticket();
-        ticket.setStatus(statusRepository.findByStatus(StatusType.APERTO));
+        ticket.setStatus(statusRepository.findByStatus("APERTO"));
         ticket.setDataCreazione(LocalDate.now());
         model.addAttribute("statusList", statusService.getAllStatusTypes());
         model.addAttribute("categorie", categoriaService.getAllCategoriaStatusTypes());
@@ -140,6 +140,7 @@ public class TicketController {
         if (bindingResult.hasErrors()) {
             return "ticket/add";
         }
+
         Status status = statusRepository.findByStatus(formTicket.getStatus().getStatus());
         Categoria categoria = categoriaRepository.findByNome(formTicket.getCategoria().getNome());
         formTicket.setStatus(status);
@@ -155,7 +156,7 @@ public class TicketController {
     @PostMapping("/setStatusIn_corso/{id}")
     public String setStatusIn_corso(@PathVariable Integer id) {
         Ticket ticket = ticketService.getTicketById(id);
-        ticket.setStatus(statusRepository.findByStatus(StatusType.IN_CORSO));
+        ticket.setStatus(statusRepository.findByStatus("IN_CORSO"));
         ticketService.updateTicket(ticket);
         return "redirect:/index";
     }
@@ -163,7 +164,7 @@ public class TicketController {
     @PostMapping("/setStatusChiuso/{id}")
     public String setStatusChiuso(@PathVariable Integer id) {
         Ticket ticket = ticketService.getTicketById(id);
-        ticket.setStatus(statusRepository.findByStatus(StatusType.CHIUSO));
+        ticket.setStatus(statusRepository.findByStatus("CHIUSO"));
         ticket.setDataChiusura(LocalDate.now());
         ticketService.updateTicket(ticket);
         return "redirect:/index";
@@ -172,7 +173,7 @@ public class TicketController {
     @PostMapping("/setStatusAperto/{id}")
     public String setStatusAperto(@PathVariable Integer id) {
         Ticket ticket = ticketService.getTicketById(id);
-        ticket.setStatus(statusRepository.findByStatus(StatusType.APERTO));
+        ticket.setStatus(statusRepository.findByStatus("APERTO"));
         ticketService.updateTicket(ticket);
         return "redirect:/index";
     }
@@ -181,7 +182,7 @@ public class TicketController {
     public String deleteTicket(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         ticketRepository.delete(ticketService.getTicketById(id));
         redirectAttributes.addFlashAttribute("message", "Il ticket è stato cancellato con successo");
-        redirectAttributes.addFlashAttribute("messageClass", "alert-danger");
+        redirectAttributes.addFlashAttribute("messageClass", "alert-success");
         return "redirect:/index";
     }
 

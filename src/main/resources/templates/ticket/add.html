@@ -59,7 +59,7 @@
                                 <label for="categoria" class="form-label">Categoria</label>
                                 <select class="form-control" id="categoria" th:field="*{categoria.nome}" th:errorClass="is-invalid">
                                     <option value="" disabled selected>Seleziona una categoria</option>
-                                    <option th:each="categoria : ${categorie}" th:value="${categoria}" th:text="${categoria}"></option>
+                                    <option th:each="categoria : ${categorie}" th:value="${categoria.getNome}" th:text="${categoria.getNome}"></option>
                                 </select>
                                 <div th:if="${#fields.hasErrors('categoria')}" class="invalid-feedback">
                                     <ul>
