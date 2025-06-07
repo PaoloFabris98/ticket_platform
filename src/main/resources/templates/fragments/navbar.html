@@ -5,66 +5,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
 </head>
 
 <body>
-    <th:block th:fragment="navBar">
-        <div class="card bg-dark text-white m-1 p-2 rounded shadow-lg">
-            <div class="row align-items-center justify-content-between w-100">
-                <div class="col-md-8 d-flex align-items-center gap-4">
-                    <h4 class="m-0">
-                        <a th:href="@{'/index'}" class="text-white">Tickets</a>
-                    </h4>
-                    <h6 class="m-0" sec:authorize="hasAuthority('ADMIN')">
-                        <a th:href="@{'/operatori'}" class="text-white">Operatori</a>
-                    </h6>
-                    <h6 class="m-0" sec:authorize="hasAuthority('ADMIN')">
-                        <a th:href="@{'/createUser'}" class="text-white">Crea Operatore</a>
-                    </h6>
-                    <h6 class="m-0" sec:authorize="hasAuthority('ADMIN')">
-                        <a th:href="@{'/addTicket'}" class="text-white">Aggiungi Ticket</a>
-                    </h6>
-                    <h6 class="m-0" sec:authorize="hasAuthority('ADMIN')">
-                        <a th:href="@{'/API'}" class="text-white">Rest</a>
-                    </h6>
-                    <h6 class="m-0" sec:authorize="hasAuthority('ADMIN')">
-                        <a th:href="@{'/addAPI'}" class="text-white">Aggiungi Rest User</a>
-                    </h6>
-                    <h6 class="m-0" sec:authorize="hasAuthority('ADMIN')">
-                        <a th:href="@{'/clienti'}" class="text-white">Clienti</a>
-                    </h6>
-                    <h6 class="m-0" sec:authorize="hasAuthority('ADMIN')">
-                        <a th:href="@{'/addCliente'}" class="text-white">Aggiungi Cliente</a>
-                    </h6>
-                </div>
+<th:block th:fragment="navBar">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark m-1 p-2 rounded shadow-lg">
+        <div class="container-fluid">
+            <!-- Logo/Scritta sempre visibile -->
+            <a class="navbar-brand" th:href="@{'/index'}">Tickets</a>
 
-                <div class="col-md-4 d-flex align-items-center justify-content-end gap-3">
-                    <h6 class="m-0 d-flex align-items-center gap-2">
-                        <span th:text="'Benvenuto, '"></span>
-                        <a th:href="@{'/dashboard/' + ${currentUserObj.getId()}}" class="text-white">
-                            <span th:text="${currentUserObj.username}"></span>
-                        </a>
-                        | 
-                        <span>Cambia status in:</span>
-                    </h6>
-                    
+            <!-- Bottone per toggle navbar sui dispositivi piccoli -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Contenuto collassabile -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+                        <a class="nav-link" th:href="@{'/operatori'}">Operatori</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+                        <a class="nav-link" th:href="@{'/createUser'}">Crea Operatore</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+                        <a class="nav-link" th:href="@{'/addTicket'}">Aggiungi Ticket</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+                        <a class="nav-link" th:href="@{'/API'}">Rest</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+                        <a class="nav-link" th:href="@{'/addAPI'}">Aggiungi Rest User</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+                        <a class="nav-link" th:href="@{'/clienti'}">Clienti</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+                        <a class="nav-link" th:href="@{'/addCliente'}">Aggiungi Cliente</a>
+                    </li>
+                </ul>
+
+                <!-- Area utente -->
+                <div class="d-flex align-items-center gap-2 text-white">
+                    <span>Benvenuto,</span>
+                    <a th:href="@{'/dashboard/' + ${currentUserObj.getId()}}" class="text-white text-decoration-none">
+                        <span th:text="${currentUserObj.username}"></span>
+                    </a>
+                    <span>| Cambia status in:</span>
+
                     <div th:switch="${currentUserObj.status.userStatusType}">
                         <form th:action="@{'/setOperatoreNonDisponibile/' + ${currentUserObj.getId()}}" method="post"
                               th:if="${currentUserObj.getUserStatus().getStatusName() == 'DISPONIBILE'}">
-                            <button type="submit" class="btn btn-warning">Non Disponibile</button>
+                            <button type="submit" class="btn btn-warning btn-sm">Non Disponibile</button>
                         </form>
                         <form th:action="@{'/setOperatoreDisponibile/' + ${currentUserObj.getId()}}" method="post"
                               th:if="${currentUserObj.getUserStatus().getStatusName() == 'NON_DISPONIBILE'}">
-                            <button type="submit" class="btn btn-success">Disponibile</button>
+                            <button type="submit" class="btn btn-success btn-sm">Disponibile</button>
                         </form>
                     </div>
-                    <form th:action="@{/logout}" method="post">
-                        <button type="submit" class="btn btn-danger">Logout</button>
+                    <form th:action="@{/logout}" method="post" class="ms-2">
+                        <button type="submit" class="btn btn-danger btn-sm">Logout</button>
                     </form>
                 </div>
             </div>
         </div>
-    </th:block>
+    </nav>
+</th:block>
 </body>
 
 </html>

@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
     <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}" />
     <link th:rel="stylesheet" th:href="@{/css/stile.css}" />
@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="table-responsive">
-            <table class="table table-bordered table-striped text-center">
+            <table class="table table-bordered table-striped text-center" style="background-color: #212529;">
                 <thead class="table-dark">
                     <tr>
                         <th>Cliente Id</th>
@@ -41,14 +41,14 @@
                         <td th:text="${cliente.getCellulare()}"></td>
                         <td>
                             <span th:each="ticket : ${cliente.tickets}">
-                                <a th:href="@{'/ticket/' + ${ticket.getId()}}" class="btn btn-outline-primary"><span
-                                        th:text="${ticket.id}"></span></a>
+                                <a th:href="@{'/ticket/' + ${ticket.getId()}}" class="btn btn-outline-primary">
+                                    <span th:text="${ticket.id}"></span>
+                                </a>
                             </span>
                         </td>
                         <td>
                             <div class="d-flex flex-wrap gap-2">
-                                <div
-                                    th:insert="~{fragments/buttons :: editCliente('/editCliente/' + ${cliente.getId()})}">
+                                <div th:insert="~{fragments/buttons :: editCliente('/editCliente/' + ${cliente.getId()})}">
                                 </div>
                                 <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                     th:data-bs-target="'#delete-modal-' + ${cliente.getId()}"
@@ -70,8 +70,8 @@
                                                 th:text="${cliente.getId()}"></strong>?</p>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Annulla</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla
+                                        </button>
                                         <form th:action="@{/deleteCliente/{id}(id=${cliente.getId()})}" method="post">
                                             <button type="submit" class="btn btn-danger">Elimina</button>
                                         </form>

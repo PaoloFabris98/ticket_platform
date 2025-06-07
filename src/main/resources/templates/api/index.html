@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="table-responsive">
-            <table class="table table-bordered table-striped text-center">
+            <table class="table table-bordered table-striped text-center" style="background-color: #212529;">
                 <thead class="table-dark">
                     <tr>
                         <th style="width: 5%;">Id</th>
@@ -45,7 +45,6 @@
                                 sec:authorize="hasAuthority('ADMIN')">
                                 <i class="bi bi-trash3"></i>
                             </button>
-
                         </td>
                         <div class="modal fade" th:id="'delete-modal-' + ${apiUser.id}" tabindex="-1">
                             <div class="modal-dialog">

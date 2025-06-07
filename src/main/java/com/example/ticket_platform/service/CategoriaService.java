@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.ticket_platform.model.Categoria;
-import com.example.ticket_platform.model.CategoriaTicketType;
 import com.example.ticket_platform.repository.CategoriaRepository;
 
 @Service

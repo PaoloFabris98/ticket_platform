@@ -7,6 +7,7 @@
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
     <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}" />
     <link th:rel="stylesheet" th:href="@{/css/stile.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/user.css}" />
     <link th:rel="stylesheet" th:href="@{/css/card.css}" />
     <link th:rel="stylesheet" th:href="@{/css/navbar.css}" />
 </head>
@@ -16,13 +17,15 @@
     <div class="w-100 mx-4 m-3">
 
         <div th:insert="~{fragments/navbar :: navBar}"></div>
+
         <div th:if="${message != null && messageClass != null}">
             <div class="alert text-center" th:classappend="${messageClass}">
                 <p th:text="${message}"></p>
             </div>
         </div>
+
         <div class="table-responsive">
-            <table class="table table-bordered table-striped text-center">
+            <table class="table table-bordered table-striped text-center align-middle">
                 <thead class="table-dark">
                     <tr>
                         <th style="width: 5%;">Operatore Id</th>
@@ -41,9 +44,10 @@
                         <td class="fs-6" style="width: 10%;" th:text="${user.getEmail()}"></td>
                         <td class="fs-6" style="width: 10%;">
                             <span th:each="ticket : ${user.tickets}" class="d-inline-block me-1">
-                                <a th:href="@{/ticket/{id}(id=${ticket.id})}" th:classappend="${ticket.statusName == 'APERTO'} ? ' btn-primary' :
-                   (${ticket.statusName == 'CHIUSO'} ? ' btn-danger' :
-                   (${ticket.statusName == 'IN_CORSO'} ? ' btn-warning' : ''))"
+                                <a th:href="@{/ticket/{id}(id=${ticket.id})}"
+                                    th:classappend="${ticket.statusName == 'APERTO'} ? ' btn-primary' :
+                                       (${ticket.statusName == 'CHIUSO'} ? ' btn-danger' :
+                                       (${ticket.statusName == 'IN_CORSO'} ? ' btn-warning' : ''))"
                                     class="btn btn-primary btn-sm">
                                     <span th:text="${ticket.id}"></span>
                                 </a>
@@ -64,25 +68,24 @@
                             </span>
                         </td>
                         <td>
-                            <div class="d-flex">
-                                <div class="me-2">
-                                    <a th:href="@{'/dashboard/' + ${user.getId()}}" class="text-white btn btn-primary">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                </div>
-                                <div class="me-2"
-                                    th:insert="~{fragments/buttons :: editUser('/editUser/' + ${user.getId()})}"></div>
-                                <div class="me-2" sec:authorize="hasAuthority('ADMIN')">
-                                    <form th:action="@{/deleteUser/{id}(id=${user.getId()})}" method="post">
-                                        <button type="submit" class="btn btn-danger"><i
-                                                class="bi bi-trash"></i></button>
-                                    </form>
-                                </div>
+                            <div class="d-flex flex-wrap justify-content-center gap-1">
+                                <a th:href="@{'/dashboard/' + ${user.getId()}}" class="btn btn-primary btn-sm text-white">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <div th:insert="~{fragments/buttons :: editUser('/editUser/' + ${user.getId()})}"></div>
+                                <form th:action="@{/deleteUser/{id}(id=${user.getId()})}" method="post" sec:authorize="hasAuthority('ADMIN')">
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
                             </div>
                         </td>
-
                     </tr>
                 </tbody>
             </table>
         </div>
+
         <div th:insert="~{fragments/footer :: footer}"></div>
+        <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    </div>
+</body>
