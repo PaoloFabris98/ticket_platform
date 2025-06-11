@@ -43,7 +43,8 @@ public class SecurityConfiguration {
                                                 .permitAll()
                                                 .requestMatchers("/operatori", "/addTicket", "/editTicket/**",
                                                                 "/deleteTicket/**", "/createUser", "/clienti", "/API",
-                                                                "/addAPI", "/addCliente", "/editCliente/**")
+                                                                "/addAPI", "/addCliente", "/editCliente/**",
+                                                                "/admin_panel")
                                                 .hasAuthority("ADMIN")
                                                 .requestMatchers("/permissions_missing", "/addNote/**")
                                                 .hasAnyAuthority("USER", "ADMIN")

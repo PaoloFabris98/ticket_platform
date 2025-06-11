@@ -32,6 +32,15 @@ public class UtilityFunctions {
         return "ADMIN".equals(authorities.getAuthority());
     }
 
+    public String checkingAdminPermission(Principal principal) {
+        if (isAdmin(currentUser(principal))) {
+            return null;
+        } else {
+            return "redirect:/permissions_missing";
+        }
+
+    }
+
     public Boolean isUser(User currentUser) {
         Authorities authorities = authoritiesService.findByUsername(currentUser);
         return "USER".equals(authorities.getAuthority());

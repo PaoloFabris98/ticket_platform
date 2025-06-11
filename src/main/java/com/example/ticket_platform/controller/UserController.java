@@ -85,13 +85,12 @@ public class UserController {
 
     @GetMapping("/dashboard/{id}")
     public String dashboard(@PathVariable Integer id, Model model, Principal principal) {
-        User currentUser = userService.findByUsernameUser(principal.getName());
         try {
             User user = userService.findUserById(id);
-            if (currentUser.getRole().name().equals("ADMIN")) {
+            if (utilityFunctions.isAdmin(utilityFunctions.currentUser(principal))) {
                 model.addAttribute("user", user);
             } else {
-                if (currentUser.getId() == id) {
+                if (utilityFunctions.currentUser(principal).getId() == id) {
                     model.addAttribute(user);
                 } else {
                     return "redirect:/permissions_missing";
