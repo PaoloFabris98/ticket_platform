@@ -1,4 +1,4 @@
-package com.example.ticket_platform.model;
+package com.example.ticket_platform.model.dto;
 
 public class Descrizione {
     String descrizione;

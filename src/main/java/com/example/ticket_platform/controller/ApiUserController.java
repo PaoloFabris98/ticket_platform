@@ -1,5 +1,6 @@
 package com.example.ticket_platform.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.ApiUser;
 import com.example.ticket_platform.model.User;
-
+import com.example.ticket_platform.model.dto.TempUser;
 import com.example.ticket_platform.repository.ApiUserRepository;
 import com.example.ticket_platform.repository.UserRepository;
 import com.example.ticket_platform.service.ApiUserService;
@@ -46,10 +47,19 @@ public class ApiUserController {
     }
 
     @ModelAttribute("currentUserObj")
-    public User getCurrentUserObj(Authentication authentication) {
-        User currentUser = userRepository.findByUsername(authentication.getName()).get();
-        return currentUser;
+    public TempUser getCurrentUserObj(Principal principal) {
+        User user = utilityFunctions.currentUser(principal);
 
+        if (user == null) {
+            return null;
+        }
+
+        TempUser tempUser = new TempUser();
+        tempUser.setId(user.getId());
+        tempUser.setUsername(user.getUsername());
+        tempUser.setRole(user.getRole());
+        tempUser.setUserStatus(user.getUserStatus());
+        return tempUser;
     }
 
     @GetMapping("/API")

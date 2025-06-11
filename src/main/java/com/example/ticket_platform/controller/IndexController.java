@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.model.User;
+import com.example.ticket_platform.model.dto.TempUser;
 import com.example.ticket_platform.service.TicketService;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,9 +40,19 @@ public class IndexController {
     }
 
     @ModelAttribute("currentUserObj")
-    public User getCurrentUserObj(Principal principal) {
-        return utilityFunctions.currentUser(principal);
+    public TempUser getCurrentUserObj(Principal principal) {
+        User user = utilityFunctions.currentUser(principal);
 
+        if (user == null) {
+            return null;
+        }
+
+        TempUser tempUser = new TempUser();
+        tempUser.setId(user.getId());
+        tempUser.setUsername(user.getUsername());
+        tempUser.setRole(user.getRole());
+        tempUser.setUserStatus(user.getUserStatus());
+        return tempUser;
     }
 
     @GetMapping("/")

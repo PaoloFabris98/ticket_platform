@@ -12,16 +12,13 @@
 <th:block th:fragment="navBar">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark m-1 p-2 rounded shadow-lg">
         <div class="container-fluid">
-            <!-- Logo/Scritta sempre visibile -->
             <a class="navbar-brand" th:href="@{'/index'}">Tickets</a>
 
-            <!-- Bottone per toggle navbar sui dispositivi piccoli -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
                     aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Contenuto collassabile -->
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
@@ -47,7 +44,6 @@
                     </li>
                 </ul>
 
-                <!-- Area utente -->
                 <div class="d-flex align-items-center gap-2 text-white">
                     <span>Benvenuto,</span>
                     <a th:href="@{'/dashboard/' + ${currentUserObj.getId()}}" class="text-white text-decoration-none">

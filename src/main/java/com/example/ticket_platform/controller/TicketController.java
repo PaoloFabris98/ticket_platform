@@ -18,6 +18,7 @@ import com.example.ticket_platform.model.Status;
 import com.example.ticket_platform.model.StatusType;
 import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.model.User;
+import com.example.ticket_platform.model.dto.TempUser;
 import com.example.ticket_platform.repository.CategoriaRepository;
 import com.example.ticket_platform.repository.ClienteRepository;
 import com.example.ticket_platform.repository.StatusRepository;
@@ -63,9 +64,19 @@ public class TicketController {
     }
 
     @ModelAttribute("currentUserObj")
-    public User getCurrentUserObj(Principal principal) {
-        return utilityFunctions.currentUser(principal);
+    public TempUser getCurrentUserObj(Principal principal) {
+        User user = utilityFunctions.currentUser(principal);
 
+        if (user == null) {
+            return null;
+        }
+
+        TempUser tempUser = new TempUser();
+        tempUser.setId(user.getId());
+        tempUser.setUsername(user.getUsername());
+        tempUser.setRole(user.getRole());
+        tempUser.setUserStatus(user.getUserStatus());
+        return tempUser;
     }
 
     @GetMapping("/ticket/{id}")

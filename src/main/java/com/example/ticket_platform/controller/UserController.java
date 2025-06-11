@@ -15,6 +15,7 @@ import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.UserStatus;
 import com.example.ticket_platform.model.UserStatusType;
+import com.example.ticket_platform.model.dto.TempUser;
 import com.example.ticket_platform.repository.UserRepository;
 import com.example.ticket_platform.repository.UserStatusRepository;
 import com.example.ticket_platform.security.CustomJdbcUserDetailsManager;
@@ -49,6 +50,31 @@ public class UserController {
     @Autowired
     private UtilityFunctions utilityFunctions;
 
+    @ModelAttribute("currentUser")
+    public String getCurrentUser(Principal principal) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            return utilityFunctions.currentUser(principal).getUsername();
+        }
+        return "redirect:/login";
+    }
+
+    @ModelAttribute("currentUserObj")
+    public TempUser getCurrentUserObj(Principal principal) {
+        User user = utilityFunctions.currentUser(principal);
+
+        if (user == null) {
+            return null;
+        }
+
+        TempUser tempUser = new TempUser();
+        tempUser.setId(user.getId());
+        tempUser.setUsername(user.getUsername());
+        tempUser.setRole(user.getRole());
+        tempUser.setUserStatus(user.getUserStatus());
+        return tempUser;
+    }
+
     @GetMapping("/operatori")
     public String seeOperators(Model model, Principal principal) {
         List<User> users = userService.getAll();
@@ -76,21 +102,6 @@ public class UserController {
         } catch (Exception e) {
             return "redirect:/user_Index_Out_Of_Bound";
         }
-
-    }
-
-    @ModelAttribute("currentUser")
-    public String getCurrentUser(Principal principal) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-            return utilityFunctions.currentUser(principal).getUsername();
-        }
-        return "redirect:/login";
-    }
-
-    @ModelAttribute("currentUserObj")
-    public User getCurrentUserObj(Principal principal) {
-        return utilityFunctions.currentUser(principal);
 
     }
 
