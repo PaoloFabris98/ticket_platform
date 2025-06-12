@@ -11,15 +11,21 @@
     <link th:rel="stylesheet" th:href="@{/css/stile.css}" />
     <link th:rel="stylesheet" th:href="@{/css/card.css}" />
     <link th:rel="stylesheet" th:href="@{/css/navbar.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/adminOptions.css}" />
 </head>
 
 <body class="bg-dark text-white mx-4 m-3">
 
     <div th:insert="~{fragments/navbar :: navBar}"></div>
 
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
+    <div class="container-fluid mt-4">
+        <div class="row">
+
+            <div class="col-lg-3 mb-4">
+                <div th:insert="~{fragments/adminOptions :: adminOption}"></div>
+            </div>
+
+            <div class="col-lg-9">
                 <div class="card bg-secondary text-white shadow-lg rounded-4 p-4">
                     <div class="card-body">
                         <h3 class="card-title text-center fw-bold">Aggiungi Ticket</h3>
@@ -46,7 +52,7 @@
                                 <select class="form-control" id="operatore" th:field="*{operatore.id}" th:errorClass="is-invalid">
                                     <option value="" disabled selected>Seleziona un operatore</option>
                                     <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.username}"
-                                            th:selected="${ticket.operatore != null && ticket.operatore.id == user.id}"></option>
+                                        th:selected="${ticket.operatore != null && ticket.operatore.id == user.id}"></option>
                                 </select>
                                 <div th:if="${#fields.hasErrors('operatore')}" class="invalid-feedback">
                                     <ul>
@@ -80,8 +86,7 @@
 
                             <div class="m-3 p-2">
                                 <label for="descrizione" class="form-label">Descrizione</label>
-                                <textarea class="form-control" id="descrizione" th:field="*{descrizione}" rows="5"
-                                          placeholder="Inserisci la descrizione del ticket" th:errorClass="is-invalid"></textarea>
+                                <textarea class="form-control" id="descrizione" th:field="*{descrizione}" rows="5" placeholder="Inserisci la descrizione del ticket" th:errorClass="is-invalid"></textarea>
                                 <div th:if="${#fields.hasErrors('descrizione')}" class="invalid-feedback">
                                     <ul>
                                         <li th:each="error: ${#fields.errors('descrizione')}" th:text="${error}"></li>

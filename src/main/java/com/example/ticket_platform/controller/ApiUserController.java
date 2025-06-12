@@ -64,6 +64,7 @@ public class ApiUserController {
 
     @GetMapping("/API")
     public String index(Model model) {
+        model.addAttribute("currentPage", "/API");
         List<ApiUser> apiUsers = apiUserRepository.findAll();
         model.addAttribute("apiUsers", apiUsers);
         return "api/index";
@@ -71,6 +72,7 @@ public class ApiUserController {
 
     @GetMapping("/addAPI")
     public String addAPI(Model model) {
+        model.addAttribute("currentPage", "/addAPI");
         ApiUser apiUser = new ApiUser();
         String key = utilityFunctions.authKeyGenerator(20);
         apiUser.setAuthKey(key);

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/stile.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/index.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/card.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/navbar.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/adminOptions.css}" />
+</head>
+
+<body class="bg-dark d-flex justify-content-center">
+
+    <div class="w-100 mx-4 m-3">
+
+        <div th:insert="~{fragments/navbar :: navBar}"></div>
+
+        <div th:if="${message != null && messageClass != null}">
+            <div class="alert text-center" th:classappend="${messageClass}">
+                <p th:text="${message}"></p>
+            </div>
+        </div>
+        <div class="col-2">
+            <div th:insert="~{fragments/adminOptions :: adminOption}"></div>
+        </div>
+
+        <div class="col-10">
+            Tickets
+        </div>
+    </div>
+
+    <div th:insert="~{fragments/footer :: footer}"></div>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    </div>
+
+</body>
+
+</html>

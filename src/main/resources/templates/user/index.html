@@ -10,6 +10,7 @@
     <link th:rel="stylesheet" th:href="@{/css/user.css}" />
     <link th:rel="stylesheet" th:href="@{/css/card.css}" />
     <link th:rel="stylesheet" th:href="@{/css/navbar.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/adminOptions.css}" />
 </head>
 
 <body class="bg-dark d-flex justify-content-center">
@@ -23,69 +24,83 @@
                 <p th:text="${message}"></p>
             </div>
         </div>
+        <div class="container-fluid mt-4">
+            <div class="row">
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped text-center align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th style="width: 5%;">Operatore Id</th>
-                        <th style="width: 30%;">Username</th>
-                        <th style="width: 10%;">Operatore</th>
-                        <th style="width: 10%;">Tickets ID</th>
-                        <th style="width: 10%;">Status</th>
-                        <th style="width: 10%;">Abilitato</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="user : ${users}">
-                        <td style="width: 5%;" th:text="${user.getId()}"></td>
-                        <td style="width: 30%;" th:text="${user.getUsername()}"></td>
-                        <td class="fs-6" style="width: 10%;" th:text="${user.getEmail()}"></td>
-                        <td class="fs-6" style="width: 10%;">
-                            <span th:each="ticket : ${user.tickets}" class="d-inline-block me-1">
-                                <a th:href="@{/ticket/{id}(id=${ticket.id})}"
-                                    th:classappend="${ticket.statusName == 'APERTO'} ? ' btn-primary' :
+                <div class="col-lg-3 mb-4">
+                    <div th:insert="~{fragments/adminOptions :: adminOption}"></div>
+                </div>
+
+                <div class="col-lg-9">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped text-center align-middle">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th style="width: 5%;">Operatore Id</th>
+                                    <th style="width: 30%;">Username</th>
+                                    <th style="width: 10%;">Operatore</th>
+                                    <th style="width: 10%;">Tickets ID</th>
+                                    <th style="width: 10%;">Status</th>
+                                    <th style="width: 10%;">Abilitato</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="user : ${users}">
+                                    <td style="width: 5%;" th:text="${user.getId()}"></td>
+                                    <td style="width: 30%;" th:text="${user.getUsername()}"></td>
+                                    <td class="fs-6" style="width: 10%;" th:text="${user.getEmail()}"></td>
+                                    <td class="fs-6" style="width: 10%;">
+                                        <span th:each="ticket : ${user.tickets}" class="d-inline-block me-1">
+                                            <a th:href="@{/ticket/{id}(id=${ticket.id})}" th:classappend="${ticket.statusName == 'APERTO'} ? ' btn-primary' :
                                        (${ticket.statusName == 'CHIUSO'} ? ' btn-danger' :
                                        (${ticket.statusName == 'IN_CORSO'} ? ' btn-warning' : ''))"
-                                    class="btn btn-primary btn-sm">
-                                    <span th:text="${ticket.id}"></span>
-                                </a>
-                            </span>
-                        </td>
-                        <td style="width: 10%;">
-                            <span
-                                th:classappend="${user.getUserStatus().getUserStatusType().name() == 'DISPONIBILE' ? 'bg-success text-white' : 'bg-danger text-white'}"
-                                class="badge rounded-pill">
-                                <span
-                                    th:text="${user.getUserStatus().getUserStatusType().name() == 'DISPONIBILE' ? 'Disponibile' : 'Non Disponibile'}"></span>
-                            </span>
-                        </td>
-                        <td style="width: 10%;">
-                            <span th:classappend="${user.isEnable() ? 'bg-success text-white' : 'bg-danger text-white'}"
-                                class="badge rounded-pill">
-                                <span th:text="${user.isEnable() ? 'Abilitato' : 'Disabilitato'}"></span>
-                            </span>
-                        </td>
-                        <td>
-                            <div class="d-flex flex-wrap justify-content-center gap-1">
-                                <a th:href="@{'/dashboard/' + ${user.getId()}}" class="btn btn-primary btn-sm text-white">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <div th:insert="~{fragments/buttons :: editUser('/editUser/' + ${user.getId()})}"></div>
-                                <form th:action="@{/deleteUser/{id}(id=${user.getId()})}" method="post" sec:authorize="hasAuthority('ADMIN')">
-                                    <button type="submit" class="btn btn-danger btn-sm">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                                                class="btn btn-primary btn-sm">
+                                                <span th:text="${ticket.id}"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                    <td style="width: 10%;">
+                                        <span
+                                            th:classappend="${user.getUserStatus().getUserStatusType().name() == 'DISPONIBILE' ? 'bg-success text-white' : 'bg-danger text-white'}"
+                                            class="badge rounded-pill">
+                                            <span
+                                                th:text="${user.getUserStatus().getUserStatusType().name() == 'DISPONIBILE' ? 'Disponibile' : 'Non Disponibile'}"></span>
+                                        </span>
+                                    </td>
+                                    <td style="width: 10%;">
+                                        <span
+                                            th:classappend="${user.isEnable() ? 'bg-success text-white' : 'bg-danger text-white'}"
+                                            class="badge rounded-pill">
+                                            <span th:text="${user.isEnable() ? 'Abilitato' : 'Disabilitato'}"></span>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-wrap justify-content-center gap-1">
+                                            <a th:href="@{'/dashboard/' + ${user.getId()}}"
+                                                class="btn btn-primary btn-sm text-white">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <div
+                                                th:insert="~{fragments/buttons :: editUser('/editUser/' + ${user.getId()})}">
+                                            </div>
+                                            <form th:action="@{/deleteUser/{id}(id=${user.getId()})}" method="post"
+                                                sec:authorize="hasAuthority('ADMIN')">
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div th:insert="~{fragments/footer :: footer}"></div>
-        <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
-    </div>
+            <div th:insert="~{fragments/footer :: footer}"></div>
+            <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+        </div>
 </body>

@@ -11,15 +11,21 @@
     <link th:rel="stylesheet" th:href="@{/css/stile.css}" />
     <link th:rel="stylesheet" th:href="@{/css/card.css}" />
     <link th:rel="stylesheet" th:href="@{/css/navbar.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/adminOptions.css}" />
 </head>
 
 <body class="bg-dark text-white mx-4 m-3">
 
     <div th:insert="~{fragments/navbar :: navBar}"></div>
 
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
+    <div class="container-fluid mt-4">
+        <div class="row">
+
+            <div class="col-lg-3 mb-4">
+                <div th:insert="~{fragments/adminOptions :: adminOption}"></div>
+            </div>
+
+            <div class="col-lg-9">
                 <div class="card bg-secondary text-white shadow-lg rounded-4 p-4">
                     <div class="card-body">
                         <h3 class="card-title text-center fw-bold">Crea Operatore</h3>
@@ -28,6 +34,7 @@
                         <div th:if="${param.usernameAlredyInUse}" class="alert alert-danger mt-3 text-center">
                             Lo Username è già in uso!
                         </div>
+
                         <form th:action="@{|/createUser|}" method="post" id="createUser-form" th:object="${user}" class="text-white">
                             <input type="hidden" th:field="*{id}" />
 
@@ -100,10 +107,10 @@
 
     <div th:insert="~{fragments/footer :: footer}"></div>
 
-    <!--JS-->
     <script th:src="@{/js/app.js}"></script>
     <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
 </body>
+
 
 </html>

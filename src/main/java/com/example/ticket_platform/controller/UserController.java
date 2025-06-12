@@ -79,6 +79,7 @@ public class UserController {
     public String seeOperators(Model model, Principal principal) {
         List<User> users = userService.getAll();
         model.addAttribute("users", users);
+        model.addAttribute("currentPage", "/operatori");
 
         return "user/index";
     }
@@ -178,6 +179,7 @@ public class UserController {
 
     @GetMapping("/createUser")
     public String addUser(Model model) {
+        model.addAttribute("currentPage", "/create_User");
         User user = new User();
         UserStatus userStatus = userStatusRepository.findByUserStatusType(UserStatusType.DISPONIBILE);
         user.setUserStatus(userStatus);

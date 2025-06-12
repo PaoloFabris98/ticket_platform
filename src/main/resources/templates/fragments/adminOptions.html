@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+</head>
+
+<body>
+    <th:block th:fragment="adminOption">
+        <div class="d-flex flex-column gap-2">
+
+            <a th:href="@{/operatori}" class="nav-link d-flex align-items-center gap-2 p-2 rounded"
+                th:classappend="${currentPage == '/operatori'} ? 'bg-light bg-opacity-25 text-white border-start border-4 border-info' : 'text-white'">
+                <i class="bi bi-people-fill"></i> Operatori
+            </a>
+
+            <a th:href="@{/createUser}" class="nav-link d-flex align-items-center gap-2 p-2 rounded"
+                th:classappend="${currentPage == '/create_User'} ? 'bg-light bg-opacity-25 text-white border-start border-4 border-info' : 'text-white'"
+                sec:authorize="hasAuthority('ADMIN')">
+                <i class="bi bi-person-plus-fill"></i> Crea Operatore
+            </a>
+
+            <a th:href="@{/addTicket}" class="nav-link d-flex align-items-center gap-2 p-2 rounded"
+                th:classappend="${currentPage == '/addTicket'} ? 'bg-light bg-opacity-25 text-white border-start border-4 border-info' : 'text-white'"
+                sec:authorize="hasAuthority('ADMIN')">
+                <i class="bi bi-ticket-perforated-fill"></i> Aggiungi Ticket
+            </a>
+
+            <a th:href="@{/API}" class="nav-link d-flex align-items-center gap-2 p-2 rounded"
+                th:classappend="${currentPage == '/API'} ? 'bg-light bg-opacity-25 text-white border-start border-4 border-info' : 'text-white'"
+                sec:authorize="hasAuthority('ADMIN')">
+                <i class="bi bi-terminal-fill"></i> Rest
+            </a>
+
+            <a th:href="@{/addAPI}" class="nav-link d-flex align-items-center gap-2 p-2 rounded"
+                th:classappend="${currentPage == '/addAPI'} ? 'bg-light bg-opacity-25 text-white border-start border-4 border-info' : 'text-white'"
+                sec:authorize="hasAuthority('ADMIN')">
+                <i class="bi bi-person-plus-fill"></i> Aggiungi Rest User
+            </a>
+
+            <a th:href="@{/clienti}" class="nav-link d-flex align-items-center gap-2 p-2 rounded"
+                th:classappend="${currentPage == '/clienti'} ? 'bg-light bg-opacity-25 text-white border-start border-4 border-info' : 'text-white'"
+                sec:authorize="hasAuthority('ADMIN')">
+                <i class="bi bi-people"></i> Clienti
+            </a>
+
+            <a th:href="@{/addCliente}" class="nav-link d-flex align-items-center gap-2 p-2 rounded"
+                th:classappend="${currentPage == '/addCliente'} ? 'bg-light bg-opacity-25 text-white border-start border-4 border-info' : 'text-white'"
+                sec:authorize="hasAuthority('ADMIN')">
+                <i class="bi bi-person-plus"></i> Aggiungi Cliente
+            </a>
+
+        </div>
+    </th:block>
+
+</body>
+
+</html>

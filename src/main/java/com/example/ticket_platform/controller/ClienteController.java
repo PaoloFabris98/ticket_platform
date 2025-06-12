@@ -67,6 +67,7 @@ public class ClienteController {
 
     @GetMapping("/clienti")
     public String clienti(Model model) {
+        model.addAttribute("currentPage", "/clienti");
         List<Cliente> clienti = clienteRepository.findAll();
         model.addAttribute("clienti", clienti);
         return "cliente/index";
@@ -74,6 +75,7 @@ public class ClienteController {
 
     @GetMapping("/addCliente")
     public String addCliente(Model model) {
+        model.addAttribute("currentPage", "/addCliente");
         Cliente cliente = new Cliente();
         model.addAttribute("cliente", cliente);
         return "cliente/add";
@@ -82,6 +84,7 @@ public class ClienteController {
     @PostMapping("/addCliente")
     public String addCliente(@Valid @ModelAttribute("cliente") Cliente formCliente, BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
+
         if (bindingResult.hasErrors()) {
             return "cliente/add";
         }

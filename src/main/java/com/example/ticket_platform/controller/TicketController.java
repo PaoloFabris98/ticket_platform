@@ -136,6 +136,7 @@ public class TicketController {
 
     @GetMapping("/addTicket")
     public String addTicket(Model model) {
+        model.addAttribute("currentPage", "/addTicket");
         Ticket ticket = new Ticket();
         ticket.setStatus(statusRepository.findByStatus("APERTO"));
         ticket.setDataCreazione(LocalDate.now());
