@@ -39,6 +39,9 @@ public class SecurityConfiguration {
 
                                                 .requestMatchers("/webjars/**", "/css/**", "/js/**", "/imgs/**")
                                                 .permitAll()
+
+                                                .requestMatchers("/files/download/**").hasAnyAuthority("ADMIN", "USER")
+
                                                 .requestMatchers("/", "/login", "/logout", "/not_autenticated",
                                                                 "/API/**")
                                                 .permitAll()
@@ -57,11 +60,15 @@ public class SecurityConfiguration {
                                                 .requestMatchers(HttpMethod.POST, "/editTicket/**", "/addTicket",
                                                                 "/deleteTicket/**",
                                                                 "/editUser/**", "/createUser", "/deleteCliente/**",
-                                                                "/deleteNote/**", "/addCliente", "/editCliente/**")
+                                                                "/deleteNote/**",
+                                                                "/addCliente", "/editCliente/**")
                                                 .hasAuthority("ADMIN")
 
                                                 .requestMatchers(HttpMethod.POST, "/addNote/**")
                                                 .hasAuthority("USER")
+
+                                                .requestMatchers(HttpMethod.GET, "/download/**")
+                                                .hasAnyAuthority("USER", "ADMIN")
 
                                                 .anyRequest().authenticated())
 
