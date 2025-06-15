@@ -36,30 +36,35 @@ public class SecurityConfiguration {
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
                                 .authorizeHttpRequests(auth -> auth
+
                                                 .requestMatchers("/webjars/**", "/css/**", "/js/**", "/imgs/**")
                                                 .permitAll()
-                                                .requestMatchers("/login", "/not_autenticated", "/logout", "/",
+                                                .requestMatchers("/", "/login", "/logout", "/not_autenticated",
                                                                 "/API/**")
                                                 .permitAll()
+
                                                 .requestMatchers("/operatori", "/addTicket", "/editTicket/**",
-                                                                "/deleteTicket/**", "/createUser", "/clienti", "/API",
-                                                                "/addAPI", "/addCliente", "/editCliente/**",
-                                                                "/admin_panel")
+                                                                "/deleteTicket/**",
+                                                                "/createUser", "/clienti", "/API", "/addAPI",
+                                                                "/addCliente",
+                                                                "/editCliente/**", "/admin_panel")
                                                 .hasAuthority("ADMIN")
-                                                .requestMatchers("/permissions_missing", "/addNote/**")
-                                                .hasAnyAuthority("USER", "ADMIN")
-                                                .requestMatchers("/index", "/editUser/**")
+
+                                                .requestMatchers("/permissions_missing", "/addNote/**", "/index",
+                                                                "/editUser/**", "/upload")
                                                 .hasAnyAuthority("ADMIN", "USER")
+
                                                 .requestMatchers(HttpMethod.POST, "/editTicket/**", "/addTicket",
                                                                 "/deleteTicket/**",
                                                                 "/editUser/**", "/createUser", "/deleteCliente/**",
                                                                 "/deleteNote/**", "/addCliente", "/editCliente/**")
-                                                .hasAnyAuthority("ADMIN")
+                                                .hasAuthority("ADMIN")
+
                                                 .requestMatchers(HttpMethod.POST, "/addNote/**")
-                                                .hasAnyAuthority("USER")
-                                                .requestMatchers(HttpMethod.POST, "/addNote/**", "/editUser/**")
-                                                .hasAnyAuthority("USER", "ADMIN")
+                                                .hasAuthority("USER")
+
                                                 .anyRequest().authenticated())
+
                                 .formLogin(form -> form
                                                 .loginPage("/login")
                                                 .defaultSuccessUrl("/index", true)

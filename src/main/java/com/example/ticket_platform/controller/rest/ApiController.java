@@ -28,7 +28,7 @@ public class ApiController {
     @Autowired
     private StatusService statusService;
 
-    @GetMapping("/API/get_all_tickets/{authKey}/{username}/{password}")
+    @GetMapping("/API/get_all_tickets/{authKey}")
     public ResponseEntity<?> getAllTickets(@PathVariable String authKey,
             @PathVariable String username,
             @PathVariable String password) {
@@ -46,7 +46,7 @@ public class ApiController {
         return new ResponseEntity<>(ticketService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/API/get_ticket_by_status/{authKey}/{username}/{password}/{status}")
+    @GetMapping("/API/get_ticket_by_status/{authKey}/{username}")
     public ResponseEntity<?> getAllOpenTicket(@PathVariable String authKey,
             @PathVariable String username,
             @PathVariable String password,

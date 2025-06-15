@@ -86,6 +86,7 @@ public class TicketController {
         if (ticket == null) {
             return "redirect:/ticket_Index_Out_Of_Bound";
         }
+        model.addAttribute("allegati", ticket.getImgs());
         if (utilityFunctions.isAdmin(utilityFunctions.currentUser(principal))) {
             model.addAttribute("ticket", ticket);
             return "ticket/ticket";

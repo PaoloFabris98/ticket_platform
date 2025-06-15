@@ -35,6 +35,9 @@ public class User {
     @JsonIgnore
     private String email;
 
+    private String getAllTicketsAuthKey;
+    private String getTicketsByStatusAuthKey;
+
     @Column(name = "enabled")
     @JsonIgnore
     private Boolean enable = true;
@@ -117,6 +120,22 @@ public class User {
 
     public void setEnable(Boolean enable) {
         this.enable = enable;
+    }
+
+    public String getGetAllTicketsAuthKey() {
+        return this.getAllTicketsAuthKey;
+    }
+
+    public void setGetAllTicketsAuthKey(String getAllTicketsAuthKey) {
+        this.getAllTicketsAuthKey = getAllTicketsAuthKey;
+    }
+
+    public String getGetTicketsByStatusAuthKey() {
+        return this.getTicketsByStatusAuthKey;
+    }
+
+    public void setGetTicketsByStatusAuthKey(String getTicketsByStatusAuthKey) {
+        this.getTicketsByStatusAuthKey = getTicketsByStatusAuthKey;
     }
 
 }

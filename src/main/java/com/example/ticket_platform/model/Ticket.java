@@ -35,6 +35,10 @@ public class Ticket {
 
     private LocalDate dataChiusura;
 
+    @OneToMany(mappedBy = "ticket", orphanRemoval = true)
+    @JsonManagedReference
+    private List<Img> imgs;
+
     @Lob
     @NotBlank(message = "La descrizione non può essere vuota.")
     private String descrizione;
@@ -148,6 +152,18 @@ public class Ticket {
 
     public String getStatusName() {
         return this.status.getStatus().toString();
+    }
+
+    public void addFile(Img file) {
+        this.imgs.add(file);
+    }
+
+    public List<Img> getImgs() {
+        return this.imgs;
+    }
+
+    public void setImgs(List<Img> imgs) {
+        this.imgs = imgs;
     }
 
 }

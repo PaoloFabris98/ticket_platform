@@ -47,7 +47,7 @@ public class UtilityFunctions {
     }
 
     public String authKeyGenerator(int i) {
-        String allowedChar = "ABCDEFGHIJKLMNOPQRSTUWXYZabcdefghijklmnopqrstuwxyz1234567890";
+        String allowedChar = "ABCDEFGHIJKLMNOPQRSTUWXYZabcdefghijklmnopqrstuwxyz1234567890!?=";
         StringBuilder randomString = new StringBuilder();
         Random random = new Random();
         while (randomString.length() < i) {
