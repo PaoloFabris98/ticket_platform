@@ -75,11 +75,8 @@ public class AdminController {
         if (user.getApiAuthKeyLastUpdated() != null &&
                 user.getApiAuthKeyLastUpdated().isBefore(now.minusHours(1))) {
 
-            String newApiKey = utilityFunctions.authKeyGenerator(30);
-            String newAllTicketKey = utilityFunctions.authKeyGenerator(30);
-
-            user.setApiAuthKey(newApiKey);
-            user.setAllTicketAuthKey(newAllTicketKey);
+            user.setApiAuthKey(utilityFunctions.authKeyGenerator(30));
+            user.setAllTicketAuthKey(utilityFunctions.authKeyGenerator(30));
             user.setApiAuthKeyLastUpdated(now);
 
             customJdbcUserDetailsManager.updateUserApiKey(user, principal);
