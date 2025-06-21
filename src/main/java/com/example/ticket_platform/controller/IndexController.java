@@ -1,6 +1,7 @@
 package com.example.ticket_platform.controller;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.dto.TempUser;
+import com.example.ticket_platform.repository.UserRepository;
+import com.example.ticket_platform.security.CustomJdbcUserDetailsManager;
 import com.example.ticket_platform.service.TicketService;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +32,12 @@ public class IndexController {
 
     @Autowired
     private UtilityFunctions utilityFunctions;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CustomJdbcUserDetailsManager customJdbcUserDetailsManager;
 
     @ModelAttribute("currentUser")
     public String getCurrentUser(Principal principal) {
@@ -64,6 +73,23 @@ public class IndexController {
 
     @GetMapping("/index")
     public String index(Model model, Principal principal) {
+
+        User user = userRepository.findByUsername(principal.getName()).get();
+        LocalDateTime now = LocalDateTime.now();
+
+        if (user.getApiAuthKeyLastUpdated() != null &&
+                user.getApiAuthKeyLastUpdated().isBefore(now.minusHours(24))) {
+
+            String newApiKey = utilityFunctions.authKeyGenerator(30);
+            String newAllTicketKey = utilityFunctions.authKeyGenerator(30);
+
+            user.setApiAuthKey(newApiKey);
+            user.setAllTicketAuthKey(newAllTicketKey);
+            user.setApiAuthKeyLastUpdated(now);
+
+            customJdbcUserDetailsManager.updateUserApiKey(user, principal);
+        }
+
         if (utilityFunctions.isAdmin(utilityFunctions.currentUser(principal))) {
             List<Ticket> allTickets = ticketService.findAll();
             model.addAttribute("tickets", allTickets);

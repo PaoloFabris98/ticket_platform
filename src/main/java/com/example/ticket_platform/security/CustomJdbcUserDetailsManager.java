@@ -60,6 +60,21 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
 
     }
 
+    public void updateUserApiKey(User user, Principal principal) {
+        User existingUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
+        existingUser.setAllTicketAuthKeyLastUpdated(user.getAllTicketAuthKeyLastUpdated());
+        existingUser.setAllTicketAuthKey(user.getAllTicketAuthKey());
+        existingUser.setApiAuthKey(user.getApiAuthKey());
+        existingUser.setApiAuthKeyLastUpdated(user.getApiAuthKeyLastUpdated());
+        existingUser.setTickets(user.getTickets());
+        try {
+            userRepository.save(existingUser);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Operazione fallita");
+        }
+    }
+
     @Transactional
     public void updateUser(User user, Principal principal) {
         User existingUser = userRepository.findById(user.getId())
@@ -74,6 +89,11 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
         existingUser.setEnable(user.getEnable());
         existingUser.setRole(user.getRole());
         existingUser.setUserStatus(userStatus);
+        existingUser.setAllTicketAuthKeyLastUpdated(user.getAllTicketAuthKeyLastUpdated());
+        existingUser.setAllTicketAuthKey(user.getAllTicketAuthKey());
+        existingUser.setApiAuthKey(user.getApiAuthKey());
+        existingUser.setApiAuthKeyLastUpdated(user.getApiAuthKeyLastUpdated());
+        existingUser.setTickets(user.getTickets());
 
         System.out.println("Aggiornando l'utente: " + existingUser.getUsername());
         try {

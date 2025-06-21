@@ -1,5 +1,6 @@
 package com.example.ticket_platform.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -36,7 +37,9 @@ public class User {
     private String email;
 
     private String apiAuthKey;
+    private LocalDateTime apiAuthKeyLastUpdated;
     private String allTicketAuthKey;
+    private LocalDateTime allTicketAuthKeyLastUpdated;
 
     @Column(name = "enabled")
     @JsonIgnore
@@ -136,6 +139,22 @@ public class User {
 
     public void setAllTicketAuthKey(String allTicketAuthKey) {
         this.allTicketAuthKey = allTicketAuthKey;
+    }
+
+    public LocalDateTime getApiAuthKeyLastUpdated() {
+        return this.apiAuthKeyLastUpdated;
+    }
+
+    public void setApiAuthKeyLastUpdated(LocalDateTime apiAuthKeyLastUpdated) {
+        this.apiAuthKeyLastUpdated = apiAuthKeyLastUpdated;
+    }
+
+    public LocalDateTime getAllTicketAuthKeyLastUpdated() {
+        return this.allTicketAuthKeyLastUpdated;
+    }
+
+    public void setAllTicketAuthKeyLastUpdated(LocalDateTime allTicketAuthKeyLastUpdated) {
+        this.allTicketAuthKeyLastUpdated = allTicketAuthKeyLastUpdated;
     }
 
 }

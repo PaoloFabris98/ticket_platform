@@ -1,6 +1,7 @@
 package com.example.ticket_platform.controller;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -68,6 +69,21 @@ public class AdminController {
     @GetMapping("/admin_panel")
     public String adminPanel(Model model, Principal principal) {
         utilityFunctions.checkingAdminPermission(principal);
+        User user = userRepository.findByUsername(principal.getName()).get();
+        LocalDateTime now = LocalDateTime.now();
+
+        if (user.getApiAuthKeyLastUpdated() != null &&
+                user.getApiAuthKeyLastUpdated().isBefore(now.minusHours(1))) {
+
+            String newApiKey = utilityFunctions.authKeyGenerator(30);
+            String newAllTicketKey = utilityFunctions.authKeyGenerator(30);
+
+            user.setApiAuthKey(newApiKey);
+            user.setAllTicketAuthKey(newAllTicketKey);
+            user.setApiAuthKeyLastUpdated(now);
+
+            customJdbcUserDetailsManager.updateUserApiKey(user, principal);
+        }
 
         return "adminDashboard/index";
     }

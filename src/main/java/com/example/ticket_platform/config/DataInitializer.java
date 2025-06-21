@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 @Configuration
@@ -82,6 +83,8 @@ public class DataInitializer {
                 user.setUserStatus(statusAttivo);
                 user.setApiAuthKey(utilityFunctions.authKeyGenerator(30));
                 user.setAllTicketAuthKey(utilityFunctions.authKeyGenerator(30));
+                user.setAllTicketAuthKeyLastUpdated(LocalDateTime.now());
+                user.setApiAuthKeyLastUpdated(LocalDateTime.now());
                 Authorities authorities = new Authorities();
                 authorities.setUsername(user.getUsername());
                 authorities.setAuthority("USER");
@@ -114,6 +117,8 @@ public class DataInitializer {
                 user.setAllTicketAuthKey(utilityFunctions.authKeyGenerator(30));
                 user.setRole(AuthoritiesType.ADMIN);
                 user.setUserStatus(statusAttivo);
+                user.setAllTicketAuthKeyLastUpdated(LocalDateTime.now());
+                user.setApiAuthKeyLastUpdated(LocalDateTime.now());
 
                 customJdbcUserDetailsManager.create(user);
             }
