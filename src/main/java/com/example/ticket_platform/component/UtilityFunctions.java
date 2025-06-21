@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.ticket_platform.model.Authorities;
 import com.example.ticket_platform.model.User;
+import com.example.ticket_platform.model.dto.TempUser;
 import com.example.ticket_platform.service.AuthoritiesService;
 
 import com.example.ticket_platform.service.UserService;
@@ -47,7 +48,7 @@ public class UtilityFunctions {
     }
 
     public String authKeyGenerator(int i) {
-        String allowedChar = "ABCDEFGHIJKLMNOPQRSTUWXYZabcdefghijklmnopqrstuwxyz1234567890!?=";
+        String allowedChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{};:,.<>/?";
         StringBuilder randomString = new StringBuilder();
         Random random = new Random();
         while (randomString.length() < i) {
@@ -57,4 +58,5 @@ public class UtilityFunctions {
         String newAuthKey = randomString.toString();
         return newAuthKey;
     }
+
 }

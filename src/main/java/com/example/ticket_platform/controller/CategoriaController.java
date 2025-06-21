@@ -50,6 +50,8 @@ public class CategoriaController {
         tempUser.setUsername(user.getUsername());
         tempUser.setRole(user.getRole());
         tempUser.setUserStatus(user.getUserStatus());
+        tempUser.setApiAuthKey(user.getApiAuthKey());
+        tempUser.setGetAllTicketAuthKey(user.getGetAllTicketAuthKey());
         return tempUser;
     }
 

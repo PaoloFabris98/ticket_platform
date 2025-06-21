@@ -8,10 +8,10 @@ import java.security.Principal;
 
 import com.example.ticket_platform.service.TicketService;
 import com.example.ticket_platform.component.UtilityFunctions;
-import com.example.ticket_platform.model.File;
+import com.example.ticket_platform.model.Allegato;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.dto.TempUser;
-import com.example.ticket_platform.repository.FileRepository;
+import com.example.ticket_platform.repository.AllegatoRepository;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +39,15 @@ public class FileUploadController {
     private UtilityFunctions utilityFunctions;
 
     @Autowired
-    private FileRepository fileRepository;
+    private AllegatoRepository fileRepository;
 
-    @Value("${upload.dir}")
-    private String uploadDir;
+    @Value("${upload.ticket.dir}")
+    private String ticketUploadDir;
+
+    @Value("${upload.manual.dir}")
+    private String manualUploadDir;
+
+    private Path uploadPath;
 
     @ModelAttribute("currentUser")
     public String getCurrentUser(Principal principal) {
@@ -68,9 +73,9 @@ public class FileUploadController {
         return tempUser;
     }
 
-    @PostMapping("/upload/{id}")
+    @PostMapping("/upload/{id}/{destination}")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
-            @PathVariable Integer id,
+            @PathVariable Integer id, @PathVariable String destination,
             Model model, RedirectAttributes redirectAttributes) {
 
         if (file.isEmpty()) {
@@ -80,7 +85,12 @@ public class FileUploadController {
         }
 
         try {
-            Path uploadPath = Paths.get(System.getProperty("user.dir"), uploadDir);
+            if (destination.equals("ticket")) {
+                uploadPath = Paths.get(System.getProperty("user.dir"), ticketUploadDir);
+            } else if (destination.equals("manuali")) {
+                uploadPath = Paths.get(System.getProperty("user.dir"), manualUploadDir);
+            }
+
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
@@ -101,7 +111,7 @@ public class FileUploadController {
 
             file.transferTo(filePath.toFile());
 
-            File fileOBJ = new File();
+            Allegato fileOBJ = new Allegato();
             fileOBJ.setImgPath(filePath.toString());
             fileOBJ.setFileName(finalFileName);
             fileOBJ.setTicket(ticketService.getTicketById(id));

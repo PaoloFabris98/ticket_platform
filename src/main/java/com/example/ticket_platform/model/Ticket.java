@@ -37,7 +37,7 @@ public class Ticket {
 
     @OneToMany(mappedBy = "ticket", orphanRemoval = true)
     @JsonManagedReference
-    private List<File> file;
+    private List<Allegato> file;
 
     @Lob
     @NotBlank(message = "La descrizione non può essere vuota.")
@@ -154,15 +154,15 @@ public class Ticket {
         return this.status.getStatus().toString();
     }
 
-    public void addFile(File file) {
+    public void addFile(Allegato file) {
         this.file.add(file);
     }
 
-    public List<File> getImgs() {
+    public List<Allegato> getImgs() {
         return this.file;
     }
 
-    public void setImgs(List<File> file) {
+    public void setImgs(List<Allegato> file) {
         this.file = file;
     }
 

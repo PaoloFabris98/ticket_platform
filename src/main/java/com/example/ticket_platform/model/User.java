@@ -35,8 +35,8 @@ public class User {
     @JsonIgnore
     private String email;
 
-    private String getAllTicketsAuthKey;
-    private String getTicketsByStatusAuthKey;
+    private String apiAuthKey;
+    private String getAllTicketAuthKey;
 
     @Column(name = "enabled")
     @JsonIgnore
@@ -122,20 +122,20 @@ public class User {
         this.enable = enable;
     }
 
-    public String getGetAllTicketsAuthKey() {
-        return this.getAllTicketsAuthKey;
+    public String getApiAuthKey() {
+        return this.apiAuthKey;
     }
 
-    public void setGetAllTicketsAuthKey(String getAllTicketsAuthKey) {
-        this.getAllTicketsAuthKey = getAllTicketsAuthKey;
+    public void setApiAuthKey(String apiAuthKey) {
+        this.apiAuthKey = apiAuthKey;
     }
 
-    public String getGetTicketsByStatusAuthKey() {
-        return this.getTicketsByStatusAuthKey;
+    public String getGetAllTicketAuthKey() {
+        return this.getAllTicketAuthKey;
     }
 
-    public void setGetTicketsByStatusAuthKey(String getTicketsByStatusAuthKey) {
-        this.getTicketsByStatusAuthKey = getTicketsByStatusAuthKey;
+    public void setGetAllTicketAuthKey(String getAllTicketAuthKey) {
+        this.getAllTicketAuthKey = getAllTicketAuthKey;
     }
 
 }

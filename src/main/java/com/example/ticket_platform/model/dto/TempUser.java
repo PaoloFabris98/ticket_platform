@@ -8,6 +8,8 @@ public class TempUser {
     private String username;
     private AuthoritiesType role;
     private UserStatus userStatus;
+    private String apiAuthKey;
+    private String getAllTicketAuthKey;
 
     public TempUser() {
     }
@@ -42,6 +44,22 @@ public class TempUser {
 
     public void setUserStatus(UserStatus userStatus) {
         this.userStatus = userStatus;
+    }
+
+    public String getApiAuthKey() {
+        return this.apiAuthKey;
+    }
+
+    public void setApiAuthKey(String apiAuthKey) {
+        this.apiAuthKey = apiAuthKey;
+    }
+
+    public String getGetAllTicketAuthKey() {
+        return this.getAllTicketAuthKey;
+    }
+
+    public void setGetAllTicketAuthKey(String getAllTicketAuthKey) {
+        this.getAllTicketAuthKey = getAllTicketAuthKey;
     }
 
 }

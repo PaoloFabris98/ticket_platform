@@ -9,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.ticket_platform.model.File;
-import com.example.ticket_platform.repository.FileRepository;
+import com.example.ticket_platform.model.Allegato;
+import com.example.ticket_platform.repository.AllegatoRepository;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -23,16 +23,16 @@ import java.util.Optional;
 public class FileDownloadController {
 
     @Autowired
-    private FileRepository fileRepository;
+    private AllegatoRepository fileRepository;
 
     @GetMapping("/download/{id}")
     public ResponseEntity<Resource> downloadFile(@PathVariable("id") Integer id) {
-        Optional<File> optionalFile = fileRepository.findById(id);
+        Optional<Allegato> optionalFile = fileRepository.findById(id);
         if (optionalFile.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        File fileEntity = optionalFile.get();
+        Allegato fileEntity = optionalFile.get();
         String fullPath = fileEntity.getImgPath();
 
         try {

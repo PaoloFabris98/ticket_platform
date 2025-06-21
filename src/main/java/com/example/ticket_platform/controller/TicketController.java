@@ -12,8 +12,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.Categoria;
+import com.example.ticket_platform.model.Allegato;
 import com.example.ticket_platform.model.Status;
 import com.example.ticket_platform.model.StatusType;
 import com.example.ticket_platform.model.Ticket;
@@ -21,6 +28,7 @@ import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.dto.TempUser;
 import com.example.ticket_platform.repository.CategoriaRepository;
 import com.example.ticket_platform.repository.ClienteRepository;
+import com.example.ticket_platform.repository.AllegatoRepository;
 import com.example.ticket_platform.repository.StatusRepository;
 import com.example.ticket_platform.repository.TicketRepository;
 import com.example.ticket_platform.service.*;
@@ -31,6 +39,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class TicketController {
@@ -53,6 +62,8 @@ public class TicketController {
     private CategoriaRepository categoriaRepository;
     @Autowired
     private ClienteRepository clienteRepository;
+    @Autowired
+    private AllegatoRepository allegatoRepository;
 
     @ModelAttribute("currentUser")
     public String getCurrentUser(Principal principal) {
@@ -76,6 +87,8 @@ public class TicketController {
         tempUser.setUsername(user.getUsername());
         tempUser.setRole(user.getRole());
         tempUser.setUserStatus(user.getUserStatus());
+        tempUser.setApiAuthKey(user.getApiAuthKey());
+        tempUser.setGetAllTicketAuthKey(user.getGetAllTicketAuthKey());
         return tempUser;
     }
 
@@ -200,6 +213,27 @@ public class TicketController {
         redirectAttributes.addFlashAttribute("message", "Il ticket è stato cancellato con successo");
         redirectAttributes.addFlashAttribute("messageClass", "alert-success");
         return "redirect:/index";
+    }
+
+    @PostMapping("/deleteTicketFile/{ticketId}/{fileId}")
+    public String postMethodName(@PathVariable Integer ticketId, @PathVariable Integer fileId,
+            RedirectAttributes redirectAttributes) throws IOException {
+
+        Allegato allegato = allegatoRepository.findById(fileId).get();
+        Path path = Paths.get(allegato.getImgPath());
+        try {
+            Files.delete(path);
+            allegatoRepository.delete(allegato);
+            redirectAttributes.addFlashAttribute("message", "Il file è stato cancellato con successo");
+            redirectAttributes.addFlashAttribute("messageClass", "alert-success");
+        } catch (IOException e) {
+            redirectAttributes.addFlashAttribute("message", "Errore durante la cancellazione del file");
+            redirectAttributes.addFlashAttribute("messageClass", "alert-danger");
+            e.printStackTrace();
+        }
+
+        return "redirect:/ticket/" + ticketId;
+
     }
 
 }
