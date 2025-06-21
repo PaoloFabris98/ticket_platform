@@ -36,9 +36,10 @@ public class SecurityConfiguration {
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
                                 .authorizeHttpRequests(auth -> auth
-
                                                 .requestMatchers("/webjars/**", "/css/**", "/js/**", "/imgs/**")
                                                 .permitAll()
+
+                                                .requestMatchers("/js/adminDashboard.js").hasAuthority("ADMIN")
 
                                                 .requestMatchers("/files/download/**").hasAnyAuthority("ADMIN", "USER")
 
@@ -58,10 +59,9 @@ public class SecurityConfiguration {
                                                 .hasAnyAuthority("ADMIN", "USER")
 
                                                 .requestMatchers(HttpMethod.POST, "/editTicket/**", "/addTicket",
-                                                                "/deleteTicket/**",
-                                                                "/editUser/**", "/createUser", "/deleteCliente/**",
-                                                                "/deleteNote/**",
-                                                                "/addCliente", "/editCliente/**")
+                                                                "/deleteTicket/**", "/editUser/**", "/createUser",
+                                                                "/deleteCliente/**",
+                                                                "/deleteNote/**", "/addCliente", "/editCliente/**")
                                                 .hasAuthority("ADMIN")
 
                                                 .requestMatchers(HttpMethod.POST, "/addNote/**")
