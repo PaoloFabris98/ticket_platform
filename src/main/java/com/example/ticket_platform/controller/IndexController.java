@@ -53,7 +53,7 @@ public class IndexController {
         tempUser.setRole(user.getRole());
         tempUser.setUserStatus(user.getUserStatus());
         tempUser.setApiAuthKey(user.getApiAuthKey());
-        tempUser.setGetAllTicketAuthKey(user.getGetAllTicketAuthKey());
+        tempUser.setAllTicketAuthKey(user.getAllTicketAuthKey());
         return tempUser;
     }
 

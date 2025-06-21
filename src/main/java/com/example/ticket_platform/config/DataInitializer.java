@@ -81,7 +81,7 @@ public class DataInitializer {
                 user.setRole(AuthoritiesType.USER);
                 user.setUserStatus(statusAttivo);
                 user.setApiAuthKey(utilityFunctions.authKeyGenerator(30));
-                user.setGetAllTicketAuthKey(utilityFunctions.authKeyGenerator(30));
+                user.setAllTicketAuthKey(utilityFunctions.authKeyGenerator(30));
                 Authorities authorities = new Authorities();
                 authorities.setUsername(user.getUsername());
                 authorities.setAuthority("USER");
@@ -111,7 +111,7 @@ public class DataInitializer {
                 user.setEmail("tesAdmin@example.com");
                 user.setEnable(true);
                 user.setApiAuthKey(utilityFunctions.authKeyGenerator(30));
-                user.setGetAllTicketAuthKey(utilityFunctions.authKeyGenerator(30));
+                user.setAllTicketAuthKey(utilityFunctions.authKeyGenerator(30));
                 user.setRole(AuthoritiesType.ADMIN);
                 user.setUserStatus(statusAttivo);
 

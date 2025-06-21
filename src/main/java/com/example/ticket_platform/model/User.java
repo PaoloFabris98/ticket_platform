@@ -36,7 +36,7 @@ public class User {
     private String email;
 
     private String apiAuthKey;
-    private String getAllTicketAuthKey;
+    private String allTicketAuthKey;
 
     @Column(name = "enabled")
     @JsonIgnore
@@ -130,12 +130,12 @@ public class User {
         this.apiAuthKey = apiAuthKey;
     }
 
-    public String getGetAllTicketAuthKey() {
-        return this.getAllTicketAuthKey;
+    public String getAllTicketAuthKey() {
+        return this.allTicketAuthKey;
     }
 
-    public void setGetAllTicketAuthKey(String getAllTicketAuthKey) {
-        this.getAllTicketAuthKey = getAllTicketAuthKey;
+    public void setAllTicketAuthKey(String allTicketAuthKey) {
+        this.allTicketAuthKey = allTicketAuthKey;
     }
 
 }
