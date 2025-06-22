@@ -2,6 +2,7 @@ package com.example.ticket_platform.security;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,7 +17,9 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import com.example.ticket_platform.component.CustomAccessDeniedHandler;
 import com.example.ticket_platform.component.CustomAuthenticationEntryPoint;
+import com.example.ticket_platform.model.Options;
 import com.example.ticket_platform.repository.AuthoritiesRepository;
+import com.example.ticket_platform.repository.OptionsRepository;
 import com.example.ticket_platform.repository.UserRepository;
 
 @Configuration
@@ -31,6 +34,9 @@ public class SecurityConfiguration {
                 this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
                 this.customAccessDeniedHandler = customAccessDeniedHandler;
         }
+
+        @Autowired
+        private OptionsRepository optionsRepository;
 
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

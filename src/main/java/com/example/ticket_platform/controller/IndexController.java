@@ -2,6 +2,7 @@ package com.example.ticket_platform.controller;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,8 +89,21 @@ public class IndexController {
         }
 
         if (utilityFunctions.isAdmin(utilityFunctions.currentUser(principal))) {
-            List<Ticket> allTickets = ticketService.findAll();
-            model.addAttribute("tickets", allTickets);
+            List<Ticket> allTicketsNotFiltered = ticketService.findAll();
+            List<Ticket> allTicketFiltered = new ArrayList<>();
+            for (Ticket ticket : allTicketsNotFiltered) {
+                if (ticket.getStatus().getStatus().equals("CHIUSO")) {
+                    if (ticket.getDataChiusura() != null &&
+                            ticket.getDataChiusura().isEqual(now.minusDays(1).toLocalDate())) {
+                        continue;
+                    }
+                    allTicketFiltered.add(ticket);
+                } else {
+                    allTicketFiltered.add(ticket);
+                }
+
+            }
+            model.addAttribute("tickets", allTicketFiltered);
         } else {
             List<Ticket> userTickets = ticketService
                     .getTicketsByUserId(utilityFunctions.currentUser(principal).getId());

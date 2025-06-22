@@ -5,6 +5,7 @@ import com.example.ticket_platform.model.*;
 import com.example.ticket_platform.repository.*;
 import com.example.ticket_platform.security.CustomJdbcUserDetailsManager;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,9 @@ public class DataInitializer {
         this.customJdbcUserDetailsManager = customJdbcUserDetailsManager;
     }
 
+    @Autowired
+    private OptionsRepository optionsRepository;
+
     @Bean
     public CommandLineRunner initData(UserRepository userRepository, TicketRepository ticketRepository,
             StatusRepository statusRepository, AuthoritiesRepository authoritiesRepository,
@@ -29,6 +33,11 @@ public class DataInitializer {
             ApiUserRepository apiUserRepository, UtilityFunctions utilityFunctions,
             ClienteRepository clienteRepository) {
         return test -> {
+
+            Options options = new Options();
+            options.setTicketUploadDir("uploads/ticket/");
+            options.setManualsUploadDir("uploads/manuali/");
+            optionsRepository.save(options);
 
             if (statusRepository.count() == 0) {
                 Status aperto = new Status();

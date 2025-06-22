@@ -19,7 +19,8 @@
 
 
     <input type="hidden" id="authKey" name="authKey" th:value="${currentUserObj.getApiAuthKey()}" />
-    <input type="hidden" id="allTicketAuthKey" name="allTicketAuthKey" th:value="${currentUserObj.getAllTicketAuthKey()}" />
+    <input type="hidden" id="allTicketAuthKey" name="allTicketAuthKey"
+        th:value="${currentUserObj.getAllTicketAuthKey()}" />
 
 
     <div th:insert="~{fragments/navbar :: navBar}"></div>
@@ -38,6 +39,24 @@
             </div>
 
             <div class="col-md-10">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <label for="meseSelect" class="form-label mb-0 me-2">Mese:</label>
+                    <select id="meseSelect" class="form-select w-auto">
+                        <option value="0">Gennaio</option>
+                        <option value="1">Febbraio</option>
+                        <option value="2">Marzo</option>
+                        <option value="3">Aprile</option>
+                        <option value="4">Maggio</option>
+                        <option value="5">Giugno</option>
+                        <option value="6">Luglio</option>
+                        <option value="7">Agosto</option>
+                        <option value="8">Settembre</option>
+                        <option value="9">Ottobre</option>
+                        <option value="10">Novembre</option>
+                        <option value="11">Dicembre</option>
+                    </select>
+                    <button id="filtraBtn" class="btn btn-primary">Filtra</button>
+                </div>
                 <div class="card bg-light p-3">
                     <canvas id="openedTickets" style="width: 100%; height: 400px;"></canvas>
                 </div>
@@ -53,4 +72,5 @@
     <script th:src="@{/js/adminDashboard.js}"></script>
 
 </body>
+
 </html>

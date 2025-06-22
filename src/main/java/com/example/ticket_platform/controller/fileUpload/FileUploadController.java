@@ -12,6 +12,7 @@ import com.example.ticket_platform.model.Allegato;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.dto.TempUser;
 import com.example.ticket_platform.repository.AllegatoRepository;
+import com.example.ticket_platform.repository.OptionsRepository;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class FileUploadController {
 
     @Autowired
     private AllegatoRepository fileRepository;
+
+    @Autowired
+    private OptionsRepository optionsRepository;
 
     @Value("${upload.ticket.dir}")
     private String ticketUploadDir;
@@ -86,9 +90,11 @@ public class FileUploadController {
 
         try {
             if (destination.equals("ticket")) {
-                uploadPath = Paths.get(System.getProperty("user.dir"), ticketUploadDir);
+                uploadPath = Paths.get(System.getProperty("user.dir"),
+                        optionsRepository.findAll().getFirst().getTicketUploadDir());
             } else if (destination.equals("manuali")) {
-                uploadPath = Paths.get(System.getProperty("user.dir"), manualUploadDir);
+                uploadPath = Paths.get(System.getProperty("user.dir"),
+                        optionsRepository.findAll().getFirst().getManualsUploadDir());
             }
 
             if (!Files.exists(uploadPath)) {
