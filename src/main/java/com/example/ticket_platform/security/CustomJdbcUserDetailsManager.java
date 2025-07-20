@@ -13,12 +13,14 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.ticket_platform.model.Authorities;
+import com.example.ticket_platform.model.Magazzino;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.UserStatus;
 import com.example.ticket_platform.repository.UserRepository;
 import com.example.ticket_platform.repository.UserStatusRepository;
 import com.example.ticket_platform.service.AuthoritiesService;
 import com.example.ticket_platform.repository.AuthoritiesRepository;
+import com.example.ticket_platform.repository.MagazzinoRepository;
 
 public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
 
@@ -31,6 +33,8 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
     private UserStatusRepository userStatusRepository;
     @Autowired
     private SessionRegistry sessionRegistry;
+    @Autowired
+    private MagazzinoRepository magazzinoRepository;
 
     public CustomJdbcUserDetailsManager(DataSource dataSource, UserRepository userRepository,
             AuthoritiesRepository authoritiesRepository) {
@@ -54,6 +58,11 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
             throw new IllegalArgumentException("Lo username " + user.getUsername() + " è già in uso.");
         }
         createUserAuthoriti(user);
+        Magazzino tempMagazzino1 = new Magazzino();
+        String tempName = "VanKid" + user.getUsername();
+        tempMagazzino1.setName(tempName);
+        magazzinoRepository.save(tempMagazzino1);
+        user.setVanKit(tempMagazzino1);
         userRepository.save(user);
         DatabaseUserDetails databaseUserDetails = new DatabaseUserDetails(user, authoritiesRepository);
         updateAuthoritiesV1(databaseUserDetails);
@@ -94,6 +103,7 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
         existingUser.setApiAuthKey(user.getApiAuthKey());
         existingUser.setApiAuthKeyLastUpdated(user.getApiAuthKeyLastUpdated());
         existingUser.setTickets(user.getTickets());
+        existingUser.setVanKit(user.getVanKit());
 
         System.out.println("Aggiornando l'utente: " + existingUser.getUsername());
         try {

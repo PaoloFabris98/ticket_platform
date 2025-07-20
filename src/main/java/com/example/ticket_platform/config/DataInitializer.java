@@ -4,6 +4,9 @@ import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.*;
 import com.example.ticket_platform.repository.*;
 import com.example.ticket_platform.security.CustomJdbcUserDetailsManager;
+import com.example.ticket_platform.service.ArticoloService;
+import com.example.ticket_platform.service.CodiceService;
+import com.example.ticket_platform.service.MagazzinoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -31,7 +34,8 @@ public class DataInitializer {
             StatusRepository statusRepository, AuthoritiesRepository authoritiesRepository,
             UserStatusRepository userStatusRepository, CategoriaRepository categoriaRepository,
             ApiUserRepository apiUserRepository, UtilityFunctions utilityFunctions,
-            ClienteRepository clienteRepository) {
+            ClienteRepository clienteRepository, MagazzinoRepository magazzinoRepository,
+            ArticoloRepository articoloRepository, CodiceRepository codiceRepository) {
         return test -> {
 
             Options options = new Options();
@@ -204,6 +208,22 @@ public class DataInitializer {
                 apiUser.setAuthKey(utilityFunctions.authKeyGenerator(20));
 
                 apiUserRepository.save(apiUser);
+            }
+
+            if (magazzinoRepository.count() == 0) {
+                Magazzino magazzino = new Magazzino();
+                magazzino.setName("Sede");
+                magazzinoRepository.save(magazzino);
+                for (User userTemp : userRepository.findAll()) {
+                    System.out.println(userTemp);
+                    Magazzino temp = new Magazzino();
+                    String tempName = "VanKid" + userTemp.getUsername();
+                    temp.setProprietario(userTemp);
+                    temp.setName(tempName);
+                    userTemp.setVanKit(temp);
+                    userRepository.save(userTemp);
+                    magazzinoRepository.save(temp);
+                }
             }
 
         };

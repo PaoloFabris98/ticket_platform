@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.ticket_platform.model.Authorities;
 import com.example.ticket_platform.model.AuthoritiesType;
+import com.example.ticket_platform.model.Magazzino;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.UserStatus;
 import com.example.ticket_platform.repository.AuthoritiesRepository;
@@ -25,6 +26,7 @@ public class DatabaseUserDetails implements UserDetails {
     private final UserStatus status;
     private final AuthoritiesType authoritiesType;
     private final Set<GrantedAuthority> authorities;
+    private final Magazzino magazzino;
 
     public DatabaseUserDetails(User user, AuthoritiesRepository authoritiesRepository) {
         this.id = user.getId();
@@ -35,6 +37,7 @@ public class DatabaseUserDetails implements UserDetails {
         this.status = user.getUserStatus();
         this.authoritiesType = user.getRole();
         this.authorities = new HashSet<>();
+        this.magazzino = user.getVanKit();
 
         List<Authorities> userAuthorities = authoritiesRepository.findByUsername(username);
         for (Authorities authority : userAuthorities) {

@@ -1,5 +1,6 @@
 package com.example.ticket_platform.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,12 +15,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
@@ -56,6 +58,9 @@ public class User {
     private UserStatus userStatus;
     @JsonIgnore
     private AuthoritiesType role;
+
+    @OneToOne(mappedBy = "proprietario")
+    private Magazzino vanKit;
 
     public AuthoritiesType getRole() {
         return role;
@@ -155,6 +160,14 @@ public class User {
 
     public void setAllTicketAuthKeyLastUpdated(LocalDateTime allTicketAuthKeyLastUpdated) {
         this.allTicketAuthKeyLastUpdated = allTicketAuthKeyLastUpdated;
+    }
+
+    public Magazzino getVanKit() {
+        return this.vanKit;
+    }
+
+    public void setVanKit(Magazzino vanKit) {
+        this.vanKit = vanKit;
     }
 
 }
