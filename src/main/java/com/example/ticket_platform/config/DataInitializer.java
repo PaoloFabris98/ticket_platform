@@ -86,6 +86,12 @@ public class DataInitializer {
             UserStatus statusAttivo = userStatusRepository.findByUserStatusType(UserStatusType.DISPONIBILE);
             UserStatus statusNonAttivo = userStatusRepository.findByUserStatusType(UserStatusType.NON_DISPONIBILE);
 
+            if (magazzinoRepository.count() == 0) {
+                Magazzino magazzino = new Magazzino();
+                magazzino.setName("Sede");
+                magazzinoRepository.save(magazzino);
+            }
+
             if (!userRepository.findByUsername("Operatore").isPresent()) {
                 User user = new User();
                 user.setUsername("Operatore");
@@ -98,6 +104,11 @@ public class DataInitializer {
                 user.setAllTicketAuthKey(utilityFunctions.authKeyGenerator(30));
                 user.setAllTicketAuthKeyLastUpdated(LocalDateTime.now());
                 user.setApiAuthKeyLastUpdated(LocalDateTime.now());
+                String tempStr = "VanKitOperatore";
+                Magazzino tempMagazzino = new Magazzino();
+                tempMagazzino.setName(tempStr);
+                tempMagazzino.setProprietario(user);
+                user.setVanKit(tempMagazzino);
                 Authorities authorities = new Authorities();
                 authorities.setUsername(user.getUsername());
                 authorities.setAuthority("USER");
@@ -132,6 +143,12 @@ public class DataInitializer {
                 user.setUserStatus(statusAttivo);
                 user.setAllTicketAuthKeyLastUpdated(LocalDateTime.now());
                 user.setApiAuthKeyLastUpdated(LocalDateTime.now());
+
+                String tempStr = "VanKitAdmin";
+                Magazzino tempMagazzino = new Magazzino();
+                tempMagazzino.setName(tempStr);
+                tempMagazzino.setProprietario(user);
+                user.setVanKit(tempMagazzino);
 
                 customJdbcUserDetailsManager.create(user);
             }
@@ -208,22 +225,6 @@ public class DataInitializer {
                 apiUser.setAuthKey(utilityFunctions.authKeyGenerator(20));
 
                 apiUserRepository.save(apiUser);
-            }
-
-            if (magazzinoRepository.count() == 0) {
-                Magazzino magazzino = new Magazzino();
-                magazzino.setName("Sede");
-                magazzinoRepository.save(magazzino);
-                for (User userTemp : userRepository.findAll()) {
-                    System.out.println(userTemp);
-                    Magazzino temp = new Magazzino();
-                    String tempName = "VanKid" + userTemp.getUsername();
-                    temp.setProprietario(userTemp);
-                    temp.setName(tempName);
-                    userTemp.setVanKit(temp);
-                    userRepository.save(userTemp);
-                    magazzinoRepository.save(temp);
-                }
             }
 
         };

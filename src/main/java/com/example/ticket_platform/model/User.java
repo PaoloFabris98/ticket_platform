@@ -7,6 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -59,7 +60,7 @@ public class User implements Serializable {
     @JsonIgnore
     private AuthoritiesType role;
 
-    @OneToOne(mappedBy = "proprietario")
+    @OneToOne(mappedBy = "proprietario", cascade = CascadeType.ALL)
     private Magazzino vanKit;
 
     public AuthoritiesType getRole() {

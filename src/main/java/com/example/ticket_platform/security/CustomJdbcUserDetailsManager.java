@@ -58,11 +58,6 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
             throw new IllegalArgumentException("Lo username " + user.getUsername() + " è già in uso.");
         }
         createUserAuthoriti(user);
-        Magazzino tempMagazzino1 = new Magazzino();
-        String tempName = "VanKid" + user.getUsername();
-        tempMagazzino1.setName(tempName);
-        magazzinoRepository.save(tempMagazzino1);
-        user.setVanKit(tempMagazzino1);
         userRepository.save(user);
         DatabaseUserDetails databaseUserDetails = new DatabaseUserDetails(user, authoritiesRepository);
         updateAuthoritiesV1(databaseUserDetails);
