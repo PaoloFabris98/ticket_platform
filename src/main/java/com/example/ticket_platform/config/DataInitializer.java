@@ -16,6 +16,9 @@ import org.springframework.context.annotation.Configuration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 @Configuration
 public class DataInitializer {
@@ -212,6 +215,28 @@ public class DataInitializer {
                 apiUser.setAuthKey(utilityFunctions.authKeyGenerator(20));
 
                 apiUserRepository.save(apiUser);
+            }
+
+            Magazzino magazzino = magazzinoRepository.findByName("Sede").orElse(null);
+            if (magazzino != null && articoloRepository.count() == 0) {
+                Random random = new Random();
+
+                for (int i = 1; i <= 5; i++) {
+                    Articolo articolo = new Articolo();
+                    articolo.setName("Articolo " + i);
+                    articolo.setDescrizione("Descrizione per articolo " + i);
+                    articolo.setMagazzino(magazzino);
+                    articolo.setQuantità(random.nextInt(11));
+
+                    String codiceVal = utilityFunctions.codeGenerator(6);
+
+                    Codice codice = new Codice();
+                    codice.setCode(codiceVal);
+                    codice.setArticolo(articolo);
+
+                    articolo.setCodici(List.of(codice));
+                    articoloRepository.save(articolo);
+                }
             }
 
         };

@@ -59,4 +59,16 @@ public class UtilityFunctions {
         return newAuthKey;
     }
 
+    public String codeGenerator(int i) {
+        String allowedChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder randomString = new StringBuilder();
+        Random random = new Random();
+        while (randomString.length() < i) {
+            int index = random.nextInt(allowedChar.length());
+            randomString.append(allowedChar.charAt(index));
+        }
+        String newAuthKey = randomString.toString();
+        return newAuthKey;
+    }
+
 }
