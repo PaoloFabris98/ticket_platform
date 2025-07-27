@@ -52,6 +52,17 @@ public class Magazzino {
         this.articoli = articoli;
     }
 
+    public Articolo getArticoloById(Integer id) {
+        for (Articolo articolo : this.getArticoli()) {
+            if (articolo.getId() == id) {
+                return articolo;
+            } else {
+                return null;
+            }
+        }
+        return null;
+    }
+
     public User getProprietario() {
         return this.proprietario;
     }

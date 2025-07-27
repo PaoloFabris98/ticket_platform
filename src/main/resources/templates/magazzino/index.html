@@ -35,7 +35,7 @@
                         <th class="resizable">Descrizione</th>
                         <th class="resizable"
                             style="width: 120px; max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                            Quantità</th>
+                            Disponibilità</th>
                         <th></th>
                     </tr>
                     <tr>
@@ -66,7 +66,7 @@
                         </td>
                         <td th:text="${articolo.descrizione}"></td>
                         <td th:text="${articolo.quantità}"></td>
-                        <td></td>
+                        <td><div th:insert="~{fragments/buttons :: seeArticolo('/articolo/' + ${articolo.getId()})}"></div></td>
                     </tr>
                 </tbody>
             </table>
