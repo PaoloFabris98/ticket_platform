@@ -16,6 +16,7 @@ import com.example.ticket_platform.model.Authorities;
 import com.example.ticket_platform.model.Magazzino;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.UserStatus;
+import com.example.ticket_platform.model.UserStatusType;
 import com.example.ticket_platform.repository.UserRepository;
 import com.example.ticket_platform.repository.UserStatusRepository;
 import com.example.ticket_platform.service.AuthoritiesService;
@@ -58,6 +59,15 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
             throw new IllegalArgumentException("Lo username " + user.getUsername() + " è già in uso.");
         }
         createUserAuthoriti(user);
+        Magazzino magazzino = new Magazzino();
+        magazzino.setName("VanKid" + user.getUsername());
+        magazzino.setProprietario(user);
+        user.setVanKit(magazzino);
+
+        if (user.getEnable() == false) {
+            user.setUserStatus(userStatusRepository.findByUserStatusType(UserStatusType.NON_DISPONIBILE));
+        }
+
         userRepository.save(user);
         DatabaseUserDetails databaseUserDetails = new DatabaseUserDetails(user, authoritiesRepository);
         updateAuthoritiesV1(databaseUserDetails);

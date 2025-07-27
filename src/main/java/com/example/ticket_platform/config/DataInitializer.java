@@ -104,11 +104,6 @@ public class DataInitializer {
                 user.setAllTicketAuthKey(utilityFunctions.authKeyGenerator(30));
                 user.setAllTicketAuthKeyLastUpdated(LocalDateTime.now());
                 user.setApiAuthKeyLastUpdated(LocalDateTime.now());
-                String tempStr = "VanKitOperatore";
-                Magazzino tempMagazzino = new Magazzino();
-                tempMagazzino.setName(tempStr);
-                tempMagazzino.setProprietario(user);
-                user.setVanKit(tempMagazzino);
                 Authorities authorities = new Authorities();
                 authorities.setUsername(user.getUsername());
                 authorities.setAuthority("USER");
@@ -143,13 +138,6 @@ public class DataInitializer {
                 user.setUserStatus(statusAttivo);
                 user.setAllTicketAuthKeyLastUpdated(LocalDateTime.now());
                 user.setApiAuthKeyLastUpdated(LocalDateTime.now());
-
-                String tempStr = "VanKitAdmin";
-                Magazzino tempMagazzino = new Magazzino();
-                tempMagazzino.setName(tempStr);
-                tempMagazzino.setProprietario(user);
-                user.setVanKit(tempMagazzino);
-
                 customJdbcUserDetailsManager.create(user);
             }
 
@@ -161,7 +149,6 @@ public class DataInitializer {
                 user.setEnable(true);
                 user.setRole(AuthoritiesType.USER);
                 user.setUserStatus(statusNonAttivo);
-
                 customJdbcUserDetailsManager.create(user);
             }
 
