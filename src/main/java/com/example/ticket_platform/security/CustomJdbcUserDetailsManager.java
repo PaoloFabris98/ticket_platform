@@ -1,6 +1,7 @@
 package com.example.ticket_platform.security;
 
 import java.security.Principal;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -12,20 +13,25 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.ticket_platform.model.Articolo;
 import com.example.ticket_platform.model.Authorities;
 import com.example.ticket_platform.model.Magazzino;
+import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.UserStatus;
 import com.example.ticket_platform.model.UserStatusType;
 import com.example.ticket_platform.repository.UserRepository;
 import com.example.ticket_platform.repository.UserStatusRepository;
+import com.example.ticket_platform.service.ArticoloService;
 import com.example.ticket_platform.service.AuthoritiesService;
+import com.example.ticket_platform.service.TicketService;
+import com.example.ticket_platform.service.UserService;
+import com.example.ticket_platform.repository.ArticoloRepository;
 import com.example.ticket_platform.repository.AuthoritiesRepository;
 import com.example.ticket_platform.repository.MagazzinoRepository;
 
 public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
 
-    private UserRepository userRepository;
     private AuthoritiesRepository authoritiesRepository;
 
     @Autowired
@@ -36,6 +42,16 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
     private SessionRegistry sessionRegistry;
     @Autowired
     private MagazzinoRepository magazzinoRepository;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private TicketService ticketService;
+    @Autowired
+    private ArticoloService articoloService;
+    @Autowired
+    private ArticoloRepository articoloRepository;
 
     public CustomJdbcUserDetailsManager(DataSource dataSource, UserRepository userRepository,
             AuthoritiesRepository authoritiesRepository) {
@@ -72,6 +88,38 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
         DatabaseUserDetails databaseUserDetails = new DatabaseUserDetails(user, authoritiesRepository);
         updateAuthoritiesV1(databaseUserDetails);
 
+    }
+
+    public void delete(User user) {
+        List<Ticket> tickets = ticketService.getTicketsByUserId(user.getId());
+        User nonAssegnati = userService.findByUsernameUser("Non Assegnati");
+        Magazzino sede = magazzinoRepository.findByName("Sede").get();
+        for (int i = 0; i < tickets.size(); i++) {
+            tickets.get(i).setOperatore(nonAssegnati);
+            ticketService.saveTicket(tickets.get(i));
+        }
+
+        Magazzino magazzino = user.getVanKit();
+        if (sede != null) {
+            List<Articolo> articoli = sede.getArticoli();
+            for (Articolo articolo : magazzino.getArticoli()) {
+                if (articoli.contains(articolo)) {
+                    Articolo articoloSede = sede.getArticoloById(articolo.getId());
+                    sede.getArticoloById(articolo.getId())
+                            .setQuantità(articolo.getQuantità() + articoloSede.getQuantità());
+                    magazzinoRepository.save(sede);
+                } else {
+                    sede.getArticoli().add(articolo);
+                    magazzinoRepository.save(sede);
+                    Articolo articoloSede = sede.getArticoloById(articolo.getId());
+                    sede.getArticoloById(articolo.getId())
+                            .setQuantità(articolo.getQuantità() + articoloSede.getQuantità());
+                    magazzinoRepository.save(sede);
+                }
+            }
+        }
+
+        userService.deleteUser(user.getUsername());
     }
 
     public void updateUserApiKey(User user, Principal principal) {

@@ -190,12 +190,13 @@ public class TicketController {
         return "redirect:/index";
     }
 
-    @PostMapping("/setStatusChiuso/{id}")
+    @PostMapping("/setStatusChiuso/{id}/articoli-usati")
     public String setStatusChiuso(@PathVariable Integer id) {
         Ticket ticket = ticketService.getTicketById(id);
         ticket.setStatus(statusRepository.findByStatus("CHIUSO"));
         ticket.setDataChiusura(LocalDate.now());
         ticketService.updateTicket(ticket);
+
         return "redirect:/index";
     }
 

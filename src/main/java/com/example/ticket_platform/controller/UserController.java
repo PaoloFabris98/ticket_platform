@@ -11,15 +11,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import com.example.ticket_platform.component.UtilityFunctions;
+import com.example.ticket_platform.model.Magazzino;
 import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.UserStatus;
 import com.example.ticket_platform.model.UserStatusType;
 import com.example.ticket_platform.model.dto.TempUser;
+import com.example.ticket_platform.repository.MagazzinoRepository;
 import com.example.ticket_platform.repository.UserRepository;
 import com.example.ticket_platform.repository.UserStatusRepository;
 import com.example.ticket_platform.security.CustomJdbcUserDetailsManager;
 import com.example.ticket_platform.service.AuthoritiesService;
+import com.example.ticket_platform.service.MagazzinoService;
 import com.example.ticket_platform.service.TicketService;
 import com.example.ticket_platform.service.UserService;
 
@@ -46,6 +49,10 @@ public class UserController {
     private AuthoritiesService authoritiesService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private MagazzinoRepository magazzinoRepository;
+    @Autowired
+    private MagazzinoService magazzinoService;
 
     @Autowired
     private UtilityFunctions utilityFunctions;
@@ -258,16 +265,10 @@ public class UserController {
 
     @PostMapping("/deleteUser/{id}")
     public String postMethodName(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
-        String temp = userService.findUserById(id).getUsername();
-        List<Ticket> tickets = ticketService.getTicketsByUserId(id);
-
         try {
-            User nonAssegnati = userService.findByUsernameUser("Non Assegnati");
-            for (int i = 0; i < tickets.size(); i++) {
-                tickets.get(i).setOperatore(nonAssegnati);
-                ticketService.saveTicket(tickets.get(i));
-            }
-            userService.deleteUser(userService.findUserById(id).getUsername());
+            String temp = userService.findUserById(id).getUsername();
+            User user = userRepository.findByUsername(temp).get();
+            customJdbcUserDetailsManager.delete(user);
             redirectAttributes.addFlashAttribute("message",
                     "L'operatore " + temp + " è stato eliminato correttamente!");
             redirectAttributes.addFlashAttribute("messageClass", "alert-success");

@@ -17,9 +17,7 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import com.example.ticket_platform.component.CustomAccessDeniedHandler;
 import com.example.ticket_platform.component.CustomAuthenticationEntryPoint;
-import com.example.ticket_platform.model.Options;
 import com.example.ticket_platform.repository.AuthoritiesRepository;
-import com.example.ticket_platform.repository.OptionsRepository;
 import com.example.ticket_platform.repository.UserRepository;
 
 @Configuration
@@ -34,9 +32,6 @@ public class SecurityConfiguration {
                 this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
                 this.customAccessDeniedHandler = customAccessDeniedHandler;
         }
-
-        @Autowired
-        private OptionsRepository optionsRepository;
 
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -61,7 +56,8 @@ public class SecurityConfiguration {
                                                 .hasAuthority("ADMIN")
 
                                                 .requestMatchers("/permissions_missing", "/addNote/**", "/index",
-                                                                "/editUser/**", "/upload", "magazzino")
+                                                                "/editUser/**", "/upload", "/magazzino", "/articolo/**",
+                                                                "/js/magazzinoSearch.js")
                                                 .hasAnyAuthority("ADMIN", "USER")
 
                                                 .requestMatchers(HttpMethod.POST, "/editTicket/**", "/addTicket",

@@ -61,6 +61,9 @@ public class Ticket {
     @JsonManagedReference
     private List<Nota> note;
 
+    @OneToMany(mappedBy = "ticket")
+    private List<ArticoloUtilizzato> articoliUtilizzati;
+
     public Integer getId() {
         return this.id;
     }
