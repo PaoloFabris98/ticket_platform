@@ -1,13 +1,15 @@
 package com.example.ticket_platform.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class ArticoloUtilizzato {
+public class ArticoloUtilizzato implements Serializable {
     @Id
     private Integer id;
 
@@ -15,6 +17,8 @@ public class ArticoloUtilizzato {
     private Ticket ticket;
 
     private Articolo articolo;
+
+    private List<Codice> codici;
 
     private Integer quantità;
 
@@ -58,6 +62,14 @@ public class ArticoloUtilizzato {
 
     public void setDataUtilizzo(LocalDate dataUtilizzo) {
         this.dataUtilizzo = dataUtilizzo;
+    }
+
+    public List<Codice> getCodici() {
+        return this.codici;
+    }
+
+    public void setCodici(List<Codice> codici) {
+        this.codici = codici;
     }
 
 }

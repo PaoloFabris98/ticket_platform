@@ -2,6 +2,7 @@ package com.example.ticket_platform.controller;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +22,18 @@ import java.nio.file.Paths;
 import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.Categoria;
 import com.example.ticket_platform.model.Allegato;
+import com.example.ticket_platform.model.Articolo;
 import com.example.ticket_platform.model.Status;
 import com.example.ticket_platform.model.StatusType;
 import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.model.User;
+import com.example.ticket_platform.model.dto.ArticoliUsatiDTO;
 import com.example.ticket_platform.model.dto.TempUser;
+import com.example.ticket_platform.model.wrapper.ArticoliUsatiWrapper;
 import com.example.ticket_platform.repository.CategoriaRepository;
 import com.example.ticket_platform.repository.ClienteRepository;
 import com.example.ticket_platform.repository.AllegatoRepository;
+import com.example.ticket_platform.repository.ArticoloRepository;
 import com.example.ticket_platform.repository.StatusRepository;
 import com.example.ticket_platform.repository.TicketRepository;
 import com.example.ticket_platform.service.*;
@@ -64,6 +69,8 @@ public class TicketController {
     private ClienteRepository clienteRepository;
     @Autowired
     private AllegatoRepository allegatoRepository;
+    @Autowired
+    private ArticoloRepository articoloRepository;
 
     @ModelAttribute("currentUser")
     public String getCurrentUser(Principal principal) {
@@ -96,16 +103,39 @@ public class TicketController {
     public String getMethodName(@PathVariable Integer id, Model model, Principal principal,
             RedirectAttributes redirectAttributes) {
         Ticket ticket = ticketService.getTicketById(id);
+
         if (ticket == null) {
             return "redirect:/ticket_Index_Out_Of_Bound";
         }
+
+        List<ArticoliUsatiDTO> articoliUsati = new ArrayList<>();
+        for (Articolo articolo : ticket.getOperatore().getVanKit().getArticoli()) {
+            ArticoliUsatiDTO articoliUsatiDTO = new ArticoliUsatiDTO();
+            articoliUsatiDTO.setArticolo(articolo);
+            if (ticket.getOperatore().getVanKit()
+                    .getArticoloByName(articolo.getName()).getQuantità() == 0
+                    || ticket.getOperatore().getVanKit()
+                            .getArticoloById(articolo.getId()).getQuantità() == null) {
+                articoliUsatiDTO.setQuantità(0);
+            } else {
+                articoliUsatiDTO.setQuantità(ticket.getOperatore().getVanKit()
+                        .getArticoloById(articolo.getId()).getQuantità());
+            }
+            articoliUsati.add(articoliUsatiDTO);
+        }
+
+        ArticoliUsatiWrapper articoliUsatiWrapper = new ArticoliUsatiWrapper();
+        articoliUsatiWrapper.setArticoliUsati(articoliUsati);
+
         model.addAttribute("allegati", ticket.getImgs());
         if (utilityFunctions.isAdmin(utilityFunctions.currentUser(principal))) {
             model.addAttribute("ticket", ticket);
+            model.addAttribute("articoliUsatiWrapper", articoliUsatiWrapper);
             return "ticket/ticket";
         } else {
             if (ticket.getOperatore().getUsername().equals(utilityFunctions.currentUser(principal).getUsername())) {
                 model.addAttribute(ticket);
+                model.addAttribute("articoliUsatiWrapper", articoliUsatiWrapper);
                 return "ticket/ticket";
             } else {
                 return "redirect:/permissions_missing";
@@ -191,7 +221,9 @@ public class TicketController {
     }
 
     @PostMapping("/setStatusChiuso/{id}/articoli-usati")
-    public String setStatusChiuso(@PathVariable Integer id) {
+    public String setStatusChiuso(@PathVariable Integer id,
+            @Valid @ModelAttribute("articoliUsatiWrapper") ArticoliUsatiWrapper wrapper) {
+        List<ArticoliUsatiDTO> articoli = wrapper.getArticoliUsati();
         Ticket ticket = ticketService.getTicketById(id);
         ticket.setStatus(statusRepository.findByStatus("CHIUSO"));
         ticket.setDataChiusura(LocalDate.now());

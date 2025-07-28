@@ -46,6 +46,33 @@ public class DataInitializer {
             options.setManualsUploadDir("uploads/manuali/");
             optionsRepository.save(options);
 
+            if (magazzinoRepository.count() == 0) {
+                Magazzino magazzino = new Magazzino();
+                magazzino.setName("Sede");
+                magazzinoRepository.save(magazzino);
+            }
+            Magazzino magazzino = magazzinoRepository.findByName("Sede").orElse(null);
+            if (magazzino != null && articoloRepository.count() == 0) {
+                Random random = new Random();
+
+                for (int i = 1; i <= 5; i++) {
+                    Articolo articolo = new Articolo();
+                    articolo.setName("Articolo " + i);
+                    articolo.setDescrizione("Descrizione per articolo " + i);
+                    articolo.setMagazzino(magazzino);
+                    articolo.setQuantità(random.nextInt(11));
+
+                    String codiceVal = utilityFunctions.codeGenerator(6);
+
+                    Codice codice = new Codice();
+                    codice.setCode(codiceVal);
+                    codice.setArticolo(articolo);
+
+                    articolo.setCodici(List.of(codice));
+                    articoloRepository.save(articolo);
+                }
+            }
+
             if (statusRepository.count() == 0) {
                 Status aperto = new Status();
                 aperto.setStatus("APERTO");
@@ -88,12 +115,6 @@ public class DataInitializer {
 
             UserStatus statusAttivo = userStatusRepository.findByUserStatusType(UserStatusType.DISPONIBILE);
             UserStatus statusNonAttivo = userStatusRepository.findByUserStatusType(UserStatusType.NON_DISPONIBILE);
-
-            if (magazzinoRepository.count() == 0) {
-                Magazzino magazzino = new Magazzino();
-                magazzino.setName("Sede");
-                magazzinoRepository.save(magazzino);
-            }
 
             if (!userRepository.findByUsername("Operatore").isPresent()) {
                 User user = new User();
@@ -215,28 +236,6 @@ public class DataInitializer {
                 apiUser.setAuthKey(utilityFunctions.authKeyGenerator(20));
 
                 apiUserRepository.save(apiUser);
-            }
-
-            Magazzino magazzino = magazzinoRepository.findByName("Sede").orElse(null);
-            if (magazzino != null && articoloRepository.count() == 0) {
-                Random random = new Random();
-
-                for (int i = 1; i <= 5; i++) {
-                    Articolo articolo = new Articolo();
-                    articolo.setName("Articolo " + i);
-                    articolo.setDescrizione("Descrizione per articolo " + i);
-                    articolo.setMagazzino(magazzino);
-                    articolo.setQuantità(random.nextInt(11));
-
-                    String codiceVal = utilityFunctions.codeGenerator(6);
-
-                    Codice codice = new Codice();
-                    codice.setCode(codiceVal);
-                    codice.setArticolo(articolo);
-
-                    articolo.setCodici(List.of(codice));
-                    articoloRepository.save(articolo);
-                }
             }
 
         };

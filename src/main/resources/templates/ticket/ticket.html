@@ -24,150 +24,171 @@
 
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <div class="card bg-secondary text-white shadow-lg rounded-4 p-4">
                     <div class="card-body">
                         <h3 class="card-title text-center fw-bold">Dettagli Ticket</h3>
                         <hr class="border-light">
 
-                        <div class="row mb-3">
-                            <div class="col">
-                                <strong>Ticket ID:</strong>
-                                <span th:text="${ticket.getId()}" class="badge bg-light text-dark"></span>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col">
-                                <strong>Cliente:</strong>
-                                <div class="mt-2">
-                                    <i class="bi bi-person-circle"></i>
-                                    <span th:text="${ticket.getCliente().getNome()}"></span>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <strong>Ticket ID:</strong>
+                                    <span th:text="${ticket.getId()}" class="badge bg-light text-dark"></span>
                                 </div>
-                                <div>
-                                    <i class="bi bi-envelope"></i>
-                                    <span th:text="${ticket.getCliente().getEmail()}"></span>
-                                </div>
-                                <div>
-                                    <i class="bi bi-telephone"></i>
-                                    <span th:text="${ticket.getCliente().getCellulare()}"></span>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="row mb-3">
-                            <div class="col">
-                                <strong>Descrizione:</strong>
-                                <p th:text="${ticket.getDescrizione()}" class="text-light"></p>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col">
-                                <strong>Categoria:</strong>
-                                <span th:text="${ticket.getCategoria().getNome()}"
-                                    th:classappend="${ticket.getCategoria().getNome() == 'ASSISTENZA' ? 'bg-primary' : 
-                                                       (ticket.getCategoria().getNome() == 'MANUTENZIONE' ? 'bg-success' : 
-                                                       (ticket.getCategoria().getNome() == 'AMMINISTRAZIONE' ? 'bg-info' : 'bg-warning'))}"
-                                    class="badge text-white"></span>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col">
-                                <strong>Data Apertura:</strong>
-                                <span th:text="${ticket.getFormattedDate()}" class="text-light"></span>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col">
-                                <strong>Status:</strong>
-                                <span th:text="${ticket.getStatusName()}"
-                                    th:classappend="${ticket.getStatusName() == 'APERTO' ? 'bg-success' : 
-                                                       (ticket.getStatusName() == 'CHIUSO' ? 'bg-danger' : 
-                                                       (ticket.getStatusName() == 'IN_CORSO' ? 'bg-warning text-dark' : 'bg-secondary'))}"
-                                    class="badge text-white"></span>
-                            </div>
-                        </div>
-
-                        <form th:action="@{/upload/{id}/{destination}(id=${ticket.id}, destination='ticket')}"
-                            method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="ticketId" th:value="${ticket.id}" />
-
-                            <div class="mb-3">
-                                <label for="file" class="form-label">Carica un file</label>
-                                <input class="form-control" type="file" id="file" name="file" accept="image/*" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <button type="submit" class="btn btn-primary">Carica</button>
-                            </div>
-                        </form>
-
-                    
-
-                        <div class="row mb-3">
-                            <div class="col">
-                                <div class="card bg-dark text-white p-3 rounded-3">
-                                    <h5 class="fw-bold">Note</h5>
-                                    <hr class="border-light">
-                                    <div th:if="${ticket.getNote() != null and not #lists.isEmpty(ticket.getNote())}">
-                                        <div th:each="nota : ${ticket.getNote()}"
-                                            class="p-2 mb-3 border rounded bg-secondary">
-                                            <p class="fw-bold mb-0"
-                                                th:text="'Autore: ' + ${nota.getAutore().getUsername()}"></p>
-                                            <p class="text-white mb-0" th:text="'Data: ' + ${nota.getFormattedDate()}">
-                                            </p>
-                                            <p class="mb-0" th:text="${nota.getNota()}"></p>
-                                            <div class="text-end"
-                                                th:if="${currentUser == nota.getAutore().getUsername() or currentUserObj.getRole().getName() == 'ADMIN'}">
-                                                <form th:action="@{/deleteNote/{id}(id=${nota.getId()})}" method="post">
-                                                    <button type="submit" class="btn btn-sm btn-danger">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
+                                <div class="mb-3">
+                                    <strong>Cliente:</strong>
+                                    <div class="mt-2">
+                                        <i class="bi bi-person-circle"></i>
+                                        <span th:text="${ticket.getCliente().getNome()}"></span>
                                     </div>
-                                    <div th:if="${ticket.getNote() == null or #lists.isEmpty(ticket.getNote())}"
-                                        class="text-white">
-                                        Nessuna nota disponibile
+                                    <div>
+                                        <i class="bi bi-envelope"></i>
+                                        <span th:text="${ticket.getCliente().getEmail()}"></span>
+                                    </div>
+                                    <div>
+                                        <i class="bi bi-telephone"></i>
+                                        <span th:text="${ticket.getCliente().getCellulare()}"></span>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="row mb-3">
-                            <div class="col">
-                                <div class="card bg-dark text-white p-3 rounded-3">
-                                    <h5 class="fw-bold">Allegati</h5>
-                                    <hr class="border-light">
-                                    <div th:if="${allegati != null and not #lists.isEmpty(allegati)}">
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item bg-primary text-white d-flex justify-content-between align-items-center"
-                                                th:each="file : ${allegati}">
-                                                <span th:text="${file.fileName}"></span>
-                                                <div>
-                                                    <a th:href="@{/download/{id}(id=${file.getId})}"
-                                                        class="btn btn-sm btn-outline-light me-2">
-                                                        <i class="bi bi-download"></i> Scarica
-                                                    </a>
-                                                    <form
-                                                        th:action="@{/deleteTicketFile/{ticketId}/{fileId}(ticketId=${ticket.id}, fileId=${file.getId})}"
-                                                        method="post" class="d-inline">
-                                                        <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                            <i class="bi bi-trash"></i> Cancella
+                                <div class="mb-3">
+                                    <strong>Descrizione:</strong>
+                                    <p th:text="${ticket.getDescrizione()}" class="text-light"></p>
+                                </div>
+
+                                <div class="mb-3">
+                                    <strong>Categoria:</strong>
+                                    <span th:text="${ticket.getCategoria().getNome()}"
+                                        th:classappend="${ticket.getCategoria().getNome() == 'ASSISTENZA' ? 'bg-primary' : (ticket.getCategoria().getNome() == 'MANUTENZIONE' ? 'bg-success' : (ticket.getCategoria().getNome() == 'AMMINISTRAZIONE' ? 'bg-info' : 'bg-warning'))}"
+                                        class="badge text-white"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <strong>Data Apertura:</strong>
+                                    <span th:text="${ticket.getFormattedDate()}" class="text-light"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <strong>Status:</strong>
+                                    <span th:text="${ticket.getStatusName()}"
+                                        th:classappend="${ticket.getStatusName() == 'APERTO' ? 'bg-success' : (ticket.getStatusName() == 'CHIUSO' ? 'bg-danger' : (ticket.getStatusName() == 'IN_CORSO' ? 'bg-warning text-dark' : 'bg-secondary'))}"
+                                        class="badge text-white"></span>
+                                </div>
+
+                                <form th:action="@{/upload/{id}/{destination}(id=${ticket.id}, destination='ticket')}"
+                                    method="post" enctype="multipart/form-data">
+                                    <input type="hidden" name="ticketId" th:value="${ticket.id}" />
+
+                                    <div class="mb-3">
+                                        <label for="file" class="form-label">Carica un file</label>
+                                        <input class="form-control" type="file" id="file" name="file" accept="image/*"
+                                            required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <button type="submit" class="btn btn-primary">Carica</button>
+                                    </div>
+                                </form>
+
+                                <div class="mb-3">
+                                    <div class="card bg-dark text-white p-3 rounded-3">
+                                        <h5 class="fw-bold">Note</h5>
+                                        <hr class="border-light">
+                                        <div
+                                            th:if="${ticket.getNote() != null and not #lists.isEmpty(ticket.getNote())}">
+                                            <div th:each="nota : ${ticket.getNote()}"
+                                                class="p-2 mb-3 border rounded bg-secondary">
+                                                <p class="fw-bold mb-0"
+                                                    th:text="'Autore: ' + ${nota.getAutore().getUsername()}"></p>
+                                                <p class="text-white mb-0"
+                                                    th:text="'Data: ' + ${nota.getFormattedDate()}"></p>
+                                                <p class="mb-0" th:text="${nota.getNota()}"></p>
+                                                <div class="text-end"
+                                                    th:if="${currentUser == nota.getAutore().getUsername() or currentUserObj.getRole().getName() == 'ADMIN'}">
+                                                    <form th:action="@{/deleteNote/{id}(id=${nota.getId()})}"
+                                                        method="post">
+                                                        <button type="submit" class="btn btn-sm btn-danger">
+                                                            <i class="bi bi-trash"></i>
                                                         </button>
                                                     </form>
                                                 </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div th:if="${file == null or #lists.isEmpty(allegati)}" class="text-muted">
-                                        Nessun file allegato
+                                            </div>
+                                        </div>
+                                        <div th:if="${ticket.getNote() == null or #lists.isEmpty(ticket.getNote())}"
+                                            class="text-white">
+                                            Nessuna nota disponibile
+                                        </div>
                                     </div>
                                 </div>
+
+                                <div class="mb-3">
+                                    <div class="card bg-dark text-white p-3 rounded-3">
+                                        <h5 class="fw-bold">Allegati</h5>
+                                        <hr class="border-light">
+                                        <div th:if="${allegati != null and not #lists.isEmpty(allegati)}">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item bg-primary text-white d-flex justify-content-between align-items-center"
+                                                    th:each="file : ${allegati}">
+                                                    <span th:text="${file.fileName}"></span>
+                                                    <div>
+                                                        <a th:href="@{/download/{id}(id=${file.getId})}"
+                                                            class="btn btn-sm btn-outline-light me-2">
+                                                            <i class="bi bi-download"></i> Scarica
+                                                        </a>
+                                                        <form
+                                                            th:action="@{/deleteTicketFile/{ticketId}/{fileId}(ticketId=${ticket.id}, fileId=${file.getId})}"
+                                                            method="post" class="d-inline">
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                                <i class="bi bi-trash"></i> Cancella
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div th:if="${file == null or #lists.isEmpty(allegati)}" class="text-muted">
+                                            Nessun file allegato
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6" th:if="${ticket.getStatusName() == 'IN_CORSO'}">
+                                <form th:object="${articoliUsatiWrapper}"
+                                    th:action="@{/setStatusChiuso/{id}/articoli-usati(id=${ticket.getId()})}"
+                                    method="post">
+                                    <h5 class="fw-bold">Articoli Usati</h5>
+                                    <hr class="border-light">
+                                    <table class="table table-dark table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Articolo</th>
+                                                <th>Codice</th>
+                                                <th>Quantità Disponibile</th>
+                                                <th>Quantità Usata</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="articoloUsato, iterStat : *{articoliUsati}">
+                                                <td th:text="${articoloUsato.articolo.getName()}"></td>
+                                                <td>
+                                                    <span th:each="codice : ${articoloUsato.articolo.codici}"
+                                                        class="d-block" th:text="${codice.getCode()}"></span>
+                                                </td>
+                                                <td th:text="${articoloUsato.articolo.getQuantità()}"></td>
+                                                <td>
+                                                    <input type="number" min="0"
+                                                        th:field="*{articoliUsati[__${iterStat.index}__].quantità}" />
+                                                    <input type="hidden"
+                                                        th:field="*{articoliUsati[__${iterStat.index}__].articolo.id}" />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <button type="submit" class="btn btn-danger mt-3">Concludi Ticket</button>
+                                </form>
                             </div>
                         </div>
 
@@ -178,10 +199,11 @@
                                     <button type="submit" class="btn btn-warning">Prendi In Carico</button>
                                 </form>
 
-                                <form th:if="${ticket.getStatusName() == 'IN_CORSO'}"
+                                <form th:if="${ticket.getStatusName() == 'CHIUSO'}"
                                     th:action="@{/setStatusChiuso/{id}(id=${ticket.getId()})}" method="post">
                                     <button type="submit" class="btn btn-danger">Concludi</button>
                                 </form>
+
                                 <div th:insert="~{fragments/buttons :: addNota('/addNota/' + ${ticket.getId()})}"></div>
                                 <div th:insert="~{fragments/buttons :: goToHome}"></div>
                             </div>

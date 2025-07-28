@@ -1,6 +1,7 @@
 package com.example.ticket_platform.security;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.ticket_platform.model.Articolo;
 import com.example.ticket_platform.model.Authorities;
+import com.example.ticket_platform.model.Codice;
 import com.example.ticket_platform.model.Magazzino;
 import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.model.User;
@@ -76,8 +78,30 @@ public class CustomJdbcUserDetailsManager extends JdbcUserDetailsManager {
         }
         createUserAuthoriti(user);
         Magazzino magazzino = new Magazzino();
-        magazzino.setName("VanKid" + user.getUsername());
+        magazzino.setName("VanKit" + user.getUsername());
         magazzino.setProprietario(user);
+
+        List<Articolo> articoliClonati = new ArrayList<>();
+        for (Articolo articoloOriginale : magazzinoRepository.findByName("Sede").get().getArticoli()) {
+            Articolo clone = new Articolo();
+            clone.setName(articoloOriginale.getName());
+            clone.setDescrizione(articoloOriginale.getDescrizione());
+            clone.setQuantità(0);
+            clone.setMagazzino(magazzino);
+
+            List<Codice> codiciClonati = new ArrayList<>();
+            for (Codice codiceOriginale : articoloOriginale.getCodici()) {
+                Codice codiceClone = new Codice();
+                codiceClone.setCode(codiceOriginale.getCode());
+                codiceClone.setArticolo(clone);
+                codiciClonati.add(codiceClone);
+            }
+            clone.setCodici(codiciClonati);
+
+            articoliClonati.add(clone);
+        }
+
+        magazzino.setArticoli(articoliClonati);
         user.setVanKit(magazzino);
 
         if (user.getEnable() == false) {

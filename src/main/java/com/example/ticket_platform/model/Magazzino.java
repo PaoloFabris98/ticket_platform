@@ -56,8 +56,15 @@ public class Magazzino {
         for (Articolo articolo : this.getArticoli()) {
             if (articolo.getId() == id) {
                 return articolo;
-            } else {
-                return null;
+            }
+        }
+        return null;
+    }
+
+    public Articolo getArticoloByName(String name) {
+        for (Articolo articolo : this.getArticoli()) {
+            if (articolo.getName().equals(name)) {
+                return articolo;
             }
         }
         return null;
