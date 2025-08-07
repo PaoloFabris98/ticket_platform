@@ -23,6 +23,7 @@ import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.Categoria;
 import com.example.ticket_platform.model.Allegato;
 import com.example.ticket_platform.model.Articolo;
+import com.example.ticket_platform.model.ArticoloUtilizzato;
 import com.example.ticket_platform.model.Status;
 import com.example.ticket_platform.model.StatusType;
 import com.example.ticket_platform.model.Ticket;
@@ -34,6 +35,7 @@ import com.example.ticket_platform.repository.CategoriaRepository;
 import com.example.ticket_platform.repository.ClienteRepository;
 import com.example.ticket_platform.repository.AllegatoRepository;
 import com.example.ticket_platform.repository.ArticoloRepository;
+import com.example.ticket_platform.repository.ArticoloUtilizzatoRepository;
 import com.example.ticket_platform.repository.StatusRepository;
 import com.example.ticket_platform.repository.TicketRepository;
 import com.example.ticket_platform.service.*;
@@ -71,6 +73,8 @@ public class TicketController {
     private AllegatoRepository allegatoRepository;
     @Autowired
     private ArticoloRepository articoloRepository;
+    @Autowired
+    private ArticoloUtilizzatoRepository articoloUtilizzatoRepository;
 
     @ModelAttribute("currentUser")
     public String getCurrentUser(Principal principal) {
@@ -108,7 +112,15 @@ public class TicketController {
             return "redirect:/ticket_Index_Out_Of_Bound";
         }
 
+        List<ArticoliUsatiDTO> articoliOperatore = new ArrayList<>();
         List<ArticoliUsatiDTO> articoliUsati = new ArrayList<>();
+        articoliUsati.add(new ArticoliUsatiDTO());
+        for (ArticoloUtilizzato articoloUtilizzato : articoloUtilizzatoRepository.findByTicket(ticket)) {
+            ArticoliUsatiDTO articoliUsatiDTO = new ArticoliUsatiDTO();
+            articoliUsatiDTO.setArticolo(articoloUtilizzato.getArticolo());
+            articoliUsatiDTO.setQuantità(articoloUtilizzato.getQuantità());
+            articoliUsati.add(articoliUsatiDTO);
+        }
         for (Articolo articolo : ticket.getOperatore().getVanKit().getArticoli()) {
             ArticoliUsatiDTO articoliUsatiDTO = new ArticoliUsatiDTO();
             articoliUsatiDTO.setArticolo(articolo);
@@ -121,21 +133,25 @@ public class TicketController {
                 articoliUsatiDTO.setQuantità(ticket.getOperatore().getVanKit()
                         .getArticoloById(articolo.getId()).getQuantità());
             }
-            articoliUsati.add(articoliUsatiDTO);
+            articoliOperatore.add(articoliUsatiDTO);
         }
 
+        ArticoliUsatiWrapper articoliUsatiWrapperOperatore = new ArticoliUsatiWrapper();
+        articoliUsatiWrapperOperatore.setArticoliUsati(articoliOperatore);
         ArticoliUsatiWrapper articoliUsatiWrapper = new ArticoliUsatiWrapper();
         articoliUsatiWrapper.setArticoliUsati(articoliUsati);
 
         model.addAttribute("allegati", ticket.getImgs());
         if (utilityFunctions.isAdmin(utilityFunctions.currentUser(principal))) {
             model.addAttribute("ticket", ticket);
-            model.addAttribute("articoliUsatiWrapper", articoliUsatiWrapper);
+            model.addAttribute("articoliOperatore", articoliUsatiWrapperOperatore);
+            model.addAttribute("articoliUsati", articoliUsatiWrapper);
             return "ticket/ticket";
         } else {
             if (ticket.getOperatore().getUsername().equals(utilityFunctions.currentUser(principal).getUsername())) {
-                model.addAttribute(ticket);
-                model.addAttribute("articoliUsatiWrapper", articoliUsatiWrapper);
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("articoliOperatore", articoliUsatiWrapperOperatore);
+                model.addAttribute("articoliUsati", articoliUsatiWrapper.getArticoliUsati());
                 return "ticket/ticket";
             } else {
                 return "redirect:/permissions_missing";
@@ -238,6 +254,21 @@ public class TicketController {
         ticket.setStatus(statusRepository.findByStatus("APERTO"));
         ticketService.updateTicket(ticket);
         return "redirect:/index";
+    }
+
+    @PostMapping("/addArticolo/{id}")
+    public String addArticolo(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+        Ticket ticket = ticketRepository.findById(id).get();
+        if (ticket != null) {
+            ArticoloUtilizzato nuovoArticolo = new ArticoloUtilizzato();
+            nuovoArticolo.setTicket(ticket);
+            articoloUtilizzatoRepository.save(nuovoArticolo);
+            return "redirect:/ticket/" + id;
+        } else {
+            redirectAttributes.addFlashAttribute("message", "Non è stato possibile aggiungere l'articolo al ticket");
+            redirectAttributes.addFlashAttribute("messageClass", "alert-danger");
+            return "redirect:/ticket/" + id;
+        }
     }
 
     @PostMapping("/deleteTicket/{id}")

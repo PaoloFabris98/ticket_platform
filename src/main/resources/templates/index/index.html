@@ -96,11 +96,6 @@
                                         <button type="submit" class="btn btn-warning">Prendi In Carico</button>
                                     </form>
 
-                                    <form th:if="${ticket.getStatusName() == 'IN_CORSO'}"
-                                        th:action="@{/setStatusChiuso/{id}(id=${ticket.getId()})}" method="post">
-                                        <button type="submit" class="btn btn-danger">Concludi</button>
-                                    </form>
-
                                     <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                         th:data-bs-target="'#delete-modal-' + ${ticket.getId()}"
                                         sec:authorize="hasAuthority('ADMIN')">

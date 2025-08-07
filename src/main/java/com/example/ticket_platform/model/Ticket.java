@@ -169,4 +169,24 @@ public class Ticket {
         this.file = file;
     }
 
+    public List<Allegato> getFile() {
+        return this.file;
+    }
+
+    public void setFile(List<Allegato> file) {
+        this.file = file;
+    }
+
+    public List<ArticoloUtilizzato> getArticoliUtilizzati() {
+        return this.articoliUtilizzati;
+    }
+
+    public void setArticoliUtilizzati(List<ArticoloUtilizzato> articoliUtilizzati) {
+        this.articoliUtilizzati = articoliUtilizzati;
+    }
+
+    public void addArticolo(ArticoloUtilizzato articolo) {
+        this.articoliUtilizzati.add(articolo);
+    }
+
 }
