@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,7 @@ import java.nio.file.Paths;
 
 import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.Categoria;
+import com.example.ticket_platform.model.Magazzino;
 import com.example.ticket_platform.model.Allegato;
 import com.example.ticket_platform.model.Articolo;
 import com.example.ticket_platform.model.ArticoloUtilizzato;
@@ -33,6 +35,7 @@ import com.example.ticket_platform.model.dto.TempUser;
 import com.example.ticket_platform.model.wrapper.ArticoliUsatiWrapper;
 import com.example.ticket_platform.repository.CategoriaRepository;
 import com.example.ticket_platform.repository.ClienteRepository;
+import com.example.ticket_platform.repository.MagazzinoRepository;
 import com.example.ticket_platform.repository.AllegatoRepository;
 import com.example.ticket_platform.repository.ArticoloRepository;
 import com.example.ticket_platform.repository.ArticoloUtilizzatoRepository;
@@ -75,6 +78,8 @@ public class TicketController {
     private ArticoloRepository articoloRepository;
     @Autowired
     private ArticoloUtilizzatoRepository articoloUtilizzatoRepository;
+    @Autowired
+    private MagazzinoRepository magazzinoRepository;
 
     @ModelAttribute("currentUser")
     public String getCurrentUser(Principal principal) {
@@ -112,18 +117,15 @@ public class TicketController {
             return "redirect:/ticket_Index_Out_Of_Bound";
         }
 
-        List<ArticoliUsatiDTO> articoliOperatore = new ArrayList<>();
+        Magazzino magazzino = magazzinoRepository.findByProprietario(ticket.getOperatore()).get();
+
         List<ArticoliUsatiDTO> articoliUsati = new ArrayList<>();
-        articoliUsati.add(new ArticoliUsatiDTO());
-        for (ArticoloUtilizzato articoloUtilizzato : articoloUtilizzatoRepository.findByTicket(ticket)) {
+
+        for (Articolo articolo : magazzino.getArticoli()) {
             ArticoliUsatiDTO articoliUsatiDTO = new ArticoliUsatiDTO();
-            articoliUsatiDTO.setArticolo(articoloUtilizzato.getArticolo());
-            articoliUsatiDTO.setQuantità(articoloUtilizzato.getQuantità());
-            articoliUsati.add(articoliUsatiDTO);
-        }
-        for (Articolo articolo : ticket.getOperatore().getVanKit().getArticoli()) {
-            ArticoliUsatiDTO articoliUsatiDTO = new ArticoliUsatiDTO();
+            articoliUsatiDTO.setId(articolo.getId());
             articoliUsatiDTO.setArticolo(articolo);
+            articoliUsatiDTO.setId(articolo.getId());
             if (ticket.getOperatore().getVanKit()
                     .getArticoloByName(articolo.getName()).getQuantità() == 0
                     || ticket.getOperatore().getVanKit()
@@ -133,25 +135,22 @@ public class TicketController {
                 articoliUsatiDTO.setQuantità(ticket.getOperatore().getVanKit()
                         .getArticoloById(articolo.getId()).getQuantità());
             }
-            articoliOperatore.add(articoliUsatiDTO);
+            articoliUsati.add(articoliUsatiDTO);
         }
 
-        ArticoliUsatiWrapper articoliUsatiWrapperOperatore = new ArticoliUsatiWrapper();
-        articoliUsatiWrapperOperatore.setArticoliUsati(articoliOperatore);
         ArticoliUsatiWrapper articoliUsatiWrapper = new ArticoliUsatiWrapper();
         articoliUsatiWrapper.setArticoliUsati(articoliUsati);
 
         model.addAttribute("allegati", ticket.getImgs());
         if (utilityFunctions.isAdmin(utilityFunctions.currentUser(principal))) {
             model.addAttribute("ticket", ticket);
-            model.addAttribute("articoliOperatore", articoliUsatiWrapperOperatore);
-            model.addAttribute("articoliUsati", articoliUsatiWrapper);
+            model.addAttribute("magazzino", magazzino.getProprietario().getUsername());
+            model.addAttribute("articoliUsatiWrapper", articoliUsatiWrapper);
             return "ticket/ticket";
         } else {
             if (ticket.getOperatore().getUsername().equals(utilityFunctions.currentUser(principal).getUsername())) {
-                model.addAttribute("ticket", ticket);
-                model.addAttribute("articoliOperatore", articoliUsatiWrapperOperatore);
-                model.addAttribute("articoliUsati", articoliUsatiWrapper.getArticoliUsati());
+                model.addAttribute(ticket);
+                model.addAttribute("articoliUsatiWrapper", articoliUsatiWrapper);
                 return "ticket/ticket";
             } else {
                 return "redirect:/permissions_missing";
@@ -239,7 +238,6 @@ public class TicketController {
     @PostMapping("/setStatusChiuso/{id}/articoli-usati")
     public String setStatusChiuso(@PathVariable Integer id,
             @Valid @ModelAttribute("articoliUsatiWrapper") ArticoliUsatiWrapper wrapper) {
-        List<ArticoliUsatiDTO> articoli = wrapper.getArticoliUsati();
         Ticket ticket = ticketService.getTicketById(id);
         ticket.setStatus(statusRepository.findByStatus("CHIUSO"));
         ticket.setDataChiusura(LocalDate.now());
@@ -256,19 +254,78 @@ public class TicketController {
         return "redirect:/index";
     }
 
-    @PostMapping("/addArticolo/{id}")
-    public String addArticolo(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
-        Ticket ticket = ticketRepository.findById(id).get();
-        if (ticket != null) {
-            ArticoloUtilizzato nuovoArticolo = new ArticoloUtilizzato();
-            nuovoArticolo.setTicket(ticket);
-            articoloUtilizzatoRepository.save(nuovoArticolo);
-            return "redirect:/ticket/" + id;
-        } else {
-            redirectAttributes.addFlashAttribute("message", "Non è stato possibile aggiungere l'articolo al ticket");
+    @PostMapping("/saveArticles/{id}/articoli-usati")
+    public String addArticolo(@PathVariable("id") Integer id,
+            @ModelAttribute("articoliUsatiWrapper") ArticoliUsatiWrapper articoliUsatiWrapper,
+            RedirectAttributes redirectAttributes) {
+        Optional<Ticket> ticket = ticketRepository.findById(id);
+        if (!ticket.isPresent()) {
+            redirectAttributes.addFlashAttribute("message", "Non è stato possibile trovare il ticket.");
             redirectAttributes.addFlashAttribute("messageClass", "alert-danger");
             return "redirect:/ticket/" + id;
         }
+        if (articoliUsatiWrapper == null) {
+            redirectAttributes.addFlashAttribute("message", "Non è stato possibile trovare gli articoli utilizzati.");
+            redirectAttributes.addFlashAttribute("messageClass", "alert-danger");
+            return "redirect:/ticket/" + id;
+        }
+        if (articoliUsatiWrapper.getListLenght() == 0 || articoliUsatiWrapper.getListLenght() == 0) {
+            redirectAttributes.addFlashAttribute("message",
+                    "Non è stato possibile trovare gli articoli nell'inventario dell'operatore.");
+            redirectAttributes.addFlashAttribute("messageClass", "alert-danger");
+            return "redirect:/ticket/" + id;
+        }
+
+        User operatore = userService.findByUsernameUser(ticket.get().getOperatoreUsername());
+        Magazzino vankitOperatore = magazzinoRepository.findByProprietario(operatore).get();
+
+        for (ArticoliUsatiDTO articoliUsatiDTO : articoliUsatiWrapper.getArticoliUsati()) {
+            Articolo currentArticle = vankitOperatore.getArticoloById(articoliUsatiDTO.getId());
+
+            if (currentArticle == null) {
+                redirectAttributes.addFlashAttribute("message",
+                        "Articolo con ID " + articoliUsatiDTO.getArticolo().getName()
+                                + " non trovato nel magazzino dell'operatore.");
+                redirectAttributes.addFlashAttribute("messageClass", "alert-danger");
+                return "redirect:/ticket/" + id;
+            }
+
+            if (articoliUsatiDTO.getQuantitàUsata() == null) {
+                articoliUsatiDTO.setQuantitàUsata(0);
+            }
+
+            if (articoliUsatiDTO.getQuantitàUsata() < 0) {
+                redirectAttributes.addFlashAttribute("message",
+                        "La quantità utilizzata dell'articolo non può essere inferiore a 0.");
+                redirectAttributes.addFlashAttribute("messageClass", "alert-danger");
+                return "redirect:/ticket/" + id;
+            }
+
+            currentArticle.addQuantity((articoliUsatiDTO.getQuantitàUsata()) * -1);
+
+            if (currentArticle.getQuantità() < 0) {
+                redirectAttributes.addFlashAttribute("message",
+                        "Controlla le quantità nel magazzino, non puoi usare più articoli di quanti tu ne abbia a disposizione.");
+                redirectAttributes.addFlashAttribute("messageClass", "alert-danger");
+                return "redirect:/ticket/" + id;
+            }
+
+            ArticoloUtilizzato articoloUtilizzato = new ArticoloUtilizzato();
+            articoloUtilizzato.setArticolo(currentArticle);
+            articoloUtilizzato.setTicket(ticket.get());
+            articoloUtilizzato.setQuantità(articoliUsatiDTO.getQuantitàUsata());
+            if (!(articoliUsatiDTO.getQuantitàUsata() == 0)) {
+                articoloUtilizzatoRepository.save(articoloUtilizzato);
+            }
+
+            articoloRepository.save(currentArticle);
+        }
+
+        redirectAttributes.addFlashAttribute("message",
+                "Articoli salvati correttamente.");
+        redirectAttributes.addFlashAttribute("messageClass", "alert-success");
+        return "redirect:/ticket/" + id;
+
     }
 
     @PostMapping("/deleteTicket/{id}")

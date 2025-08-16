@@ -8,9 +8,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "articoloUtilizzato")
 public class ArticoloUtilizzato implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,9 +23,9 @@ public class ArticoloUtilizzato implements Serializable {
     @ManyToOne
     private Ticket ticket;
 
+    @ManyToOne
+    @JoinColumn(name = "articolo_id")
     private Articolo articolo;
-
-    private List<Codice> codici;
 
     private Integer quantità;
 
@@ -65,14 +69,6 @@ public class ArticoloUtilizzato implements Serializable {
 
     public void setDataUtilizzo(LocalDate dataUtilizzo) {
         this.dataUtilizzo = dataUtilizzo;
-    }
-
-    public List<Codice> getCodici() {
-        return this.codici;
-    }
-
-    public void setCodici(List<Codice> codici) {
-        this.codici = codici;
     }
 
 }

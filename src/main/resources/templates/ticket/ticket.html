@@ -160,56 +160,61 @@
             <div class="col-lg-6 col-12">
                 <h5 class="fw-bold">Articoli Usati</h5>
                 <hr class="border-light">
-                <div class="table-responsive" th:object="${articoliUsati}">
+
+                <form th:object="${articoliUsatiWrapper}"
+                    th:action="@{/saveArticles/{id}/articoli-usati(id=${ticket.getId()})}" method="post">
                     <table class="table table-dark table-striped">
                         <thead>
                             <tr>
+
                                 <th>Articolo</th>
                                 <th>Codice</th>
-                                <th>Disponibile</th>
-                                <th>Usata</th>
+                                <th>Quantità Disponibile</th>
+                                <th>Quantità Usata</th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <input type="text" id="searchNameInput" class="form-control form-control-sm"
+                                        placeholder="Cerca articolo..." onkeyup="nameFilterTable()">
+                                </th>
+                                <th>
+                                    <input type="text" id="searchCodeInput" class="form-control form-control-sm"
+                                        placeholder="Cerca codice..." onkeyup="codeFilterTable()">
+                                </th>
+                                <th></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr th:each="articoloUsato, iterStat : *{articoliUsati}">
+                                <input type="hidden" th:field="*{articoliUsati[__${iterStat.index}__].id}"
+                                    th:value="${articoloUsato.articolo.id}" />
+
+                                <td th:text="${articoloUsato.articolo.name}"></td>
                                 <td>
-                                    <input type="text" class="form-control nome-articolo" readonly
-                                        th:value="${articoloUsato.articolo != null ? articoloUsato.articolo.name : ''}" />
+                                    <span th:each="codice : ${articoloUsato.articolo.codici}"
+                                        th:text="${codice.code}"></span>
                                 </td>
-                                <td>
-                                    <input th:field="*{articoliUsati[__${iterStat.index}__].codice}" />
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control quantita-disponibile" readonly
-                                        th:value="${articoloUsato.articolo != null ? articoloUsato.articolo.quantità : 0}" />
-                                </td>
+                                <td th:text="${articoloUsato.articolo.quantità}" class="text-center"></td>
                                 <td>
                                     <input type="number" min="0"
-                                        th:field="*{articoliUsati[__${iterStat.index}__].quantità}" />
-                                    <input type="hidden"
-                                        th:field="*{articoliUsati[__${iterStat.index}__].articolo.id}" />
+                                        th:field="*{articoliUsati[__${iterStat.index}__].quantitàUsata}" />
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                </div>
-
-
-                <form th:object="${articoliUsati}" th:action="@{/addArticolo/{id}(id=${ticket.id})}" method="post">
-                    <button type="submit" class="btn btn-success mt-3"><i class="bi bi-plus-circle"></i></button>
-                </form>
-                <form th:if="${articoliUsati.getListLenght() == 'null'}" th:object="${articoliUsati}"
-                    th:action="@{/setArticoli/{id}/articoli-usati(id=${ticket.getId()})}" method="post">
                     <button type="submit" class="btn btn-primary mt-3">Salva Articoli</button>
                 </form>
+
             </div>
+
         </div>
 
 
     </div>
 
     <div th:insert="~{fragments/footer :: footer}"></div>
-    <script th:src="@{/js/addArticolo.js}"></script>
+    <script th:src="@{/js/magazzinoSearch.js}"></script>
     <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
 </body>
 

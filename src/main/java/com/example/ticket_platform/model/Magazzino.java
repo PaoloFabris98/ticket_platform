@@ -1,5 +1,6 @@
 package com.example.ticket_platform.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -13,7 +14,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-public class Magazzino {
+public class Magazzino implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

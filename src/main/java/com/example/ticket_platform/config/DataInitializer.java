@@ -196,21 +196,8 @@ public class DataInitializer {
                     Ticket ticket = new Ticket();
                     ticket.setOperatore(operatore);
                     ticket.setDataCreazione(LocalDate.now());
-                    ticket.setDescrizione("Ticket di test numero " + i);
+                    ticket.setDescrizione("Ticket di test numero " + i + operatore.getUsername());
                     ticket.setStatus(statusAperto);
-                    ticket.setCliente(cliente);
-                    ticket.setCategoria(i % 2 == 0 ? categoriaManutenzione : categoriaAssistenza);
-                    ticketRepository.save(ticket);
-                }
-            }
-            if (ticketRepository.countByOperatore(operatore) < 10) {
-                for (int i = 1; i <= 5; i++) {
-                    Ticket ticket = new Ticket();
-                    ticket.setOperatore(operatore);
-                    ticket.setDataCreazione(LocalDate.now().minusDays(1));
-                    ticket.setDataChiusura(LocalDate.now().minusDays(1));
-                    ticket.setDescrizione("Ticket di test numero " + i);
-                    ticket.setStatus(statusRepository.findByStatus("CHIUSO"));
                     ticket.setCliente(cliente);
                     ticket.setCategoria(i % 2 == 0 ? categoriaManutenzione : categoriaAssistenza);
                     ticketRepository.save(ticket);
