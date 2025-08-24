@@ -1,6 +1,5 @@
 package com.example.ticket_platform.controller.rest;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.repository.ApiUserRepository;
 import com.example.ticket_platform.repository.TicketRepository;

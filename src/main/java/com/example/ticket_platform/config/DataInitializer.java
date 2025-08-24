@@ -4,9 +4,6 @@ import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.*;
 import com.example.ticket_platform.repository.*;
 import com.example.ticket_platform.security.CustomJdbcUserDetailsManager;
-import com.example.ticket_platform.service.ArticoloService;
-import com.example.ticket_platform.service.CodiceService;
-import com.example.ticket_platform.service.MagazzinoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -18,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 @Configuration
 public class DataInitializer {

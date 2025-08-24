@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import com.example.ticket_platform.component.UtilityFunctions;
-import com.example.ticket_platform.model.Magazzino;
 import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.UserStatus;

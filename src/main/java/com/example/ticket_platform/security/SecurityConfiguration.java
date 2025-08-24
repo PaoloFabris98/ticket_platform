@@ -2,7 +2,6 @@ package com.example.ticket_platform.security;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -52,7 +51,7 @@ public class SecurityConfiguration {
                                                                 "/deleteTicket/**",
                                                                 "/createUser", "/clienti", "/API", "/addAPI",
                                                                 "/addCliente",
-                                                                "/editCliente/**", "/admin_panel")
+                                                                "/editCliente/**", "/admin_panel", "/aggiungiArticolo")
                                                 .hasAuthority("ADMIN")
 
                                                 .requestMatchers("/permissions_missing", "/addNote/**", "/index",

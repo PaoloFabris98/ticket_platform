@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}" />
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</head>
+
+<body>
+    <th:block th:fragment="magazzinoOption">
+        <div class="d-flex flex-column gap-2">
+
+            <a th:href="@{/aggiungiArticolo}" class="nav-link d-flex align-items-center gap-2 p-2 rounded"
+                th:classappend="${currentPage == '/aggiungiArticolo'} 
+                               ? 'bg-light bg-opacity-25 text-white border-start border-4 border-info' 
+                               : 'text-white'">
+                <i class="bi bi-plus-circle"></i>
+                <span>Aggiungi Articolo</span>
+            </a>
+
+            <a th:href="@{/caricaArticoli}" class="nav-link d-flex align-items-center gap-2 p-2 rounded" th:classappend="${currentPage == '/caricaArticoli'} 
+                               ? 'bg-light bg-opacity-25 text-white border-start border-4 border-info' 
+                               : 'text-white'">
+                <i class="bi bi-upload"></i>
+                <span>Carica Articoli</span>
+            </a>
+
+        </div>
+    </th:block>
+</body>
+
+</html>

@@ -53,6 +53,10 @@ public class Magazzino implements Serializable {
         this.articoli = articoli;
     }
 
+    public void addArticol(Articolo articolo) {
+        this.articoli.add(articolo);
+    }
+
     public Articolo getArticoloById(Integer id) {
         for (Articolo articolo : this.getArticoli()) {
             if (articolo.getId() == id) {

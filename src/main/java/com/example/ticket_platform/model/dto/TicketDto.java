@@ -1,23 +1,19 @@
 package com.example.ticket_platform.model.dto;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import com.example.ticket_platform.model.Categoria;
 import com.example.ticket_platform.model.Cliente;
-import com.example.ticket_platform.model.Nota;
 import com.example.ticket_platform.model.Status;
 import com.example.ticket_platform.model.Ticket;
 import com.example.ticket_platform.model.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 
 public class TicketDto {

@@ -12,17 +12,22 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.ticket_platform.component.UtilityFunctions;
 import com.example.ticket_platform.model.Articolo;
+import com.example.ticket_platform.model.Codice;
 import com.example.ticket_platform.model.Magazzino;
 import com.example.ticket_platform.model.User;
+import com.example.ticket_platform.model.dto.ArticoloDTO;
 import com.example.ticket_platform.model.dto.TempUser;
 import com.example.ticket_platform.repository.ArticoloRepository;
+import com.example.ticket_platform.repository.CodiceRepository;
 import com.example.ticket_platform.repository.MagazzinoRepository;
-import com.example.ticket_platform.service.ArticoloService;
 import com.example.ticket_platform.service.MagazzinoService;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class ArticoloController {
@@ -34,6 +39,8 @@ public class ArticoloController {
     MagazzinoService magazzinoService;
     @Autowired
     ArticoloRepository articoloRepository;
+    @Autowired
+    CodiceRepository codiceRepository;
 
     @ModelAttribute("currentUser")
     public String getCurrentUser(Principal principal) {
@@ -77,5 +84,48 @@ public class ArticoloController {
         model.addAttribute("articolo", articolo);
         return "Articolo/index";
 
+    }
+
+    @GetMapping("/aggiungiArticolo")
+    public String aggiungiArticolo(Model model,
+            RedirectAttributes redirectAttributes, Principal principal) {
+
+        ArticoloDTO articolo = new ArticoloDTO();
+
+        model.addAttribute("articoloDTO", articolo);
+        return "Articolo/add";
+    }
+
+    @PostMapping("/aggiungiArticolo")
+    public String aggiungiArticolo(@ModelAttribute("articoloDTO") @Valid ArticoloDTO articoloDTO, Model model,
+            RedirectAttributes redirectAttributes, Principal principal) {
+
+        List<Magazzino> magazzini = magazzinoRepository.findAll();
+
+        if (magazzini == null || magazzini.size() == 0) {
+            redirectAttributes.addFlashAttribute("message",
+                    "Non è stato possibile trovare i magazzini");
+            redirectAttributes.addFlashAttribute("messageClass", "alert-danger");
+            return "redirect:/magazzino";
+        }
+
+        for (Magazzino magazzino : magazzini) {
+            Articolo articolo = new Articolo(articoloDTO);
+            Codice codice = new Codice();
+            articolo.setMagazzino(magazzino);
+            articolo.setQuantità(0);
+            articoloRepository.save(articolo);
+
+            codice.setCode(articoloDTO.getCodice());
+            codice.setArticolo(articolo);
+            codiceRepository.save(codice);
+
+            magazzino.addArticol(articolo);
+        }
+
+        redirectAttributes.addFlashAttribute("message",
+                "L'articolo è stato creato correttamente");
+        redirectAttributes.addFlashAttribute("messageClass", "alert-success");
+        return "redirect:/magazzino";
     }
 }

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import com.example.ticket_platform.model.Authorities;
 import com.example.ticket_platform.model.User;
-import com.example.ticket_platform.model.dto.TempUser;
 import com.example.ticket_platform.service.AuthoritiesService;
 
 import com.example.ticket_platform.service.UserService;

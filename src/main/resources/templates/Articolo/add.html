@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aggiungi Articolo</title>
+
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/stile.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/card.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/navbar.css}" />
+    <link th:rel="stylesheet" th:href="@{/css/adminOptions.css}" />
+</head>
+
+<body class="bg-dark">
+
+    <div th:insert="~{fragments/navbar :: navBar}"></div>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+
+            <div class="col-lg-3 mb-4">
+                <div th:insert="~{fragments/magazzinoOptions :: magazzinoOption}"></div>
+            </div>
+
+            <div class="col-lg-9">
+                <div class="card bg-secondary text-white shadow-lg rounded-4 p-4">
+                    <div class="card-body">
+                        <h3 class="card-title text-center fw-bold">Aggiungi Articolo</h3>
+                        <hr class="border-light">
+
+                        <form th:action="@{/aggiungiArticolo}" method="post" id="aggiungiArticolo-form" th:object="${articoloDTO}">
+
+                            <div class="m-3 p-2">
+                                <label for="name" class="form-label">Nome</label>
+                                <input type="text" id="name" class="form-control" th:field="*{name}" placeholder="Inserisci il nome dell'articolo" th:errorClass="is-invalid">
+                                <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback">
+                                    <ul>
+                                        <li th:each="error: ${#fields.errors('name')}" th:text="${error}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="m-3 p-2">
+                                <label for="descrizione" class="form-label">Descrizione</label>
+                                <textarea id="descrizione" class="form-control" th:field="*{descrizione}" rows="4" placeholder="Inserisci la descrizione" th:errorClass="is-invalid"></textarea>
+                                <div th:if="${#fields.hasErrors('descrizione')}" class="invalid-feedback">
+                                    <ul>
+                                        <li th:each="error: ${#fields.errors('descrizione')}" th:text="${error}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="m-3 p-2">
+                                <label for="codice" class="form-label">Codice</label>
+                                <input type="text" id="codice" class="form-control" th:field="*{codice}" placeholder="Inserisci un codice identificativo" th:errorClass="is-invalid">
+                                <div th:if="${#fields.hasErrors('codice')}" class="invalid-feedback">
+                                    <ul>
+                                        <li th:each="error: ${#fields.errors('codice')}" th:text="${error}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-3 justify-content-center mt-4">
+                                <input type="submit" value="Aggiungi Articolo" class="btn btn-primary m-2 p-2">
+                                <input type="reset" value="Reset" class="btn btn-warning m-2 p-2">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:insert="~{fragments/footer :: footer}"></div>
+
+    <script th:src="@{/js/app.js}"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+</body>
+</html>

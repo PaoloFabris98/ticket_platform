@@ -65,6 +65,8 @@
                             <th>Magazzino</th>
                             <th>Nome</th>
                             <th>Quantità</th>
+                            <th>Quantità Minima</th>
+                            <th>Quantità Massima</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,6 +78,13 @@
                             <td
                                 th:text="${magazzino.getArticoloById(articolo.getId()) != null ? magazzino.getArticoloById(articolo.getId()).getQuantità() : '0'}">
                             </td>
+                            <td
+                                th:text="${magazzino.getArticoloById(articolo.getId()) != null ? magazzino.getArticoloById(articolo.getId()).getQuantitàMinima() : 'N/A'}">
+                            </td>
+                            <td
+                                th:text="${magazzino.getArticoloById(articolo.getId()) != null ? magazzino.getArticoloById(articolo.getId()).getQuantitàMassima() : 'N/A'}">
+                            </td>
+
                         </tr>
                     </tbody>
                 </table>

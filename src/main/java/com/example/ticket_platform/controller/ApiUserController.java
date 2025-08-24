@@ -24,7 +24,6 @@ import com.example.ticket_platform.repository.UserRepository;
 import com.example.ticket_platform.service.ApiUserService;
 
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class ApiUserController {

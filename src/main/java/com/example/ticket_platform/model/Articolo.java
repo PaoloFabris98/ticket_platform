@@ -3,6 +3,8 @@ package com.example.ticket_platform.model;
 import java.io.Serializable;
 import java.util.List;
 
+import com.example.ticket_platform.model.dto.ArticoloDTO;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,6 +35,17 @@ public class Articolo implements Serializable {
     private List<Codice> codici;
 
     private Integer quantità;
+
+    private Integer quantitàMinima = 0;
+    private Integer quantitàMassima = 0;
+
+    public Articolo() {
+    }
+
+    public Articolo(ArticoloDTO articoloDTO) {
+        this.setName(articoloDTO.getName());
+        this.setDescrizione(articoloDTO.getDescrizione());
+    }
 
     public Integer getId() {
         return this.id;
@@ -88,6 +101,22 @@ public class Articolo implements Serializable {
 
     public void subtractQuantity(Integer quantity) {
         this.quantità -= quantity;
+    }
+
+    public Integer getQuantitàMinima() {
+        return this.quantitàMinima;
+    }
+
+    public void setQuantitàMinima(Integer quantitàMinima) {
+        this.quantitàMinima = quantitàMinima;
+    }
+
+    public Integer getQuantitàMassima() {
+        return this.quantitàMassima;
+    }
+
+    public void setQuantitàMassima(Integer quantitàMassima) {
+        this.quantitàMassima = quantitàMassima;
     }
 
 }

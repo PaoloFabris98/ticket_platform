@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.ticket_platform.model.Cliente;
 import com.example.ticket_platform.model.User;
 import com.example.ticket_platform.model.UserStatus;
 import com.example.ticket_platform.model.UserStatusType;
