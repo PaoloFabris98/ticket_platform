@@ -70,21 +70,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="magazzino : ${magazzini}">
-                            <td th:text="${magazzino.getName()}"></td>
-                            <td
-                                th:text="${magazzino.getArticoloById(articolo.getId()) != null ? magazzino.getArticoloById(articolo.getId()).getName() : 'N/A'}">
-                            </td>
-                            <td
-                                th:text="${magazzino.getArticoloById(articolo.getId()) != null ? magazzino.getArticoloById(articolo.getId()).getQuantità() : '0'}">
-                            </td>
-                            <td
-                                th:text="${magazzino.getArticoloById(articolo.getId()) != null ? magazzino.getArticoloById(articolo.getId()).getQuantitàMinima() : 'N/A'}">
-                            </td>
-                            <td
-                                th:text="${magazzino.getArticoloById(articolo.getId()) != null ? magazzino.getArticoloById(articolo.getId()).getQuantitàMassima() : 'N/A'}">
-                            </td>
+                        <tr th:each="magazzino : ${magazzini}"
+                            th:with="articoloMagazzino=${magazzino.getArticoloByCode(articolo.getCodici())}">
 
+                            <td th:text="${magazzino.getName()}"></td>
+                            <td th:text="${articoloMagazzino != null ? articoloMagazzino.getName() : 'N/A'}"></td>
+                            <td th:text="${articoloMagazzino != null ? articoloMagazzino.getQuantità() : 'N/A'}"></td>
+                            <td th:text="${articoloMagazzino != null ? articoloMagazzino.getQuantitàMinima() : 'N/A'}">
+                            </td>
+                            <td th:text="${articoloMagazzino != null ? articoloMagazzino.getQuantitàMassima() : 'N/A'}">
+                            </td>
                         </tr>
                     </tbody>
                 </table>

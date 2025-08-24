@@ -75,6 +75,19 @@ public class Magazzino implements Serializable {
         return null;
     }
 
+    public Articolo getArticoloByCode(List<Codice> codiceT) {
+        for (Articolo articolo : this.getArticoli()) {
+            for (Codice codiceTemp : articolo.getCodici()) {
+                for (Codice codiceTemp1 : codiceT) {
+                    if (codiceTemp.getCode().equals(codiceTemp1.getCode())) {
+                        return articolo;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public User getProprietario() {
         return this.proprietario;
     }

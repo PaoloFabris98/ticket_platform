@@ -115,7 +115,6 @@ public class ArticoloController {
             articolo.setMagazzino(magazzino);
             articolo.setQuantità(0);
             articoloRepository.save(articolo);
-
             codice.setCode(articoloDTO.getCodice());
             codice.setArticolo(articolo);
             codiceRepository.save(codice);
